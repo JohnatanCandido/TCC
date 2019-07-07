@@ -1,50 +1,53 @@
 package br.com.svo.entities;
 
+import br.com.svo.util.EncryptionUtils;
+
 import java.io.Serializable;
 
 public class Voto implements Serializable {
 
     public static final long serialVersionUID = 1L;
 
-    private Long idEleitor;
+    private String idEleitor;
 
-    private Long idEleicao;
+    private String idEleicao;
 
-    private Long idCargo;
+    private String idCargo;
 
-    private Long idCandidato;
+    private String idCandidato;
 
 //    GETTERS E SETTERS
 
-    public Long getIdEleitor() {
+    public String getIdEleitor() {
         return idEleitor;
     }
 
-    public void setIdEleitor(Long idEleitor) {
+    public void setIdEleitor(String idEleitor) {
         this.idEleitor = idEleitor;
     }
 
-    public Long getIdEleicao() {
+    public String getIdEleicao() {
         return idEleicao;
     }
 
-    public void setIdEleicao(Long idEleicao) {
+    public void setIdEleicao(String idEleicao) {
         this.idEleicao = idEleicao;
     }
 
-    public Long getIdCargo() {
+    public String getIdCargo() {
         return idCargo;
     }
 
-    public void setIdCargo(Long idCargo) {
+    public void setIdCargo(String idCargo) {
         this.idCargo = idCargo;
     }
 
-    public Long getIdCandidato() {
+    public String getIdCandidato() {
         return idCandidato;
     }
 
-    public void setIdCandidato(Long idCandidato) {
+    public void setIdCandidato(String idCandidato) {
+        idCandidato = EncryptionUtils.encrypt(idCandidato).toString();
         this.idCandidato = idCandidato;
     }
 }

@@ -10,11 +10,9 @@ public class Eleitor implements Serializable {
 
     private String nome;
 
-    private Integer zonaEleitoral;
+    private Integer zona;
 
-    private Integer secao;
-
-    private Integer tituloEleitoral;
+    private Integer numeroInscricao;
 
 //    GETTERS E SETTERS
 
@@ -34,27 +32,19 @@ public class Eleitor implements Serializable {
         this.nome = nome;
     }
 
-    public Integer getZonaEleitoral() {
-        return zonaEleitoral;
+    public Integer getZona() {
+        return zona;
     }
 
-    public void setZonaEleitoral(Integer zonaEleitoral) {
-        this.zonaEleitoral = zonaEleitoral;
+    public void setZona(Integer zona) {
+        this.zona = zona;
     }
 
-    public Integer getSecao() {
-        return secao;
+    public Integer getNumeroInscricao() {
+        return numeroInscricao;
     }
 
-    public void setSecao(Integer secao) {
-        this.secao = secao;
-    }
-
-    public Integer getTituloEleitoral() {
-        return tituloEleitoral;
-    }
-
-    public void setTituloEleitoral(Integer tituloEleitoral) {
-        this.tituloEleitoral = tituloEleitoral;
+    public void setNumeroInscricao(Integer numeroInscricao) {
+        this.numeroInscricao = numeroInscricao;
     }
 }

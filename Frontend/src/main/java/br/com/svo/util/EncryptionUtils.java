@@ -9,7 +9,7 @@ public final class EncryptionUtils {
     private static PaillierPublicKey pub;
 
     static {
-        String key = RestUtil.httpGet("get_key", null);
+        String key = RestUtil.httpGet("get_public_key", null);
         if (key == null)
             throw new NullPointerException("Erro ao buscar chave pública no backend");
         pub = new PaillierPublicKey(new BigInteger(key));
@@ -21,5 +21,11 @@ public final class EncryptionUtils {
 
     public static BigInteger encrypt(BigInteger valor) {
         return pub.raw_encrypt(valor);
+    }
+
+    public static String getKey() {
+        if (pub == null)
+            return "nulo";
+        return pub.getModulus().toString();
     }
 }

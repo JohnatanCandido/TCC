@@ -1,6 +1,7 @@
 package br.com.svo.web.bean;
 
 import br.com.svo.entities.Login;
+import br.com.svo.util.EncryptionUtils;
 import org.omnifaces.cdi.ViewScoped;
 
 import javax.annotation.PostConstruct;
@@ -18,6 +19,10 @@ public class LoginWebBean implements Serializable {
     @PostConstruct
     public void init() {
         this.login = new Login();
+    }
+
+    public String getKey() {
+        return EncryptionUtils.getKey();
     }
 
 //    GETTERS E SETTERS
