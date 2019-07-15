@@ -38,9 +38,9 @@ public final class RestUtil {
 
     public static void httpPost(String path, Object param) {
         HttpPost httpPost = new HttpPost(createUrl(path, null));
-        NameValuePair nvp = new BasicNameValuePair("voto", GSON.toJson(param, param.getClass()));
         try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-            httpPost.setEntity(new UrlEncodedFormEntity(Collections.singletonList(nvp)));
+            StringEntity entity = new StringEntity(GSON.toJson(param, param.getClass()));
+            httpPost.setEntity(entity);
             HttpResponse response = client.execute(httpPost);
             System.out.println(response.getEntity());
         } catch (IOException ignored) {}

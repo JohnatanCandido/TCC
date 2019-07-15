@@ -22,7 +22,7 @@ public class TesteWebBean implements Serializable {
     }
 
     public void votar() {
-        RestUtil.httpPost("vote", voto);
+        RestUtil.httpPost("votar", voto);
         voto = new Voto();
     }
 
