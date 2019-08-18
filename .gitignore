@@ -1,4 +1,4 @@
-Frontend/.idea
-Frontend/target
-Backend/.idea
-.iml
+.idea
+__pycache__
+*.iml
+target
