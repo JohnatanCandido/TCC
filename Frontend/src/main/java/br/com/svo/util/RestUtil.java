@@ -1,6 +1,8 @@
 package br.com.svo.util;
 
+import br.com.svo.util.exception.RestException;
 import com.google.gson.Gson;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -36,14 +38,22 @@ public final class RestUtil {
         }
     }
 
-    public static void httpPost(String path, Object param) {
+    public static String httpPost(String path, Object param) throws RestException {
         HttpPost httpPost = new HttpPost(createUrl(path, null));
-        NameValuePair nvp = new BasicNameValuePair("voto", GSON.toJson(param, param.getClass()));
         try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-            httpPost.setEntity(new UrlEncodedFormEntity(Collections.singletonList(nvp)));
+            httpPost.setHeader("Content-Type", "application/json");
+            httpPost.setEntity(new StringEntity(GSON.toJson(param, param.getClass())));
             HttpResponse response = client.execute(httpPost);
-            System.out.println(response.getEntity());
-        } catch (IOException ignored) {}
+            return getResponse(response);
+        } catch (IOException ignored) {
+            return null;
+        }
+    }
+
+    private static String getResponse(HttpResponse response) throws RestException, IOException {
+        if (response.getStatusLine().getStatusCode() != 200)
+            throw new RestException();
+        return EntityUtils.toString(response.getEntity());
     }
 
     private static String createUrl(String base, Map<String, String> params) {

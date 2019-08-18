@@ -7,11 +7,8 @@ public class Partido implements Serializable {
     public static final long serialVersionUID = 1L;
 
     private Long idPartido;
-
     private Integer numeroPartido;
-
     private String sigla;
-
     private String nome;
 
 //    GETTERS E SETTERS

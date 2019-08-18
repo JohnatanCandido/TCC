@@ -9,11 +9,7 @@ public class Cargo implements Serializable {
     public static final long serialVersionUID = 1L;
 
     private Long idCargo;
-
     private String nome;
-
-    private Integer numeroRepresentantes;
-
     private SistemaEleicao sistemaEleicao;
 
 //    GETTERS E SETTERS
@@ -32,14 +28,6 @@ public class Cargo implements Serializable {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public Integer getNumeroRepresentantes() {
-        return numeroRepresentantes;
-    }
-
-    public void setNumeroRepresentantes(Integer numeroRepresentantes) {
-        this.numeroRepresentantes = numeroRepresentantes;
     }
 
     public SistemaEleicao getSistemaEleicao() {

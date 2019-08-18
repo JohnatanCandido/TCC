@@ -9,14 +9,20 @@
 
 <h:head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Teste</title>
 </h:head>
 
-<h:body>
-    <h:form>
-        <h:outputText value="#{loginWebBean.getKey()}" />
-        <p:inputText id="voto" value="#{testeWebBean.voto.idCandidato}" />
-        <p:commandButton id="votar" value="Votar" action="#{testeWebBean.votar()}" update="@form" process="@form" />
-    </h:form>
+<h:body style="margin: 0">
+    <div id="header">
+        <ui:include src="/template/header.xhtml" />
+    </div>
+
+    <div id="content">
+        <ui:insert name="content" />
+    </div>
+
+    <div id="footer">
+<!--        <ui:include src="/template/basicfoo" />-->
+    </div>
+
 </h:body>
 </html>

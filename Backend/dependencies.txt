@@ -1,0 +1,6 @@
+flask
+sqlAlchemy
+flask-sqlAlchemy
+phe
+psycopg2-binary
+pyjwt

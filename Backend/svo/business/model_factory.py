@@ -48,7 +48,6 @@ def cria_login(dados):
     login = Login()
     login.usuario = dados['usuario']
     login.senha = dados['senha']
-    login.id_eleitor = dados['id_eleitor']
     return login
 
 

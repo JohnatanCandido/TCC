@@ -3,6 +3,8 @@ from flask import request, json
 from svo import app, c
 from svo.business import model_factory as mf, business
 
+# TODO Remover esse arquivo
+
 
 @app.route("/get_public_key", methods=["GET"])
 def get_key():

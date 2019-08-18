@@ -1,21 +1,23 @@
 package br.com.svo.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Eleicao implements Serializable {
 
     public static final long serialVersionUID = 1L;
 
     private Long idEleicao;
-
     private String titulo;
-
     private String observacao;
-
     private Date inicio;
-
     private Date termino;
+    private List<EleicaoCargo> eleicoesCargos = new ArrayList<>();
+    private Cidade cidade;
+    private Estado estado;
+    private TipoEleicao tipoEleicao;
 
 //    GETTERS E SETTERS
 
@@ -57,5 +59,37 @@ public class Eleicao implements Serializable {
 
     public void setTermino(Date termino) {
         this.termino = termino;
+    }
+
+    public List<EleicaoCargo> getEleicoesCargos() {
+        return eleicoesCargos;
+    }
+
+    public void setEleicoesCargos(List<EleicaoCargo> eleicoesCargos) {
+        this.eleicoesCargos = eleicoesCargos;
+    }
+
+    public Cidade getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(Cidade cidade) {
+        this.cidade = cidade;
+    }
+
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
+
+    public TipoEleicao getTipoEleicao() {
+        return tipoEleicao;
+    }
+
+    public void setTipoEleicao(TipoEleicao tipoEleicao) {
+        this.tipoEleicao = tipoEleicao;
     }
 }

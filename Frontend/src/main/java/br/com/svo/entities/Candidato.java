@@ -7,16 +7,10 @@ public class Candidato implements Serializable {
     public static final long serialVersionUID = 1L;
 
     private Long idCandidato;
-
-    private Eleicao eleicao;
-
-    private Partido partido;
-
-    private Cargo cargo;
-
-    private String nome;
-
     private Integer numero;
+    private Partido partido;
+    private EleicaoCargo eleicaoCargo;
+    private Pessoa pessoa;
 
 //    GETTERS E SETTERS
 
@@ -28,12 +22,12 @@ public class Candidato implements Serializable {
         this.idCandidato = idCandidato;
     }
 
-    public Eleicao getEleicao() {
-        return eleicao;
+    public Integer getNumero() {
+        return numero;
     }
 
-    public void setEleicao(Eleicao eleicao) {
-        this.eleicao = eleicao;
+    public void setNumero(Integer numero) {
+        this.numero = numero;
     }
 
     public Partido getPartido() {
@@ -44,27 +38,19 @@ public class Candidato implements Serializable {
         this.partido = partido;
     }
 
-    public Cargo getCargo() {
-        return cargo;
+    public EleicaoCargo getEleicaoCargo() {
+        return eleicaoCargo;
     }
 
-    public void setCargo(Cargo cargo) {
-        this.cargo = cargo;
+    public void setEleicaoCargo(EleicaoCargo eleicaoCargo) {
+        this.eleicaoCargo = eleicaoCargo;
     }
 
-    public String getNome() {
-        return nome;
+    public Pessoa getPessoa() {
+        return pessoa;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public Integer getNumero() {
-        return numero;
-    }
-
-    public void setNumero(Integer numero) {
-        this.numero = numero;
+    public void setPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
     }
 }

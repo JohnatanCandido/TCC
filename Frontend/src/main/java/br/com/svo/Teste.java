@@ -2,7 +2,7 @@ package br.com.svo;
 
 import br.com.svo.util.EncryptionUtils;
 import br.com.svo.util.RestUtil;
-import com.n1analytics.paillier.PaillierPublicKey;
+import br.com.svo.util.exception.RestException;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -36,6 +36,10 @@ public class Teste {
 
     private static void votar(String voto) {
         BigInteger cypherText = EncryptionUtils.encrypt(voto);
-        RestUtil.httpPost("http://localhost:5000/vote", cypherText.toString());
+        try {
+            RestUtil.httpPost("http://localhost:5000/vote", cypherText.toString());
+        } catch (RestException e) {
+            e.printStackTrace();
+        }
     }
 }

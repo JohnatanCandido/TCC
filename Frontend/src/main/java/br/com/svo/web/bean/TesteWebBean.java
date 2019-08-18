@@ -1,10 +1,11 @@
 package br.com.svo.web.bean;
 
-import br.com.svo.entities.Voto;
-import br.com.svo.util.RestUtil;
+import br.com.svo.entities.Identity;
+import br.com.svo.entities.VotoEncriptado;
 import org.omnifaces.cdi.ViewScoped;
 
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import java.io.Serializable;
 
@@ -14,23 +15,24 @@ public class TesteWebBean implements Serializable {
 
     public static final long serialVersionUID = 1L;
 
-    private Voto voto;
+    private VotoEncriptado votoEncriptado;
+
+    private Identity identity = (Identity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
 
     @PostConstruct
     public void init() {
-        voto = new Voto();
+        votoEncriptado = new VotoEncriptado();
     }
 
     public void votar() {
-        RestUtil.httpPost("vote", voto);
-        voto = new Voto();
+        votoEncriptado = new VotoEncriptado();
     }
 
-    public Voto getVoto() {
-        return voto;
+    public VotoEncriptado getVotoEncriptado() {
+        return votoEncriptado;
     }
 
-    public void setVoto(Voto voto) {
-        this.voto = voto;
+    public void setVotoEncriptado(VotoEncriptado votoEncriptado) {
+        this.votoEncriptado = votoEncriptado;
     }
 }

@@ -1,10 +1,11 @@
-from flask import request, json
+from flask import request, json, Blueprint
 
-from svo import app
 from svo.business import candidato_business
 
+candidatos = Blueprint('candidatos', __name__)
 
-@app.route('/candidato/cadastrar', methods=['POST'])
+
+@candidatos.route('/cadastrar', methods=['POST'])
 def cadastrar():
     if len(request.form) == 0:
         candidato_json = request.json

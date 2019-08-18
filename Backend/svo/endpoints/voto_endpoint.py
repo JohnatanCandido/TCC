@@ -1,10 +1,12 @@
-from flask import request, json
+from flask import request, json, Blueprint
 
-from svo import app
-from svo.business import model_factory as mf, database_utils as db_util
+from svo.business import model_factory as mf
+from svo.util import database_utils as db_util
+
+votos = Blueprint('votos', __name__)
 
 
-@app.route("/votar", methods=["POST"])
+@votos.route("/votar", methods=["POST"])
 def vote():
     if len(request.form) == 0:
         voto_json = request.json

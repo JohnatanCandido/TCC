@@ -1,4 +1,5 @@
-from svo.business import model_factory as mf, database_utils as db, validation
+from svo.business import model_factory as mf, validation
+from svo.util import database_utils as db
 
 
 def cadastrar(candidato_json):
