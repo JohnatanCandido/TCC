@@ -4,6 +4,7 @@ import br.com.svo.business.LoginBusiness;
 import br.com.svo.business.exception.BusinessException;
 import br.com.svo.entities.Identity;
 import br.com.svo.entities.Login;
+import br.com.svo.service.LoginServiceLocal;
 import br.com.svo.util.EncryptionUtils;
 import br.com.svo.util.IdentityUtil;
 import br.com.svo.util.RedirectUtils;
@@ -11,6 +12,7 @@ import org.omnifaces.cdi.ViewScoped;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
@@ -32,6 +34,12 @@ public class LoginWebBean implements Serializable {
 
     private boolean loginFalhou;
 
+    @Inject
+    private Identity identity;
+
+    @Inject
+    private LoginServiceLocal loginService;
+
     @PostConstruct
     public void init() {
         this.login = new Login();
@@ -41,18 +49,17 @@ public class LoginWebBean implements Serializable {
         return EncryptionUtils.getKey();
     }
 
-    public void login() throws IOException {
+    public void login() {
         try {
-            LoginBusiness loginBusiness = new LoginBusiness();
-            Identity identity = loginBusiness.login(login);
+            identity.init(loginService.login(login));
             IdentityUtil.login(identity);
-            RedirectUtils.redirect("index.xhtml");
+            RedirectUtils.redirect("index.html");
         } catch (BusinessException e) {
             loginFalhou = true;
         }
     }
 
-    public void logout() throws IOException {
+    public void logout() {
         IdentityUtil.logout();
         RedirectUtils.redirectToLogin();
     }

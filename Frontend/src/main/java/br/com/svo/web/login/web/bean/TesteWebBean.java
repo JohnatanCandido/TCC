@@ -5,7 +5,7 @@ import br.com.svo.entities.VotoEncriptado;
 import org.omnifaces.cdi.ViewScoped;
 
 import javax.annotation.PostConstruct;
-import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 
@@ -17,7 +17,8 @@ public class TesteWebBean implements Serializable {
 
     private VotoEncriptado votoEncriptado;
 
-    private Identity identity = (Identity) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
+    @Inject
+    private Identity identity;
 
     @PostConstruct
     public void init() {
