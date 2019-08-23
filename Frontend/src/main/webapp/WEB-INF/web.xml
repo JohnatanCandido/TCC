@@ -10,8 +10,14 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>*.html</url-pattern>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
+
+    <context-param>
+        <param-name>primefaces.FONT_AWESOME</param-name>
+        <param-value>true</param-value>
+    </context-param>
 
     <filter>
         <filter-name>LoginFilter</filter-name>
@@ -21,4 +27,14 @@
         <filter-name>LoginFilter</filter-name>
         <url-pattern>/pages/*</url-pattern>
     </filter-mapping>
+
+    <security-constraint>
+        <display-name>Restrict raw XHTML Documents</display-name>
+        <web-resource-collection>
+            <web-resource-name>XHTML</web-resource-name>
+            <url-pattern>*.xhtml</url-pattern>
+        </web-resource-collection>
+        <auth-constraint/>
+    </security-constraint>
+
 </web-app>

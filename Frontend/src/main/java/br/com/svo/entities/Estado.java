@@ -9,7 +9,14 @@ public class Estado implements Serializable {
     private Long idEstado;
     private String nome;
 
-//    GETTERS E SETTERS
+    public Estado() {}
+
+    public Estado(Long idEstado, String nome) {
+        this.idEstado = idEstado;
+        this.nome = nome;
+    }
+
+    //    GETTERS E SETTERS
 
     public Long getIdEstado() {
         return idEstado;

@@ -1,32 +1,46 @@
 package br.com.svo.entities;
 
-import java.io.Serializable;
+import br.com.svo.entities.enums.TipoCargo;
 
-public class EleicaoCargo implements Serializable {
+import java.io.Serializable;
+import java.util.List;
+
+public class TurnoCargo implements Serializable {
 
     public static final long serialVersionUID = 1L;
 
-    private Long idEleicaoCargo;
-    private Eleicao eleicao;
+    private Long idTurnoCargo;
+    private Turno turno;
     private Cargo cargo;
-    private Integer qtdCadeiras;
+    private List<TurnoCargoRegiao> turnoCargoRegioes;
 
-//    GETTERS E SETTERS
+    public TurnoCargo() {}
 
-    public Long getIdEleicaoCargo() {
-        return idEleicaoCargo;
+    public TurnoCargo(Turno turno, Cargo cargo) {
+        this.turno = turno;
+        this.cargo = cargo;
     }
 
-    public void setIdEleicaoCargo(Long idEleicaoCargo) {
-        this.idEleicaoCargo = idEleicaoCargo;
+    public TipoCargo getTipoCargo() {
+        return cargo.getTipoCargo();
     }
 
-    public Eleicao getEleicao() {
-        return eleicao;
+    //    GETTERS E SETTERS
+
+    public Long getIdTurnoCargo() {
+        return idTurnoCargo;
     }
 
-    public void setEleicao(Eleicao eleicao) {
-        this.eleicao = eleicao;
+    public void setIdTurnoCargo(Long idTurnoCargo) {
+        this.idTurnoCargo = idTurnoCargo;
+    }
+
+    public Turno getTurno() {
+        return turno;
+    }
+
+    public void setTurno(Turno turno) {
+        this.turno = turno;
     }
 
     public Cargo getCargo() {
@@ -37,11 +51,11 @@ public class EleicaoCargo implements Serializable {
         this.cargo = cargo;
     }
 
-    public Integer getQtdCadeiras() {
-        return qtdCadeiras;
+    public List<TurnoCargoRegiao> getTurnoCargoRegioes() {
+        return turnoCargoRegioes;
     }
 
-    public void setQtdCadeiras(Integer qtdCadeiras) {
-        this.qtdCadeiras = qtdCadeiras;
+    public void setTurnoCargoRegioes(List<TurnoCargoRegiao> turnoCargoRegioes) {
+        this.turnoCargoRegioes = turnoCargoRegioes;
     }
 }

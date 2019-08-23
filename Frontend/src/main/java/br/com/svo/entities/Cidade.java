@@ -10,7 +10,15 @@ public class Cidade implements Serializable {
     private Estado estado;
     private String nome;
 
-//    GETTERS E SETTERS
+    public Cidade() {}
+
+    public Cidade(Long idCidade, Estado estado, String nome) {
+        this.idCidade = idCidade;
+        this.estado = estado;
+        this.nome = nome;
+    }
+
+    //    GETTERS E SETTERS
 
     public Long getIdCidade() {
         return idCidade;

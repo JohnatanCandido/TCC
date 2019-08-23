@@ -1,4 +1,4 @@
-package br.com.svo.web.bean;
+package br.com.svo.web.login.web.bean;
 
 import br.com.svo.entities.Identity;
 import br.com.svo.entities.VotoEncriptado;

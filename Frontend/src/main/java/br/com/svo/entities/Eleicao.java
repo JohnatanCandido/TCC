@@ -12,12 +12,11 @@ public class Eleicao implements Serializable {
     private Long idEleicao;
     private String titulo;
     private String observacao;
-    private Date inicio;
-    private Date termino;
-    private List<EleicaoCargo> eleicoesCargos = new ArrayList<>();
-    private Cidade cidade;
-    private Estado estado;
-    private TipoEleicao tipoEleicao;
+    private List<Turno> turnos = new ArrayList<>();
+
+    public Eleicao() {
+        this.turnos.add(new Turno(this, 1));
+    }
 
 //    GETTERS E SETTERS
 
@@ -45,51 +44,11 @@ public class Eleicao implements Serializable {
         this.observacao = observacao;
     }
 
-    public Date getInicio() {
-        return inicio;
+    public List<Turno> getTurnos() {
+        return turnos;
     }
 
-    public void setInicio(Date inicio) {
-        this.inicio = inicio;
-    }
-
-    public Date getTermino() {
-        return termino;
-    }
-
-    public void setTermino(Date termino) {
-        this.termino = termino;
-    }
-
-    public List<EleicaoCargo> getEleicoesCargos() {
-        return eleicoesCargos;
-    }
-
-    public void setEleicoesCargos(List<EleicaoCargo> eleicoesCargos) {
-        this.eleicoesCargos = eleicoesCargos;
-    }
-
-    public Cidade getCidade() {
-        return cidade;
-    }
-
-    public void setCidade(Cidade cidade) {
-        this.cidade = cidade;
-    }
-
-    public Estado getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Estado estado) {
-        this.estado = estado;
-    }
-
-    public TipoEleicao getTipoEleicao() {
-        return tipoEleicao;
-    }
-
-    public void setTipoEleicao(TipoEleicao tipoEleicao) {
-        this.tipoEleicao = tipoEleicao;
+    public void setTurnos(List<Turno> turnos) {
+        this.turnos = turnos;
     }
 }

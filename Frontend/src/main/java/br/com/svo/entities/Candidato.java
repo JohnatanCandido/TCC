@@ -9,7 +9,7 @@ public class Candidato implements Serializable {
     private Long idCandidato;
     private Integer numero;
     private Partido partido;
-    private EleicaoCargo eleicaoCargo;
+    private TurnoCargo turnoCargo;
     private Pessoa pessoa;
 
 //    GETTERS E SETTERS
@@ -38,12 +38,12 @@ public class Candidato implements Serializable {
         this.partido = partido;
     }
 
-    public EleicaoCargo getEleicaoCargo() {
-        return eleicaoCargo;
+    public TurnoCargo getTurnoCargo() {
+        return turnoCargo;
     }
 
-    public void setEleicaoCargo(EleicaoCargo eleicaoCargo) {
-        this.eleicaoCargo = eleicaoCargo;
+    public void setTurnoCargo(TurnoCargo turnoCargo) {
+        this.turnoCargo = turnoCargo;
     }
 
     public Pessoa getPessoa() {

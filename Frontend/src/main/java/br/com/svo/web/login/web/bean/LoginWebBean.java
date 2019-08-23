@@ -1,20 +1,18 @@
-package br.com.svo.web.bean;
+package br.com.svo.web.login.web.bean;
 
-import br.com.svo.business.LoginBusiness;
 import br.com.svo.business.exception.BusinessException;
 import br.com.svo.entities.Identity;
 import br.com.svo.entities.Login;
-import br.com.svo.service.LoginServiceLocal;
+import br.com.svo.service.login.LoginServiceLocal;
 import br.com.svo.util.EncryptionUtils;
 import br.com.svo.util.IdentityUtil;
+import br.com.svo.util.Messages;
 import br.com.svo.util.RedirectUtils;
 import org.omnifaces.cdi.ViewScoped;
 
 import javax.annotation.PostConstruct;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.IOException;
 import java.io.Serializable;
 
 @ViewScoped
@@ -31,8 +29,6 @@ public class LoginWebBean implements Serializable {
     public static final long serialVersionUID = 1L;
 
     private Login login;
-
-    private boolean loginFalhou;
 
     @Inject
     private Identity identity;
@@ -55,7 +51,7 @@ public class LoginWebBean implements Serializable {
             IdentityUtil.login(identity);
             RedirectUtils.redirect("index.html");
         } catch (BusinessException e) {
-            loginFalhou = true;
+            Messages.addErrorMessage("Usuário ou senha incorretos");
         }
     }
 
@@ -72,9 +68,5 @@ public class LoginWebBean implements Serializable {
 
     public void setLogin(Login login) {
         this.login = login;
-    }
-
-    public boolean isLoginFalhou() {
-        return loginFalhou;
     }
 }

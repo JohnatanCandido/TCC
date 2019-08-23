@@ -1,4 +1,4 @@
-package br.com.svo.business;
+package br.com.svo.business.login;
 
 import br.com.svo.business.exception.BusinessException;
 import br.com.svo.entities.Identity;

@@ -11,18 +11,46 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </h:head>
 
-<h:body style="margin: 0">
+<h:body style="margin: 0; display: block">
+
+    <p:messages id="messages" showDetail="true" closable="true" style="z-index: 8000; position: fixed; min-width: 86%; max-width: 86%; font-size: 14px; margin-left: 8%">
+        <p:autoUpdate />
+    </p:messages>
+
+    <h:form>
+        <p:ajaxStatus rendered="true"
+                      onstart="PF('statusDialog').show();"
+                      onsuccess="PF('statusDialog').hide();"/>
+
+        <p:dialog id="modalStatusDialog"
+                  modal="true"
+                  widgetVar="statusDialog"
+                  draggable="false"
+                  closable="false"
+                  resizable="false"
+                  responsive="true"
+                  showHeader="false"
+                  styleClass="dialogStatus">
+            <i class="fa fa-circle-o-notch fa-spin ajax-loader" />
+        </p:dialog>
+
+    </h:form>
+
     <div id="header">
-        <ui:include src="/template/header.xhtml" />
+        <ui:include src="header.xhtml" />
     </div>
 
-    <div id="content">
+    <div id="menubar">
+        <ui:include src="menu-bar.xhtml" />
+    </div>
+
+    <div id="content" style="width: 70%; float: left">
         <ui:insert name="content" />
     </div>
 
-    <div id="footer">
+<!--    <div id="footer">-->
 <!--        <ui:include src="/template/basicfoo" />-->
-    </div>
+<!--    </div>-->
 
 </h:body>
 </html>

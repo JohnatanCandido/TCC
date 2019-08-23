@@ -6,16 +6,22 @@
                 template="../../template/template.xhtml">
 
 <ui:define name="content">
-    <p:tabView>
-        <p:tab title="Eleição">
-            <ui:include src="padrao/eleicao-padrao.xhtml" />
-        </p:tab>
-        <p:tab title="Candidatos">
-            <ui:include src="candidato/candidato.xhtml" />
-        </p:tab>
-        <p:tab title="Apuração">
-            <ui:include src="apuracao/apuracao-eleicao.xhtml" />
-        </p:tab>
-    </p:tabView>
+    <h:form id="formEleicao">
+        <div class="ui-fluid">
+            <div class="card-body">
+                <p:tabView styleClass="ui-g-12 ui-md-12 ui-lg-12">
+                    <p:tab title="Eleição">
+                        <ui:include src="padrao/eleicao-padrao.xhtml" />
+                    </p:tab>
+                    <p:tab title="Candidatos" styleClass="ui-g-12 ui-md-12 ui-lg-12">
+                        <ui:include src="candidato/candidato.xhtml" />
+                    </p:tab>
+                    <p:tab title="Apuração" styleClass="ui-g-12 ui-md-12 ui-lg-12">
+                        <ui:include src="apuracao/apuracao-eleicao.xhtml" />
+                    </p:tab>
+                </p:tabView>
+            </div>
+        </div>
+    </h:form>
 </ui:define>
 </ui:composition>

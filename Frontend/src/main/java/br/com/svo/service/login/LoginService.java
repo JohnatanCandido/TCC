@@ -1,6 +1,6 @@
-package br.com.svo.service;
+package br.com.svo.service.login;
 
-import br.com.svo.business.LoginBusiness;
+import br.com.svo.business.login.LoginBusiness;
 import br.com.svo.business.exception.BusinessException;
 import br.com.svo.entities.Identity;
 import br.com.svo.entities.Login;

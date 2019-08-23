@@ -14,12 +14,32 @@
 
 <h:body>
     <h:form>
-        <label for="usuario">Usuário</label>
-        <p:inputText id="usuario" value="#{loginWebBean.login.usuario}" />
-        <label for="senha">Senha</label>
-        <p:password id="senha" value="#{loginWebBean.login.senha}" />
-        <p:commandButton id="autenticar" value="Entrar" action="#{loginWebBean.login()}" update="@form" process="@form" />
-        <h:outputText value="Usuário ou senha incorretos" style="color: #F00" rendered="#{loginWebBean.loginFalhou}" />
+        <p:messages id="messages" showDetail="true" closable="true" style="z-index: 8000; position: fixed; min-width: 86%; max-width: 86%; font-size: 14px; margin-left: 8%">
+            <p:autoUpdate />
+        </p:messages>
+        <div class="ui-fluid">
+            <div class="card-body">
+                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                    <p:fieldset legend="Login">
+                        <div class="ui-g-12 ui-md-12 ui-lg-12">
+                            <label for="usuario">Usuário</label>
+                            <p:inputText id="usuario" value="#{loginWebBean.login.usuario}" />
+                        </div>
+                        <div class="ui-g-12 ui-md-12 ui-lg-12">
+                            <label for="senha">Senha</label>
+                            <p:password id="senha" value="#{loginWebBean.login.senha}" />
+                        </div>
+                        <div class="ui-g-12 ui-md-12 ui-lg-12">
+                            <p:commandButton id="autenticar"
+                                             value="Entrar"
+                                             action="#{loginWebBean.login()}"
+                                             update="@form"
+                                             process="@form" />
+                        </div>
+                    </p:fieldset>
+                </div>
+            </div>
+        </div>
     </h:form>
 </h:body>
 </html>

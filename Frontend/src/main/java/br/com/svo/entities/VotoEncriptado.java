@@ -7,7 +7,7 @@ public class VotoEncriptado implements Serializable {
     public static final long serialVersionUID = 1L;
 
     private Long idVotoEncriptado;
-    private EleicaoCargo eleicaoCargo;
+    private TurnoCargo turnoCargo;
     private Cidade cidade;
     private String idCandidato;
     private String idEleitor;
@@ -22,12 +22,12 @@ public class VotoEncriptado implements Serializable {
         this.idVotoEncriptado = idVotoEncriptado;
     }
 
-    public EleicaoCargo getEleicaoCargo() {
-        return eleicaoCargo;
+    public TurnoCargo getTurnoCargo() {
+        return turnoCargo;
     }
 
-    public void setEleicaoCargo(EleicaoCargo eleicaoCargo) {
-        this.eleicaoCargo = eleicaoCargo;
+    public void setTurnoCargo(TurnoCargo turnoCargo) {
+        this.turnoCargo = turnoCargo;
     }
 
     public Cidade getCidade() {
