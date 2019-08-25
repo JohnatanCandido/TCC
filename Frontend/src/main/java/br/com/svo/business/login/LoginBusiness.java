@@ -5,11 +5,9 @@ import br.com.svo.entities.Identity;
 import br.com.svo.entities.Login;
 import br.com.svo.entities.Pessoa;
 import br.com.svo.util.RestUtil;
-import br.com.svo.util.exception.RestException;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
-import java.security.NoSuchAlgorithmException;
 
 public class LoginBusiness {
 
@@ -30,7 +28,9 @@ public class LoginBusiness {
 //        }
 //    }
 
-    public Identity login(Login login) {
+    public Identity login(Login login) throws BusinessException {
+        if (!login.getUsuario().equals("teste") || !login.getSenha().equals("teste"))
+            throw new BusinessException();
         Identity identity = new Identity();
         identity.setPessoa(new Pessoa());
         identity.getPessoa().setNome("Teste");

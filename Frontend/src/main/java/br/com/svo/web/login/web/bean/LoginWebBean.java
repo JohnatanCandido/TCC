@@ -36,6 +36,8 @@ public class LoginWebBean implements Serializable {
     @Inject
     private LoginServiceLocal loginService;
 
+    private boolean loginFalhou;
+
     @PostConstruct
     public void init() {
         this.login = new Login();
@@ -51,7 +53,7 @@ public class LoginWebBean implements Serializable {
             IdentityUtil.login(identity);
             RedirectUtils.redirect("index.html");
         } catch (BusinessException e) {
-            Messages.addErrorMessage(e);
+            loginFalhou = true;
         }
     }
 
@@ -68,5 +70,9 @@ public class LoginWebBean implements Serializable {
 
     public void setLogin(Login login) {
         this.login = login;
+    }
+
+    public boolean isLoginFalhou() {
+        return loginFalhou;
     }
 }
