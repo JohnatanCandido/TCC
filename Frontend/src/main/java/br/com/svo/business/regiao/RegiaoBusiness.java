@@ -1,8 +1,14 @@
 package br.com.svo.business.regiao;
 
+import br.com.svo.business.exception.BusinessException;
 import br.com.svo.entities.Cidade;
 import br.com.svo.entities.Estado;
+import br.com.svo.util.RestUtil;
+import br.com.svo.util.exception.RestException;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
@@ -11,14 +17,26 @@ public class RegiaoBusiness implements Serializable {
 
     public static final long serialVersionUID = 1L;
 
-    private List<Estado> estadosPlaceHolder = Collections.singletonList(new Estado(1L, "Santa Catarina"));
-    private List<Cidade> cidadesPlaceHolder = Collections.singletonList(new Cidade(1L, estadosPlaceHolder.get(0), "Imbituba"));
+    @Inject
+    private RestUtil restUtil;
 
-    public List<Estado> consultarEstados(String filtro) {
-        return estadosPlaceHolder;
+    private static final Gson GSON = new Gson();
+
+    public List<Estado> consultarEstados(String filtro) throws BusinessException {
+        try {
+            String response = restUtil.httpGet("regiao/estado/" + filtro, null);
+            return GSON.fromJson(response, new TypeToken<List<Estado>>(){}.getType());
+        } catch (RestException e) {
+            throw new BusinessException(e.getMessages().get(0));
+        }
     }
 
-    public List<Cidade> consultarCidades(Long idEstado, String filtro) {
-        return cidadesPlaceHolder;
+    public List<Cidade> consultarCidades(Long idEstado, String filtro) throws BusinessException {
+        try {
+            String response = restUtil.httpGet("regiao/estado/" + idEstado + "/cidade/" + filtro, null);
+            return GSON.fromJson(response, new TypeToken<List<Cidade>>(){}.getType());
+        } catch (RestException e) {
+            throw new BusinessException(e.getMessages().get(0));
+        }
     }
 }

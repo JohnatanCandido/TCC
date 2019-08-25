@@ -1,8 +1,5 @@
 package br.com.svo.entities;
 
-import br.com.svo.entities.enums.SistemaEleicao;
-import br.com.svo.entities.enums.TipoCargo;
-
 import java.io.Serializable;
 
 public class Cargo implements Serializable {
@@ -11,9 +8,9 @@ public class Cargo implements Serializable {
 
     private Long idCargo;
     private String nome;
-    private SistemaEleicao sistemaEleicao;
+    private String sistemaEleicao;
     private boolean permiteSegundoTurno;
-    private TipoCargo tipoCargo;
+    private String tipoCargo;
 
 //    GETTERS E SETTERS
 
@@ -33,11 +30,11 @@ public class Cargo implements Serializable {
         this.nome = nome;
     }
 
-    public SistemaEleicao getSistemaEleicao() {
+    public String getSistemaEleicao() {
         return sistemaEleicao;
     }
 
-    public void setSistemaEleicao(SistemaEleicao sistemaEleicao) {
+    public void setSistemaEleicao(String sistemaEleicao) {
         this.sistemaEleicao = sistemaEleicao;
     }
 
@@ -49,11 +46,21 @@ public class Cargo implements Serializable {
         this.permiteSegundoTurno = permiteSegundoTurno;
     }
 
-    public TipoCargo getTipoCargo() {
+    public String getTipoCargo() {
         return tipoCargo;
     }
 
-    public void setTipoCargo(TipoCargo tipoCargo) {
+    public void setTipoCargo(String tipoCargo) {
         this.tipoCargo = tipoCargo;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!(obj instanceof Cargo))
+            return false;
+        Cargo other = (Cargo) obj;
+        return this.idCargo.equals(other.idCargo);
     }
 }

@@ -18,7 +18,7 @@ public class Cidade implements Serializable {
         this.nome = nome;
     }
 
-    //    GETTERS E SETTERS
+//    GETTERS E SETTERS
 
     public Long getIdCidade() {
         return idCidade;

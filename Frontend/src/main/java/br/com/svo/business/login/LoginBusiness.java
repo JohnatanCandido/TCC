@@ -8,20 +8,32 @@ import br.com.svo.util.RestUtil;
 import br.com.svo.util.exception.RestException;
 import com.google.gson.Gson;
 
+import javax.inject.Inject;
+import java.security.NoSuchAlgorithmException;
+
 public class LoginBusiness {
 
     private static final Gson GSON = new Gson();
 
-    public Identity login(Login login) throws BusinessException {
+    @Inject
+    private RestUtil restUtil;
+
+//    public Identity login(Login login) throws BusinessException {
 //        try {
-//            String response = RestUtil.httpPost("login/autenticar", login);
+//            login.encriptaSenha();
+//            String response = restUtil.httpPost("login/autenticar", login);
 //            return GSON.fromJson(response, Identity.class);
-            Identity identity = new Identity();
-            identity.setPessoa(new Pessoa());
-            identity.getPessoa().setNome("Teste");
-            return identity;
 //        } catch (RestException e) {
-//            throw new BusinessException("Login ou senha incorretos");
+//            throw new BusinessException(e.getMessages().get(0));
+//        } catch (NoSuchAlgorithmException e) {
+//            throw new BusinessException("Erro ao criptografar senha.");
 //        }
+//    }
+
+    public Identity login(Login login) {
+        Identity identity = new Identity();
+        identity.setPessoa(new Pessoa());
+        identity.getPessoa().setNome("Teste");
+        return identity;
     }
 }

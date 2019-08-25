@@ -1,7 +1,5 @@
 package br.com.svo.entities;
 
-import br.com.svo.entities.enums.TipoCargo;
-
 import java.io.Serializable;
 
 public class TurnoCargoRegiao implements Serializable {
@@ -9,7 +7,6 @@ public class TurnoCargoRegiao implements Serializable {
     public static final long serialVersionUID = 1L;
 
     private Long idTurnoCargoRegiao;
-    private TurnoCargo turnoCargo;
     private int qtdCadeiras;
     private boolean possuiSegundoTurno;
     private Cidade cidade;
@@ -17,8 +14,12 @@ public class TurnoCargoRegiao implements Serializable {
 
     public TurnoCargoRegiao() {}
 
-    public TurnoCargoRegiao(TurnoCargo turnoCargo, Cidade cidade, Estado estado) {
-        this.turnoCargo = turnoCargo;
+    public TurnoCargoRegiao(int qtdCadeiras, boolean possuiSegundoTurno) {
+        this.qtdCadeiras = qtdCadeiras;
+        this.possuiSegundoTurno = possuiSegundoTurno;
+    }
+
+    public TurnoCargoRegiao(Cidade cidade, Estado estado) {
         this.cidade = cidade;
         this.estado = estado;
     }
@@ -31,14 +32,6 @@ public class TurnoCargoRegiao implements Serializable {
 
     public void setIdTurnoCargoRegiao(Long idTurnoCargoRegiao) {
         this.idTurnoCargoRegiao = idTurnoCargoRegiao;
-    }
-
-    public TurnoCargo getTurnoCargo() {
-        return turnoCargo;
-    }
-
-    public void setTurnoCargo(TurnoCargo turnoCargo) {
-        this.turnoCargo = turnoCargo;
     }
 
     public int getQtdCadeiras() {

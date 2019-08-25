@@ -2,7 +2,6 @@ package br.com.svo.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Eleicao implements Serializable {

@@ -8,8 +8,6 @@ def validar(entidade):
         validar_candidato(entidade, errors)
     elif type(entidade) == Cargo:
         validar_cargo(entidade, errors)
-    elif type(entidade) == Eleicao:
-        validar_eleicao(entidade, errors)
     elif type(entidade) == Eleitor:
         validar_eleitor(entidade, errors)
     elif type(entidade) == Login:
@@ -43,15 +41,6 @@ def validar_cargo(cargo, errors):
         errors.append("O número de representantes é obrigatório")
     if cargo.sistema_eleicao is None:
         errors.append("O sistema de eleição é obrigatório")
-
-
-def validar_eleicao(eleicao, errors):
-    if eleicao.titulo is None:
-        errors.append("O título é obrigatório")
-    if eleicao.inicio is None:
-        errors.append("A data de início é obrigatório")
-    if eleicao.termino is None:
-        errors.append("A data de término é obrigatória")
 
 
 def validar_eleitor(eleitor, errors):

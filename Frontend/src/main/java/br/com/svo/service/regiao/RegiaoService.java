@@ -1,5 +1,6 @@
 package br.com.svo.service.regiao;
 
+import br.com.svo.business.exception.BusinessException;
 import br.com.svo.business.regiao.RegiaoBusiness;
 import br.com.svo.entities.Cidade;
 import br.com.svo.entities.Estado;
@@ -18,12 +19,12 @@ public class RegiaoService implements RegiaoServiceLocal, Serializable {
     private RegiaoBusiness regiaoBusiness;
 
     @Override
-    public List<Estado> consultarEstados(String filtro) {
+    public List<Estado> consultarEstados(String filtro) throws BusinessException {
         return regiaoBusiness.consultarEstados(filtro);
     }
 
     @Override
-    public List<Cidade> consultarCidades(Long idEstado, String filtro) {
+    public List<Cidade> consultarCidades(Long idEstado, String filtro) throws BusinessException {
         return regiaoBusiness.consultarCidades(idEstado, filtro);
     }
 }

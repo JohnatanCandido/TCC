@@ -1,9 +1,15 @@
 package br.com.svo.business.eleicao;
 
+import br.com.svo.business.exception.BusinessException;
 import br.com.svo.entities.Cargo;
-import br.com.svo.entities.enums.SistemaEleicao;
-import br.com.svo.entities.enums.TipoCargo;
+import br.com.svo.entities.Eleicao;
+import br.com.svo.entities.ListaCargo;
+import br.com.svo.util.RestUtil;
+import br.com.svo.util.exception.RestException;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,20 +18,36 @@ public class EleicaoBusiness implements Serializable {
 
     public static final long serialVersionUID = 1L;
 
-    String[] nomeCargos = new String[] {"Presidente", "Governador", "Deputado Federal", "Senador", "Deputado Estadual"};
-    TipoCargo[] tipos = new TipoCargo[] {TipoCargo.FEDERAL, TipoCargo.ESTADUAL, TipoCargo.FEDERAL, TipoCargo.FEDERAL, TipoCargo.ESTADUAL};
+    @Inject
+    private RestUtil restUtil;
 
-//    FIXME placeholder
+    private static final Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm:ss").create();
+
     public List<Cargo> consultaCargos() {
-        List<Cargo> cargos = new ArrayList<>();
-        for (long i = 0; i < 5; i++) {
-            Cargo cargo = new Cargo();
-            cargo.setIdCargo(i);
-            cargo.setNome(nomeCargos[(int) i]);
-            cargo.setTipoCargo(tipos[(int) i]);
-            cargo.setSistemaEleicao(SistemaEleicao.MAIORIA_SIMPLES);
-            cargos.add(cargo);
+        try {
+            String response = restUtil.httpGet("eleicao/cargos", null);
+            if (response == null) // Retorno quando não conectar com o back
+                return new ArrayList<>();
+            return GSON.fromJson(response, ListaCargo.class).getCargos();
+        } catch (RestException e) {
+            return new ArrayList<>();
         }
-        return cargos;
+    }
+
+    public void salvar(Eleicao eleicao) throws BusinessException {
+        try {
+            restUtil.httpPost("eleicao/salvar", eleicao);
+        } catch (RestException e) {
+            throw new BusinessException("Erros ao salvar a eleição:", e.getMessages());
+        }
+    }
+
+    public Eleicao buscaEleicao(Long idEleicao) throws BusinessException {
+        try {
+            String response = restUtil.httpGet("eleicao/" + idEleicao, null);
+            return GSON.fromJson(response, Eleicao.class);
+        } catch (RestException e) {
+            throw new BusinessException(e.getMessages().get(0));
+        }
     }
 }

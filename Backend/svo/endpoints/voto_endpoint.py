@@ -14,4 +14,5 @@ def vote():
         voto_json = json.loads(request.form['voto'])
     voto = mf.cria_voto_encriptado(voto_json)
     db_util.create(voto)
+    db_util.commit()
     return '200'

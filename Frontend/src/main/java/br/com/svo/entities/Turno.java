@@ -10,7 +10,6 @@ public class Turno implements Serializable {
     public static final long serialVersionUID = 1L;
 
     private Long idTurno;
-    private Eleicao eleicao;
     private int turno;
     private Date inicio;
     private Date termino;
@@ -19,8 +18,11 @@ public class Turno implements Serializable {
     public Turno() {}
 
     public Turno(Eleicao eleicao, int turno) {
-        this.eleicao = eleicao;
         this.turno = turno;
+    }
+
+    public boolean contemCargo(Cargo cargo) {
+        return this.turnoCargos.stream().anyMatch(tc -> tc.getCargo().equals(cargo));
     }
 
 //    GETTERS E SETTERS
@@ -31,14 +33,6 @@ public class Turno implements Serializable {
 
     public void setIdTurno(Long idTurno) {
         this.idTurno = idTurno;
-    }
-
-    public Eleicao getEleicao() {
-        return eleicao;
-    }
-
-    public void setEleicao(Eleicao eleicao) {
-        this.eleicao = eleicao;
     }
 
     public int getTurno() {

@@ -1,5 +1,6 @@
 package br.com.svo.web.eleicao.web.bean;
 
+import br.com.svo.business.exception.BusinessException;
 import br.com.svo.entities.Cargo;
 import br.com.svo.entities.Cidade;
 import br.com.svo.entities.Eleicao;
@@ -32,8 +33,6 @@ public class EleicaoWebBean implements Serializable {
     @Inject
     private EleicaoServiceLocal eleicaoService;
 
-
-
     private Eleicao eleicao;
     private List<Cargo> cargosDisponiveis;
     private Cargo cargoSelecionado;
@@ -41,21 +40,44 @@ public class EleicaoWebBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        if (idEleicao == null) {
-            eleicao = new Eleicao();
-        } else {
-            eleicao = new Eleicao();
+        try {
+            if (idEleicao == null) {
+                eleicao = new Eleicao();
+            } else {
+                eleicao = eleicaoService.buscaEleicao(idEleicao);
+            }
+            cargosDisponiveis = eleicaoService.consultaCargos();
+            cargosDisponiveis.removeIf(cargo -> eleicao.getTurnos().get(0).contemCargo(cargo));
+        } catch (BusinessException e) {
+            Messages.addErrorMessage(e);
         }
-        cargosDisponiveis = eleicaoService.consultaCargos();
     }
 
     public void adicionarCargo(Turno turno) {
         if (cargoSelecionado != null) {
-            turno.getTurnoCargos().add(new TurnoCargo(turno, cargoSelecionado));
+            turno.getTurnoCargos().add(new TurnoCargo(cargoSelecionado));
             cargosDisponiveis.remove(cargoSelecionado);
             cargoSelecionado = null;
         } else {
             Messages.addErrorMessage("Selecione um cargo.");
+        }
+    }
+
+    public void removerCargo(Turno turno, TurnoCargo turnoCargo) {
+        turno.getTurnoCargos().remove(turnoCargo);
+        cargosDisponiveis.add(turnoCargo.getCargo());
+    }
+
+    public boolean desabilitaModalCargoRegiao(TurnoCargo turnoCargo) {
+        return turnoCargo.getCargo().getNome().equals("Presidente");
+    }
+
+    public void salvar() {
+        try {
+            eleicaoService.salvar(eleicao);
+            Messages.addMessage("Salvo com sucesso.");
+        } catch (BusinessException e) {
+            Messages.addErrorMessage(e);
         }
     }
 

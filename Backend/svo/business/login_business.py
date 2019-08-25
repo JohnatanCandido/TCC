@@ -7,7 +7,7 @@ def auth(dados):
     user = database_utils.find_login(login)
     if user is not None:
         identity = user.to_json()
-        identity['token'] = get_token(user)
+        identity['token'] = 'Bearer ' + get_token(user)
         return identity
     return None
 

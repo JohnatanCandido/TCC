@@ -22,7 +22,7 @@ public class LoginWebBean implements Serializable {
     /*
         Iniciar postgres:
 
-        cd C:\Program Files\PostgreSQL\11\bin
+        cd Program Files\PostgreSQL\11\bin
         pg_ctl -D "C:\Program Files\PostgreSQL\11\data" start
      */
 
@@ -51,7 +51,7 @@ public class LoginWebBean implements Serializable {
             IdentityUtil.login(identity);
             RedirectUtils.redirect("index.html");
         } catch (BusinessException e) {
-            Messages.addErrorMessage("Usuário ou senha incorretos");
+            Messages.addErrorMessage(e);
         }
     }
 
