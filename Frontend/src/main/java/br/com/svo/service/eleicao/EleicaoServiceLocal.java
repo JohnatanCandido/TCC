@@ -3,7 +3,7 @@ package br.com.svo.service.eleicao;
 import br.com.svo.business.exception.BusinessException;
 import br.com.svo.entities.Cargo;
 import br.com.svo.entities.Eleicao;
-import br.com.svo.entities.Eleitor;
+import br.com.svo.entities.dto.EleicaoConsultaDTO;
 
 import javax.ejb.Local;
 import java.util.List;
@@ -16,4 +16,6 @@ public interface EleicaoServiceLocal {
     void salvar(Eleicao eleicao) throws BusinessException;
 
     Eleicao buscaEleicao(Long idEleicao) throws BusinessException;
+
+    List<EleicaoConsultaDTO> consultarEleicoes(EleicaoConsultaDTO filtro) throws BusinessException;
 }

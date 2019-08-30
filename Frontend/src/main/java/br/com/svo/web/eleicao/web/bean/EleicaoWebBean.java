@@ -2,14 +2,10 @@ package br.com.svo.web.eleicao.web.bean;
 
 import br.com.svo.business.exception.BusinessException;
 import br.com.svo.entities.Cargo;
-import br.com.svo.entities.Cidade;
 import br.com.svo.entities.Eleicao;
-import br.com.svo.entities.Estado;
 import br.com.svo.entities.Turno;
 import br.com.svo.entities.TurnoCargo;
-import br.com.svo.entities.TurnoCargoRegiao;
 import br.com.svo.service.eleicao.EleicaoServiceLocal;
-import br.com.svo.service.regiao.RegiaoServiceLocal;
 import br.com.svo.util.Messages;
 import org.omnifaces.cdi.Param;
 import org.omnifaces.cdi.ViewScoped;

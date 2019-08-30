@@ -1,5 +1,6 @@
 package br.com.svo.util;
 
+import br.com.svo.business.exception.BusinessException;
 import br.com.svo.util.exception.RestException;
 import com.n1analytics.paillier.PaillierPublicKey;
 
@@ -11,11 +12,10 @@ public final class EncryptionUtils {
     private static PaillierPublicKey pub;
 
     static {
-        RestUtil restUtil = new RestUtil();
         String key = null;
         try {
-            key = restUtil.httpGet("get_public_key", null);
-        } catch (RestException e) {
+            key = new RestUtil("get_public_key").get();
+        } catch (RestException | BusinessException e) {
             e.printStackTrace();
         }
         if (key == null)

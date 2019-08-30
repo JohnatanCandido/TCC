@@ -8,23 +8,18 @@ import br.com.svo.util.exception.RestException;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import javax.inject.Inject;
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.List;
 
 public class RegiaoBusiness implements Serializable {
 
     public static final long serialVersionUID = 1L;
 
-    @Inject
-    private RestUtil restUtil;
-
     private static final Gson GSON = new Gson();
 
     public List<Estado> consultarEstados(String filtro) throws BusinessException {
         try {
-            String response = restUtil.httpGet("regiao/estado/" + filtro, null);
+            String response = new RestUtil("regiao/estado/" + filtro).get();
             return GSON.fromJson(response, new TypeToken<List<Estado>>(){}.getType());
         } catch (RestException e) {
             throw new BusinessException(e.getMessages().get(0));
@@ -33,7 +28,7 @@ public class RegiaoBusiness implements Serializable {
 
     public List<Cidade> consultarCidades(Long idEstado, String filtro) throws BusinessException {
         try {
-            String response = restUtil.httpGet("regiao/estado/" + idEstado + "/cidade/" + filtro, null);
+            String response = new RestUtil("regiao/estado/" + idEstado + "/cidade/" + filtro).get();
             return GSON.fromJson(response, new TypeToken<List<Cidade>>(){}.getType());
         } catch (RestException e) {
             throw new BusinessException(e.getMessages().get(0));

@@ -10,6 +10,10 @@ public class RestException extends Exception {
         super();
     }
 
+    public RestException(String message) {
+        super(message);
+    }
+
     public RestException(List<String> messages) {
         this.messages = messages;
     }

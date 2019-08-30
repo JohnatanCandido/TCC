@@ -21,8 +21,7 @@ def salvar(user):
 
 
 @eleicoes.route('/<id_eleicao>', methods=['GET'])
-@protected
-def consultar_eleicao(user, id_eleicao):
+def consultar_eleicao(id_eleicao):
     eleicao = eleicao_business.eleicao_by_id(id_eleicao)
     if eleicao is None:
         return jsonify(['Eleição não encontrada']), 404
@@ -30,6 +29,14 @@ def consultar_eleicao(user, id_eleicao):
 
 
 @eleicoes.route('/cargos', methods=['GET'])
-@protected
-def consulta_cargos(user):
+def consulta_cargos():
     return jsonify(eleicao_business.consulta_cargos())
+
+
+@eleicoes.route('/consultar', methods=['GET'])
+def consulta_eleicoes():
+    filtro = request.json
+    eleicoes = eleicao_business.consulta_eleicoes(filtro)
+    if not eleicoes:
+        return 'Nenhuma eleição encontrada.', 204
+    return jsonify(eleicoes)

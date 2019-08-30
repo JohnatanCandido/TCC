@@ -59,6 +59,13 @@ class Eleicao(db.Model):
             'turnos': [t.to_json() for t in self.turnos]
         }
 
+    def campos_consulta(self):
+        return {
+            'idEleicao': self.id_eleicao,
+            'titulo': self.titulo,
+            'data': str(self.turnos[0].inicio)
+        }
+
     def turno_by_id(self, id_turno):
         turnos = [t for t in self.turnos if t.id_turno == id_turno]
         return turnos[0] if len(turnos) == 1 else Turno()

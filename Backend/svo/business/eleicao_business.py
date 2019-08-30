@@ -1,10 +1,31 @@
+from sqlalchemy import Date
+
 from svo.business import model_factory as mf
 from svo.exception.validation_exception import ValidationException
 from svo.util import database_utils as db
+from svo.entities.models import Eleicao, Turno
 
 
 def consulta_cargos():
     return {'cargos': [c.to_json() for c in db.lista_cargos()]}
+
+
+def consulta_eleicoes(filtro):
+    if 'idEleicao' in filtro:
+        eleicao = db.find_eleicao(filtro['idEleicao'])
+        if eleicao is None:
+            return []
+        return [eleicao.campos_consulta()]
+    query = 'db.query(Eleicao)'
+    if 'data' in filtro:
+        query += '.join(Eleicao.turnos).filter(Turno.inicio.cast(Date) == filtro["data"])'
+    if 'titulo' in filtro:
+        query += ".filter(Eleicao.titulo.ilike(f'%{filtro[\"titulo\"]}%'))"
+    query += '.all()'
+    eleicoes = eval(query)
+    if not eleicoes:
+        return []
+    return [e.campos_consulta() for e in eleicoes]
 
 
 def eleicao_by_id(id_eleicao):
