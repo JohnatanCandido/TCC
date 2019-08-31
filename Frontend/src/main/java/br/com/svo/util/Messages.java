@@ -27,4 +27,13 @@ public class Messages implements Serializable {
     private static void addMessage(FacesMessage.Severity severity, String message) {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severity, null, message));
     }
+
+    public static void addFoundMessage(int numeroRegistros) {
+        String message;
+        if (numeroRegistros == 1)
+            message = "1 registro encontrado.";
+        else
+            message = String.format("%s registros encontrados", numeroRegistros);
+        addMessage(message);
+    }
 }

@@ -4,7 +4,6 @@ import br.com.svo.business.exception.BusinessException;
 import br.com.svo.entities.dto.EleicaoConsultaDTO;
 import br.com.svo.service.eleicao.EleicaoServiceLocal;
 import br.com.svo.util.Messages;
-import br.com.svo.util.exception.RestException;
 import org.omnifaces.cdi.ViewScoped;
 
 import javax.annotation.PostConstruct;
@@ -37,6 +36,8 @@ public class BuscaEleicaoWebBean implements Serializable {
             eleicoes = eleicaoService.consultarEleicoes(eleicaoConsultaDTO);
             if (eleicoes.isEmpty())
                 Messages.addErrorMessage("Nenhuma eleição encontrada!");
+            else
+                Messages.addFoundMessage(eleicoes.size());
         } catch (BusinessException e) {
             Messages.addErrorMessage(e);
         }
