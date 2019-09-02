@@ -1,6 +1,8 @@
 package br.com.svo.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Pessoa implements Serializable {
 
@@ -9,7 +11,14 @@ public class Pessoa implements Serializable {
     private Long idPessoa;
     private String nome;
     private String cpf;
+    private String usuario;
     private Eleitor eleitor;
+    private List<Perfil> perfis;
+
+    public Pessoa() {
+        this.eleitor = new Eleitor();
+        this.perfis = new ArrayList<>();
+    }
 
 //    GETTERS E SETTERS
 
@@ -43,5 +52,21 @@ public class Pessoa implements Serializable {
 
     public void setEleitor(Eleitor eleitor) {
         this.eleitor = eleitor;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public List<Perfil> getPerfis() {
+        return perfis;
+    }
+
+    public void setPerfis(List<Perfil> perfis) {
+        this.perfis = perfis;
     }
 }

@@ -1,9 +1,6 @@
-from sqlalchemy import Date
-
 from svo.business import model_factory as mf
 from svo.exception.validation_exception import ValidationException
 from svo.util import database_utils as db
-from svo.entities.models import Eleicao, Turno
 
 
 def consulta_cargos():

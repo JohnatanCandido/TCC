@@ -26,4 +26,14 @@ public class Perfil implements Serializable {
     public void setNome(String nome) {
         this.nome = nome;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!(obj instanceof Perfil))
+            return false;
+        Perfil other = (Perfil) obj;
+        return this.idPerfil.equals(other.idPerfil);
+    }
 }

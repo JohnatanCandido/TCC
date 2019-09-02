@@ -7,10 +7,10 @@ public class Eleitor implements Serializable {
     public static final long serialVersionUID = 1L;
 
     private Long idEleitor;
-    private Pessoa pessoa;
     private Cidade cidade;
-    private Integer zonaEleitoral;
-    private Integer numeroInscricao;
+    private String zonaEleitoral;
+    private String numeroInscricao;
+    private String secao;
 
 //    GETTERS E SETTERS
 
@@ -22,14 +22,6 @@ public class Eleitor implements Serializable {
         this.idEleitor = idEleitor;
     }
 
-    public Pessoa getPessoa() {
-        return pessoa;
-    }
-
-    public void setPessoa(Pessoa pessoa) {
-        this.pessoa = pessoa;
-    }
-
     public Cidade getCidade() {
         return cidade;
     }
@@ -38,19 +30,27 @@ public class Eleitor implements Serializable {
         this.cidade = cidade;
     }
 
-    public Integer getZonaEleitoral() {
+    public String getZonaEleitoral() {
         return zonaEleitoral;
     }
 
-    public void setZonaEleitoral(Integer zonaEleitoral) {
+    public void setZonaEleitoral(String zonaEleitoral) {
         this.zonaEleitoral = zonaEleitoral;
     }
 
-    public Integer getNumeroInscricao() {
+    public String getNumeroInscricao() {
         return numeroInscricao;
     }
 
-    public void setNumeroInscricao(Integer numeroInscricao) {
+    public void setNumeroInscricao(String numeroInscricao) {
         this.numeroInscricao = numeroInscricao;
+    }
+
+    public String getSecao() {
+        return secao;
+    }
+
+    public void setSecao(String secao) {
+        this.secao = secao;
     }
 }

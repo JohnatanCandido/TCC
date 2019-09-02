@@ -8,6 +8,6 @@ pyjwt
 /*
     Iniciar postgres:
 
-    cd C:\Program Files\PostgreSQL\11\bin
+    cd Program Files\PostgreSQL\11\bin
     pg_ctl -D "C:\Program Files\PostgreSQL\11\data" start
  */

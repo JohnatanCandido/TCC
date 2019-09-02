@@ -220,7 +220,10 @@ class Pessoa(db.Model):
         return {
             'idPessoa': self.id_pessoa,
             'nome': self.nome,
-            'cpf': self.cpf
+            'cpf': self.cpf,
+            'usuario': self.login.usuario,
+            'eleitor': self.eleitor.to_json(),
+            'perfis': [p.to_json() for p in self.login.perfis]
         }
 
 
@@ -250,11 +253,11 @@ class Candidato(db.Model):
 class Eleitor(db.Model):
     id_eleitor = db.Column(db.Integer, primary_key=True)
     id_pessoa = db.Column(db.Integer, db.ForeignKey('pessoa.id_pessoa'), nullable=False)
-    zona_eleitoral = db.Column(db.Integer, nullable=False)
-    secao = db.Column(db.Integer, nullable=False)
-    numero_inscricao = db.Column(db.Integer, nullable=False, unique=True)
+    zona_eleitoral = db.Column(db.String(3), nullable=False)
+    secao = db.Column(db.String(4), nullable=False)
+    numero_inscricao = db.Column(db.String(12), nullable=False, unique=True)
     id_cidade = db.Column(db.Integer, db.ForeignKey('cidade.id_cidade'), nullable=False)
-    turno = db.relationship('Turno', secondary=eleitor_turno)
+    turnos = db.relationship('Turno', secondary=eleitor_turno)
 
     def __repr__(self):
         return f'idEleitor: {self.id_eleitor}, número inscrição: {self.numero_inscricao}'
@@ -263,7 +266,9 @@ class Eleitor(db.Model):
         return {
             'idEleitor': self.id_eleitor,
             'zonaEleitoral': self.zona_eleitoral,
-            'numeroInscricao': self.numero_inscricao
+            'numeroInscricao': self.numero_inscricao,
+            'secao': self.secao,
+            'cidade': self.cidade.to_json()
         }
 
 

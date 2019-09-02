@@ -1,5 +1,10 @@
-from svo.entities.models import Eleicao, Turno, TurnoCargo, TurnoCargoRegiao, Partido, Candidato, Eleitor, Login, VotoEncriptado
-from svo.util import database_utils as db
+from svo.entities.models import Eleicao, Turno, TurnoCargo, TurnoCargoRegiao, Partido, Candidato, Eleitor, Login, \
+    VotoEncriptado, Pessoa
+from svo.util import database_utils as db, senha_util
+
+import re
+
+# Eleição ==============================================================================================================
 
 
 def cria_eleicao(dados):
@@ -94,7 +99,47 @@ def cria_turno_cargo_regiao(dados, turno_cargo, turno_cargo_regiao):
     return turno_cargo_regiao
 
 
-# ====================================================================================================================
+# Pessoa ===============================================================================================================
+
+
+def cria_pessoa(dados):
+    if 'idPessoa' in dados:
+        pessoa = db.find_pessoa(int(dados['idPessoa']))
+    else:
+        pessoa = Pessoa()
+    if 'nome' in dados:
+        pessoa.nome = dados['nome']
+    if 'cpf' in dados:
+        pessoa.cpf = re.sub('[.-]', '', dados['cpf'])
+    if 'eleitor' in dados:
+        if pessoa.eleitor is not None:
+            cria_eleitor(dados['eleitor'], pessoa.eleitor)
+        else:
+            pessoa.eleitor = cria_eleitor(dados['eleitor'], None)
+    if 'usuario' in dados:
+        if pessoa.login is None:
+            pessoa.login = Login()
+            pessoa.login.usuario = dados['usuario']
+            pessoa.login.senha = senha_util.generate_password()
+    if 'perfis' in dados:
+        pessoa.login.perfis.clear()
+        for p in dados['perfis']:
+            perfil = db.find_perfil(p['idPerfil'])
+            pessoa.login.perfis.append(perfil)
+    return pessoa
+
+
+def cria_eleitor(dados, eleitor):
+    if eleitor is None:
+        eleitor = Eleitor()
+    eleitor.zona = dados['zonaEleitoral']
+    eleitor.numero_inscricao = re.sub(' ', '', dados['numeroInscricao'])
+    eleitor.secao = dados['secao']
+    return eleitor
+
+
+# ======================================================================================================================
+
 
 def cria_partido(dados):
     partido = Partido()
@@ -112,14 +157,6 @@ def cria_candidato(dados):
     candidato.id_cargo = int(dados['idCargo'])
     candidato.id_eleicao = int(dados['idEleicao'])
     return candidato
-
-
-def cria_eleitor(dados):
-    eleitor = Eleitor()
-    eleitor.nome = dados['nome']
-    eleitor.zona = int(dados['zona'])
-    eleitor.numero_inscricao = int(dados['numeroInscricao'])
-    return eleitor
 
 
 def cria_login(dados):

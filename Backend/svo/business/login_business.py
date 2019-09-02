@@ -16,3 +16,7 @@ def get_token(login):
     if login.has_perfil('Administrador'):
         return token_util.generate_adm_token(login.id_pessoa)
     return token_util.generate_user_token(login.id_pessoa)
+
+
+def listar_perfis():
+    return [p.to_json() for p in database_utils.lista_perfis()]
