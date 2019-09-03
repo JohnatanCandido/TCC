@@ -4,6 +4,7 @@ import br.com.svo.business.exception.BusinessException;
 import br.com.svo.entities.Identity;
 import br.com.svo.entities.Perfil;
 import br.com.svo.entities.Pessoa;
+import br.com.svo.entities.dto.PessoaConsultaDTO;
 import br.com.svo.util.RestUtil;
 import br.com.svo.util.exception.RestException;
 import com.google.gson.Gson;
@@ -44,11 +45,22 @@ public class PessoaBusiness implements Serializable {
     public void salvar(Pessoa pessoa) throws BusinessException {
         try {
             new RestUtil("pessoa/salvar").withBody(pessoa)
-                                  .withHeader("Content-Type", "application/json")
-                                  .withHeader("Authorization", identity.getToken())
-                                  .post();
+                                         .withHeader("Content-Type", "application/json")
+                                         .withHeader("Authorization", identity.getToken())
+                                         .post();
         } catch (RestException e) {
             throw new BusinessException("Erros ao salvar a eleição:", e.getMessages());
+        }
+    }
+
+    public List<PessoaConsultaDTO> buscarPessoas(PessoaConsultaDTO pessoaConsultaDTO) throws BusinessException {
+        try {
+            String response = new RestUtil("pessoa/consultar").withBody(pessoaConsultaDTO)
+                                                              .withHeader("Content-Type", "application/json")
+                                                              .get();
+            return GSON.fromJson(response, new TypeToken<List<PessoaConsultaDTO>>(){}.getType());
+        } catch (RestException e) {
+            throw new BusinessException("Erro ao consultar pessoa:", e.getMessages());
         }
     }
 }

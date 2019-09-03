@@ -1,0 +1,128 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:o="http://omnifaces.org/ui"
+                template="../../template/template.xhtml">
+
+    <ui:define name="content">
+        <h:form id="formBuscaPessoa">
+            <div class="ui-fluid">
+                <div class="card-body">
+                    <div class="ui-g-12 ui-md-12 ui-lg-12">
+                        <div class="ui-g-12 ui-md-12 ui-lg-4">
+                            <p:inputNumber id="idPessoa" value="#{buscaPessoaWebBean.pessoaConsultaDTO.idPessoa}" decimalPlaces="0">
+                                <p:ajax update="@this" process="@this" global="false" />
+                            </p:inputNumber>
+                        </div>
+                        <div class="ui-g-12 ui-md-12 ui-lg-4">
+                            <p:inputText id="nome" value="#{buscaPessoaWebBean.pessoaConsultaDTO.nome}">
+                                <p:ajax update="@this" process="@this" global="false" />
+                            </p:inputText>
+                        </div>
+                        <div class="ui-g-12 ui-md-12 ui-lg-4">
+                            <p:inputMask id="cpf" mask="999.999.999-99" value="#{buscaPessoaWebBean.pessoaConsultaDTO.cpf}">
+                                <p:ajax update="@this" process="@this" global="false" />
+                            </p:inputMask>
+                        </div>
+                        <div class="ui-g-12 ui-md-12 ui-lg-4">
+                            <label for="estadoSuggestion">Estado</label>
+                            <p:autoComplete id="estadoSuggestion"
+                                            value="#{buscaPessoaWebBean.pessoaConsultaDTO.idEstado}"
+                                            emptyMessage="Nenhum estado encontrado"
+                                            queryDelay="1000"
+                                            maxResults="10"
+                                            var="estado"
+                                            itemLabel="#{estado.nome}"
+                                            itemValue="#{estado.idEstado}"
+                                            minQueryLength="3"
+                                            cache="true"
+                                            cacheTimeout="30000"
+                                            completeMethod="#{buscaPessoaWebBean.consultaEstados}">
+                                <p:ajax event="clear" update="@this, cidadeSuggestion" process="@this" global="false" />
+                                <p:ajax event="itemSelect" update="@this, cidadeSuggestion" process="@this" global="false" />
+                                <o:converter converterId="omnifaces.ListConverter" list="#{buscaPessoaWebBean.estados}" />
+                            </p:autoComplete>
+                        </div>
+                        <div class="ui-g-12 ui-md-12 ui-lg-4">
+                            <label for="cidadeSuggestion">Cidade</label>
+                            <p:autoComplete id="cidadeSuggestion"
+                                            value="#{buscaPessoaWebBean.pessoaConsultaDTO.idCidade}"
+                                            disabled="#{buscaPessoaWebBean.desabilitaCidade}"
+                                            emptyMessage="Nenhuma cidade encontrada"
+                                            queryDelay="1000"
+                                            maxResults="10"
+                                            var="cidade"
+                                            itemLabel="#{cidade.nome}"
+                                            itemValue="#{cidade.idCidade}"
+                                            minQueryLength="3"
+                                            cache="true"
+                                            cacheTimeout="30000"
+                                            completeMethod="#{buscaPessoaWebBean.consultaCidades}">
+                                <p:ajax event="clear" update="@this" process="@this, adicionarRegiao" global="false" />
+                                <p:ajax event="itemSelect" update="@this, adicionarRegiao" process="@this" global="false" />
+                                <o:converter converterId="omnifaces.ListConverter" list="#{buscaPessoaWebBean.cidades}" />
+                            </p:autoComplete>
+                        </div>
+                        <div class="ui-g-12 ui-md-12 ui-lg-4">
+                            <p:inputText id="zonaEleitoral" value="#{buscaPessoaWebBean.pessoaConsultaDTO.zonaEleitoral}" maxlength="4">
+                                <p:ajax update="@this" process="@this" global="false" />
+                            </p:inputText>
+                        </div>
+                        <div class="ui-g-12 ui-md-12 ui-lg-4">
+                            <p:inputText id="secao" value="#{buscaPessoaWebBean.pessoaConsultaDTO.secao}" maxlength="3">
+                                <p:ajax update="@this" process="@this" global="false" />
+                            </p:inputText>
+                        </div>
+                        <div class="ui-g-12 ui-md-12 ui-lg-4">
+                            <p:inputText id="numeroInscricao" value="#{buscaPessoaWebBean.pessoaConsultaDTO.numeroInscricao}" maxlength="12">
+                                <p:ajax update="@this" process="@this" global="false" />
+                            </p:inputText>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-12 ui-lg-12">
+                        <div class="ui-g-12 ui-md-12 ui-lg-2">
+                            <p:commandButton id="buscarPessoas"
+                                             value="Buscar"
+                                             icon="fa fa-search"
+                                             action="#{buscaPessoaWebBean.buscar()}"
+                                             process="@this"
+                                             update="@this, dataTablePessoas" />
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-12 ui-lg-12">
+                        <p:dataTable id="dataTablePessoas"
+                                     value="#{buscaPessoaWebBean.pessoas}"
+                                     rendered="#{buscaPessoaWebBean.pessoas.size() > 0}"
+                                     var="pessoa"
+                                     rows="10"
+                                     paginator="true"
+                                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                                     paginatorAlwaysVisible="false"
+                                     reflow="true">
+                            <p:column headerText="Ação">
+                                <p:link outcome="cadastro-pessoa.xhtml">
+                                    <i class="fa fa-pencil" />
+                                    <f:param name="idPessoa" value="#{pessoa.idPessoa}" />
+                                </p:link>
+                            </p:column>
+                            <p:column headerText="Nome">
+                                <h:outputText value="#{pessoa.nome}" />
+                            </p:column>
+                            <p:column headerText="CPF">
+                                <h:outputText value="#{pessoa.cpf}" />
+                            </p:column>
+                            <p:column headerText="Título de eleitor">
+                                <h:outputText value="#{pessoa.numeroInscricao}" />
+                            </p:column>
+                            <p:column headerText="Cidade">
+                                <h:outputText value="#{pessoa.cidade}" />
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

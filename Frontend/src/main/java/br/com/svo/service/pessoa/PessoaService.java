@@ -4,6 +4,7 @@ import br.com.svo.business.exception.BusinessException;
 import br.com.svo.business.pessoa.PessoaBusiness;
 import br.com.svo.entities.Perfil;
 import br.com.svo.entities.Pessoa;
+import br.com.svo.entities.dto.PessoaConsultaDTO;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -29,5 +30,10 @@ public class PessoaService implements PessoaServiceLocal, Serializable {
     @Override
     public void salvar(Pessoa pessoa) throws BusinessException {
         pessoaBusiness.salvar(pessoa);
+    }
+
+    @Override
+    public List<PessoaConsultaDTO> buscarPessoas(PessoaConsultaDTO pessoaConsultaDTO) throws BusinessException {
+        return pessoaBusiness.buscarPessoas(pessoaConsultaDTO);
     }
 }

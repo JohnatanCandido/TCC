@@ -26,3 +26,12 @@ def salvar_pessoa(user):
         return 'Salvo com sucesso', 200
     except ValidationException as e:
         return jsonify(e.errors), 400
+
+
+@pessoas.route('/consultar')
+def consultar_pessoas():
+    filtro = request.json
+    pessoas = pessoa_business.consultar_pessoas(filtro)
+    if not pessoas:
+        return 'Nenhuma pessoa encontrada.', 204
+    return jsonify(pessoas)

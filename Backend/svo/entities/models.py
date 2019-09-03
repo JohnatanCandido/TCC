@@ -226,6 +226,15 @@ class Pessoa(db.Model):
             'perfis': [p.to_json() for p in self.login.perfis]
         }
 
+    def campos_consulta(self):
+        return {
+            'idPessoa': self.id_pessoa,
+            'nome': self.nome,
+            'cpf': self.cpf,
+            'numeroInscricao': self.eleitor.numero_inscricao,
+            'cidade': self.eleitor.cidade.nome
+        }
+
 
 class Candidato(db.Model):
     id_candidato = db.Column(db.Integer, primary_key=True)
