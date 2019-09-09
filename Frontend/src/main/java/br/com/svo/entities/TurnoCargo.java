@@ -68,4 +68,19 @@ public class TurnoCargo implements Serializable {
     public void setTurnoCargoRegioes(List<TurnoCargoRegiao> turnoCargoRegioes) {
         this.turnoCargoRegioes = turnoCargoRegioes;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!(obj instanceof TurnoCargo))
+            return false;
+        TurnoCargo other = (TurnoCargo) obj;
+        return this.idTurnoCargo.equals(other.idTurnoCargo);
+    }
+
+    @Override
+    public String toString() {
+        return "TurnoCargo[" + idTurnoCargo + ", " + cargo.getNome() + "]";
+    }
 }

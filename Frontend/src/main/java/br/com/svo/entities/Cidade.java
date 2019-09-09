@@ -43,4 +43,14 @@ public class Cidade implements Serializable {
     public void setNome(String nome) {
         this.nome = nome;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!(obj instanceof Cidade))
+            return false;
+        Cidade other = (Cidade) obj;
+        return this.idCidade.equals(other.idCidade);
+    }
 }

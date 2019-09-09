@@ -94,8 +94,7 @@
                             <p:pickList id="perfis"
                                         value="#{pessoaWebBean.perfis}"
                                         var="perfil"
-                                        converter="omnifaces.ListConverter"
-                                        itemLabel="#{perfil.nome}"
+                                        itemLabel="#{perfil}"
                                         itemValue="#{perfil}">
                                 <p:ajax event="transfer" process="@this" update="@this" />
                                 <p:ajax event="select" process="@this" update="@this" />

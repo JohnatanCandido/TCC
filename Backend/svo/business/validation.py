@@ -4,9 +4,7 @@ from svo.exception.validation_exception import ValidationException
 
 def validar(entidade):
     errors = []
-    if type(entidade) == Candidato:
-        validar_candidato(entidade, errors)
-    elif type(entidade) == Cargo:
+    if type(entidade) == Cargo:
         validar_cargo(entidade, errors)
     elif type(entidade) == Eleitor:
         validar_eleitor(entidade, errors)
@@ -19,19 +17,6 @@ def validar(entidade):
 
     if len(errors) > 0:
         raise ValidationException('Erros de validação', errors)
-
-
-def validar_candidato(candidato, errors):
-    if candidato.id_eleicao is None:
-        errors.append("A eleição é obrigatória")
-    if candidato.id_partido is None:
-        errors.append("O partido é obrigatório")
-    if candidato.id_cargo is None:
-        errors.append("O cargo é obrigatório")
-    if candidato.nome is None:
-        errors.append("O nome é obrigatório")
-    if candidato.numero is None:
-        errors.append("O número do candidato é obrigatório")
 
 
 def validar_cargo(cargo, errors):

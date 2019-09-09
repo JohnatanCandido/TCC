@@ -1,5 +1,8 @@
 package br.com.svo.entities.dto;
 
+import br.com.svo.entities.Cidade;
+import br.com.svo.entities.Estado;
+
 import java.io.Serializable;
 
 public class PessoaConsultaDTO implements Serializable {
@@ -14,7 +17,8 @@ public class PessoaConsultaDTO implements Serializable {
     private String numeroInscricao;
     private Long idEstado;
     private Long idCidade;
-    private String cidade;
+    private Estado estado;
+    private Cidade cidade;
 
 //    GETTERS E SETTERS
 
@@ -82,11 +86,21 @@ public class PessoaConsultaDTO implements Serializable {
         this.idCidade = idCidade;
     }
 
-    public String getCidade() {
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Estado estado) {
+        this.idEstado = estado.getIdEstado();
+        this.estado = estado;
+    }
+
+    public Cidade getCidade() {
         return cidade;
     }
 
-    public void setCidade(String cidade) {
+    public void setCidade(Cidade cidade) {
+        this.idCidade = cidade.getIdCidade();
         this.cidade = cidade;
     }
 }

@@ -232,7 +232,7 @@ class Pessoa(db.Model):
             'nome': self.nome,
             'cpf': self.cpf,
             'numeroInscricao': self.eleitor.numero_inscricao,
-            'cidade': self.eleitor.cidade.nome
+            'cidade': self.eleitor.cidade.to_json()
         }
 
 

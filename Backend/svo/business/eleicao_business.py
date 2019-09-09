@@ -2,6 +2,10 @@ from svo.business import model_factory as mf
 from svo.exception.validation_exception import ValidationException
 from svo.util import database_utils as db
 
+# Usado na consulta de eleições
+# noinspection PyUnresolvedReferences
+from svo.entities.models import Eleicao
+
 
 def consulta_cargos():
     return {'cargos': [c.to_json() for c in db.lista_cargos()]}

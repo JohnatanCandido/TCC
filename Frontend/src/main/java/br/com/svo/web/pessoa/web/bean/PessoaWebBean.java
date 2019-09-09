@@ -87,6 +87,7 @@ public class PessoaWebBean implements Serializable {
 
     public void salvar() {
         try {
+            pessoa.setPerfis(perfis.getTarget());
             pessoaService.salvar(pessoa);
             initPerfis();
             Messages.addMessage("Salvo com sucesso.");

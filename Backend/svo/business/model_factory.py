@@ -4,8 +4,8 @@ from svo.util import database_utils as db, senha_util
 
 import re
 
-# Eleição ==============================================================================================================
 
+# Eleição ==============================================================================================================
 
 def cria_eleicao(dados):
     if 'idEleicao' in dados:
@@ -101,7 +101,6 @@ def cria_turno_cargo_regiao(dados, turno_cargo, turno_cargo_regiao):
 
 # Pessoa ===============================================================================================================
 
-
 def cria_pessoa(dados):
     if 'idPessoa' in dados:
         pessoa = db.find_pessoa(int(dados['idPessoa']))
@@ -138,6 +137,20 @@ def cria_eleitor(dados, eleitor):
     return eleitor
 
 
+# Candidato ============================================================================================================
+
+def cria_candidato(dados):
+    candidato = Candidato()
+    if 'idCandidato' in dados:
+        candidato.id_candidato = int(dados['idCandidato'])
+    if 'idCandidatoPrincipal' in dados:
+        candidato.id_candidato_principal = int(dados['idCandidatoPrincipal'])
+    candidato.numero = int(dados['numero'])
+    candidato.id_partido = int(dados['idPartido'])
+    candidato.id_turno_cargo_regiao = int(dados['idTurnoCargoRegiao'])
+    candidato.id_pessoa = int(dados['idPessoa'])
+    return candidato
+
 # ======================================================================================================================
 
 
@@ -147,16 +160,6 @@ def cria_partido(dados):
     partido.sigla = dados['sigla']
     partido.nome = dados['nome']
     return partido
-
-
-def cria_candidato(dados):
-    candidato = Candidato()
-    candidato.nome = dados['nome']
-    candidato.numero = int(dados['numero'])
-    candidato.id_partido = int(dados['idPartido'])
-    candidato.id_cargo = int(dados['idCargo'])
-    candidato.id_eleicao = int(dados['idEleicao'])
-    return candidato
 
 
 def cria_login(dados):

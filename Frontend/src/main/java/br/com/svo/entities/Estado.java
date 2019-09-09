@@ -33,4 +33,14 @@ public class Estado implements Serializable {
     public void setNome(String nome) {
         this.nome = nome;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!(obj instanceof Estado))
+            return false;
+        Estado other = (Estado) obj;
+        return this.idEstado.equals(other.idEstado);
+    }
 }

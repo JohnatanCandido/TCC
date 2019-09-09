@@ -4,5 +4,55 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
 
-    Candidato
+    <div class="ui-g-12">
+        <div class="ui-g-12 ui-md-12 ui-lg-12">
+            <div class="ui-g-12 ui-md-8 ui-lg-3">
+                <label for="turnosCargosDisponiveis">Cargo</label>
+                <p:selectOneMenu id="turnosCargosDisponiveis"
+                                 converter="omnifaces.SelectItemsIndexConverter"
+                                 value="#{candidatoCadastroWebBean.turnoCargo}"
+                                 autoWidth="false">
+                    <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+                    <f:selectItems value="#{candidatoCadastroWebBean.turnoCargos}"
+                                   var="turnoCargo"
+                                   itemLabel="#{turnoCargo.cargo.nome}"
+                                   itemValue="#{turnoCargo}" />
+                    <p:ajax listener="#{candidatoCadastroWebBean.filtraEstados()}" process="@this" update="@form" />
+                </p:selectOneMenu>
+            </div>
+            <h:panelGroup id="panelEstado" rendered="#{candidatoCadastroWebBean.renderizaEstado}">
+                <div class="ui-g-12 ui-md-8 ui-lg-3">
+                    <label for="estados">Estado</label>
+                    <p:selectOneMenu id="estados"
+                                     converter="omnifaces.SelectItemsIndexConverter"
+                                     value="#{candidatoCadastroWebBean.estado}"
+                                     autoWidth="false">
+                        <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+                        <f:selectItems value="#{candidatoCadastroWebBean.estados}"
+                                       var="estado"
+                                       itemLabel="#{estado.nome}"
+                                       itemValue="#{estado}" />
+                        <p:ajax listener="#{candidatoCadastroWebBean.filtraCidades()}" process="@this" update="@form" />
+                    </p:selectOneMenu>
+                </div>
+            </h:panelGroup>
+            <h:panelGroup id="panelCidade" rendered="#{candidatoCadastroWebBean.renderizaCidade}">
+                <div class="ui-g-12 ui-md-8 ui-lg-3">
+                    <label for="cidades">Cidade</label>
+                    <p:selectOneMenu id="cidades"
+                                     converter="omnifaces.SelectItemsIndexConverter"
+                                     value="#{candidatoCadastroWebBean.cidade}"
+                                     autoWidth="false">
+                        <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+                        <f:selectItems value="#{candidatoCadastroWebBean.cidades}"
+                                       var="cidade"
+                                       itemLabel="#{cidade.nome}"
+                                       itemValue="#{cidade}" />
+                        <p:ajax process="@this" update="@this" />
+                    </p:selectOneMenu>
+                </div>
+            </h:panelGroup>
+
+        </div>
+    </div>
 </ui:composition>
