@@ -1,10 +1,13 @@
 package br.com.svo.business.eleicao;
 
 import br.com.svo.business.exception.BusinessException;
+import br.com.svo.entities.Candidato;
 import br.com.svo.entities.Cargo;
 import br.com.svo.entities.Eleicao;
 import br.com.svo.entities.Identity;
 import br.com.svo.entities.ListaCargo;
+import br.com.svo.entities.Partido;
+import br.com.svo.entities.Pessoa;
 import br.com.svo.entities.dto.EleicaoConsultaDTO;
 import br.com.svo.util.RestUtil;
 import br.com.svo.util.exception.RestException;
@@ -64,6 +67,41 @@ public class EleicaoBusiness implements Serializable {
             return GSON.fromJson(response, new TypeToken<List<EleicaoConsultaDTO>>(){}.getType());
         } catch (RestException e) {
             throw new BusinessException(e.getMessages().get(0));
+        }
+    }
+
+    public List<Pessoa> consultaPessoas(String filtro) throws BusinessException {
+        try {
+            String response = new RestUtil("pessoa/consultar").withBody(filtro)
+                                                              .withHeader("Content-Type", "application/json")
+                                                              .get();
+
+            return GSON.fromJson(response, new TypeToken<List<Pessoa>>(){}.getType());
+        } catch (RestException e) {
+            throw new BusinessException(e.getMessages().get(0));
+        }
+    }
+
+    public List<Partido> consultaPartidos(String filtro) throws BusinessException {
+        try {
+            String response = new RestUtil("partido/consultar").withBody(filtro)
+                                                               .withHeader("Content-Type", "application/json")
+                                                               .get();
+
+            return GSON.fromJson(response, new TypeToken<List<Partido>>(){}.getType());
+        } catch (RestException e) {
+            throw new BusinessException(e.getMessages().get(0));
+        }
+    }
+
+    public void salvarCandidato(Candidato candidato) throws BusinessException {
+        try {
+            new RestUtil("candidato/salvar").withBody(candidato)
+                                            .withHeader("Content-Type", "application/json")
+                                            .withHeader("Authorization", identity.getToken())
+                                            .post();
+        } catch (RestException e) {
+            throw new BusinessException("Erros ao salvar a candidato:", e.getMessages());
         }
     }
 }

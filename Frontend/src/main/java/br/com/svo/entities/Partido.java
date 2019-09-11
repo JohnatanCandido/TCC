@@ -44,4 +44,8 @@ public class Partido implements Serializable {
     public void setNome(String nome) {
         this.nome = nome;
     }
+
+    public String getNomeFormatado() {
+        return numeroPartido + " - " + nome + " (" + sigla + ")";
+    }
 }

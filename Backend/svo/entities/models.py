@@ -204,6 +204,12 @@ class Partido(db.Model):
             'numeroPartido': self.id_partido
         }
 
+    def campos_consulta(self):
+        return {
+            'idPartido': self.id_partido,
+            'nome': f'{self.numero_partido} - {self.nome} ({self.sigla})'
+        }
+
 
 class Pessoa(db.Model):
     id_pessoa = db.Column(db.Integer, primary_key=True)

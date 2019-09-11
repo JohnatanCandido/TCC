@@ -143,24 +143,25 @@ def cria_candidato(dados):
     candidato = Candidato()
     if 'idCandidato' in dados:
         candidato.id_candidato = int(dados['idCandidato'])
-    if 'idCandidatoPrincipal' in dados:
-        candidato.id_candidato_principal = int(dados['idCandidatoPrincipal'])
     candidato.numero = int(dados['numero'])
-    candidato.id_partido = int(dados['idPartido'])
-    candidato.id_turno_cargo_regiao = int(dados['idTurnoCargoRegiao'])
-    candidato.id_pessoa = int(dados['idPessoa'])
+    candidato.id_partido = int(dados['partido']['idPartido'])
+    candidato.id_turno_cargo_regiao = int(dados['turnoCargoRegiao']['idTurnoCargoRegiao'])
+    candidato.id_pessoa = int(dados['pessoa']['idPessoa'])
     return candidato
 
-# ======================================================================================================================
 
+# Partido ==============================================================================================================
 
 def cria_partido(dados):
     partido = Partido()
-    partido.numero_partido = int(dados['partido'])
+    if 'idPartido' in dados:
+        partido.id_partido = int(dados['idPartido'])
+    partido.numero_partido = int(dados['numeroPartido'])
     partido.sigla = dados['sigla']
     partido.nome = dados['nome']
     return partido
 
+# ======================================================================================================================
 
 def cria_login(dados):
     login = Login()

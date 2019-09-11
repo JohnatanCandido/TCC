@@ -12,7 +12,13 @@ public class Candidato implements Serializable {
     private TurnoCargoRegiao turnoCargoRegiao;
     private Pessoa pessoa;
     private Long idEleicao;
-    private Candidato candidatoPrincipal;
+    private Candidato viceCandidato;
+
+    public Candidato() {}
+
+    public Candidato(Long idEleicao) {
+        this.idEleicao = idEleicao;
+    }
 
 //    GETTERS E SETTERS
 
@@ -64,11 +70,11 @@ public class Candidato implements Serializable {
         this.idEleicao = idEleicao;
     }
 
-    public Candidato getCandidatoPrincipal() {
-        return candidatoPrincipal;
+    public Candidato getViceCandidato() {
+        return viceCandidato;
     }
 
-    public void setCandidatoPrincipal(Candidato candidatoPrincipal) {
-        this.candidatoPrincipal = candidatoPrincipal;
+    public void setViceCandidato(Candidato viceCandidato) {
+        this.viceCandidato = viceCandidato;
     }
 }

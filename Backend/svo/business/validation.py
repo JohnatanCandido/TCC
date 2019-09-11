@@ -44,15 +44,6 @@ def validar_login(login, errors):
         errors.append("A senha é obrigatória")
 
 
-def validar_partido(partido, errors):
-    if partido.numero_partido is None:
-        errors.append("O número do partido é obrigatório")
-    if partido.sigla is None:
-        errors.append("A sigla do partido é obrigatória")
-    if partido.nome is None:
-        errors.append("O nome do partido é obrigatório")
-
-
 def validar_voto(voto, errors):
     if voto.id_candidato is None:
         errors.append("O campo candidato é obrigatório")
