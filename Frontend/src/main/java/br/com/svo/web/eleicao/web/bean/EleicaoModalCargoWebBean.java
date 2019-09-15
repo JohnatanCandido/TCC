@@ -73,7 +73,7 @@ public class EleicaoModalCargoWebBean implements Serializable {
     }
 
     public boolean isDesabilitaEstado() {
-        return turnoCargo.getTipoCargo().equals(TipoCargo.FEDERAL.getTipo());
+        return turnoCargo.getCargo().getNome().equals("Presidente");
     }
 
     public boolean isDesabilitaCidade() {
@@ -83,6 +83,8 @@ public class EleicaoModalCargoWebBean implements Serializable {
 
     public boolean isDesabilitaAdicionar() {
         switch (turnoCargo.getTipoCargoEnum()) {
+            case FEDERAL:
+                return estado == null || turnoCargo.getCargo().getNome().equals("Presidente");
             case ESTADUAL:
                 return estado == null;
             case MUNICIPAL:

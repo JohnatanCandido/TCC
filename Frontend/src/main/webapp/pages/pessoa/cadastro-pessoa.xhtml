@@ -24,10 +24,6 @@
                                     <p:ajax process="@this" update="@this" global="false" />
                                 </p:inputMask>
                             </div>
-                            <div class="ui-g-12 ui-md-12 ui-lg-3">
-                                <label for="usuario">Usuário</label>
-                                <p:inputText id="usuario" value="#{pessoaWebBean.pessoa.usuario}" readonly="true" />
-                            </div>
                         </p:fieldset>
                         <br />
                         <p:fieldset legend="Eleitor">
@@ -94,12 +90,13 @@
                             <p:pickList id="perfis"
                                         value="#{pessoaWebBean.perfis}"
                                         var="perfil"
-                                        itemLabel="#{perfil}"
+                                        itemLabel="#{perfil.nome}"
                                         itemValue="#{perfil}">
                                 <p:ajax event="transfer" process="@this" update="@this" />
                                 <p:ajax event="select" process="@this" update="@this" />
                                 <p:ajax event="unselect" process="@this" update="@this" />
                                 <p:ajax event="reorder" process="@this" update="@this" />
+                                <o:converter converterId="omnifaces.ListConverter" list="#{pessoaWebBean.listaPerfil}" />
                             </p:pickList>
                         </p:fieldset>
                     </div>

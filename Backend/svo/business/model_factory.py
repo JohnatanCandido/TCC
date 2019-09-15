@@ -1,5 +1,5 @@
 from svo.entities.models import Eleicao, Turno, TurnoCargo, TurnoCargoRegiao, Partido, Candidato, Eleitor, Login, \
-    VotoEncriptado, Pessoa
+    VotoEncriptado, Pessoa, Coligacao
 from svo.util import database_utils as db, senha_util
 
 import re
@@ -115,11 +115,10 @@ def cria_pessoa(dados):
             cria_eleitor(dados['eleitor'], pessoa.eleitor)
         else:
             pessoa.eleitor = cria_eleitor(dados['eleitor'], None)
-    if 'usuario' in dados:
-        if pessoa.login is None:
-            pessoa.login = Login()
-            pessoa.login.usuario = dados['usuario']
-            pessoa.login.senha = senha_util.generate_password()
+    if pessoa.login is None:
+        pessoa.login = Login()
+        pessoa.login.usuario = pessoa.eleitor.numero_inscricao
+        pessoa.login.senha = senha_util.generate_password()
     if 'perfis' in dados:
         pessoa.login.perfis.clear()
         for p in dados['perfis']:
@@ -131,9 +130,12 @@ def cria_pessoa(dados):
 def cria_eleitor(dados, eleitor):
     if eleitor is None:
         eleitor = Eleitor()
-    eleitor.zona = dados['zonaEleitoral']
+    eleitor.zona_eleitoral = dados['zonaEleitoral']
     eleitor.numero_inscricao = re.sub(' ', '', dados['numeroInscricao'])
     eleitor.secao = dados['secao']
+
+    if 'cidade' in dados:
+        eleitor.id_cidade = dados['cidade']['idCidade']
     return eleitor
 
 
@@ -143,10 +145,14 @@ def cria_candidato(dados):
     candidato = Candidato()
     if 'idCandidato' in dados:
         candidato.id_candidato = int(dados['idCandidato'])
-    candidato.numero = int(dados['numero'])
-    candidato.id_partido = int(dados['partido']['idPartido'])
-    candidato.id_turno_cargo_regiao = int(dados['turnoCargoRegiao']['idTurnoCargoRegiao'])
-    candidato.id_pessoa = int(dados['pessoa']['idPessoa'])
+    if 'numero' in dados:
+        candidato.numero = int(dados['numero'])
+    if 'partido' in dados:
+        candidato.id_partido = int(dados['partido']['idPartido'])
+    if 'turnoCargoRegiao' in dados:
+        candidato.id_turno_cargo_regiao = int(dados['turnoCargoRegiao']['idTurnoCargoRegiao'])
+    if 'pessoa' in dados:
+        candidato.id_pessoa = int(dados['pessoa']['idPessoa'])
     return candidato
 
 
@@ -155,13 +161,30 @@ def cria_candidato(dados):
 def cria_partido(dados):
     partido = Partido()
     if 'idPartido' in dados:
-        partido.id_partido = int(dados['idPartido'])
+        partido = db.find_partido(int(dados['idPartido']))
+    if 'idColigacao' in dados:
+        partido.coligacoes.append(db.find_coligacao(int(dados['idColigacao'])))
     partido.numero_partido = int(dados['numeroPartido'])
     partido.sigla = dados['sigla']
     partido.nome = dados['nome']
     return partido
 
-# ======================================================================================================================
+
+def cria_coligacao(dados):
+    coligacao = Coligacao()
+    if 'idColigacao' in dados:
+        coligacao = db.find_coligacao(int(dados['idColigacao']))
+    if 'partidos' in dados:
+        for partido in dados['partidos']:
+            p = cria_partido(partido)
+            if p not in coligacao.partidos:
+                coligacao.partidos.append(p)
+    coligacao.nome = dados['nome']
+    coligacao.id_eleicao = int(dados['idEleicao'])
+    return coligacao
+
+
+# Login ================================================================================================================
 
 def cria_login(dados):
     login = Login()
@@ -169,6 +192,8 @@ def cria_login(dados):
     login.senha = dados['senha']
     return login
 
+
+# ======================================================================================================================
 
 def cria_voto_encriptado(dados):
     voto = VotoEncriptado()

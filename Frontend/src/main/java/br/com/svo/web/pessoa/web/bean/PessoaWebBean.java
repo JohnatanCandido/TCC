@@ -42,6 +42,7 @@ public class PessoaWebBean implements Serializable {
     private Estado estado;
 
     private DualListModel<Perfil> perfis;
+    private List<Perfil> listaPerfil = new ArrayList<>();
 
     @PostConstruct
     public void init() {
@@ -60,6 +61,7 @@ public class PessoaWebBean implements Serializable {
 
     private void initPerfis() throws BusinessException {
         List<Perfil> source = pessoaService.listarPerfis();
+        listaPerfil = new ArrayList<>(source);
         List<Perfil> target = pessoa.getPerfis();
         source.removeAll(target);
         perfis = new DualListModel<>(source, target);
@@ -148,5 +150,13 @@ public class PessoaWebBean implements Serializable {
 
     public void setPerfis(DualListModel<Perfil> perfis) {
         this.perfis = perfis;
+    }
+
+    public List<Perfil> getListaPerfil() {
+        return listaPerfil;
+    }
+
+    public void setListaPerfil(List<Perfil> listaPerfil) {
+        this.listaPerfil = listaPerfil;
     }
 }

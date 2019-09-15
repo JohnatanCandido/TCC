@@ -1,58 +1,178 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:o="http://omnifaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
 
     <div class="ui-g-12">
-        <div class="ui-g-12 ui-md-12 ui-lg-12">
-            <div class="ui-g-12 ui-md-8 ui-lg-3">
-                <label for="turnosCargosDisponiveis">Cargo</label>
-                <p:selectOneMenu id="turnosCargosDisponiveis"
-                                 converter="omnifaces.SelectItemsIndexConverter"
-                                 value="#{candidatoCadastroWebBean.turnoCargo}"
-                                 autoWidth="false">
-                    <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
-                    <f:selectItems value="#{candidatoCadastroWebBean.turnoCargos}"
-                                   var="turnoCargo"
-                                   itemLabel="#{turnoCargo.cargo.nome}"
-                                   itemValue="#{turnoCargo}" />
-                    <p:ajax listener="#{candidatoCadastroWebBean.filtraEstados()}" process="@this" update="@form" />
-                </p:selectOneMenu>
+        <h:panelGroup id="panelCadastroCandidato">
+            <p:fieldset legend="Cargo">
+                <div class="ui-g-12 ui-md-12 ui-lg-12">
+                    <div class="ui-g-12 ui-md-8 ui-lg-3">
+                        <label for="turnosCargosDisponiveis">Cargo</label>
+                        <p:selectOneMenu id="turnosCargosDisponiveis"
+                                         converter="omnifaces.SelectItemsIndexConverter"
+                                         value="#{candidatoCadastroWebBean.turnoCargo}"
+                                         autoWidth="false">
+                            <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+                            <f:selectItems value="#{candidatoCadastroWebBean.turnoCargos}"
+                                           var="turnoCargo"
+                                           itemLabel="#{turnoCargo.cargo.nome}"
+                                           itemValue="#{turnoCargo}" />
+                            <p:ajax listener="#{candidatoCadastroWebBean.filtraEstados()}" process="@this" update="panelCadastroCandidato" />
+                        </p:selectOneMenu>
+                    </div>
+                    <h:panelGroup id="panelEstado" rendered="#{candidatoCadastroWebBean.renderizaEstado}">
+                        <div class="ui-g-12 ui-md-8 ui-lg-3">
+                            <label for="estadoCandidato">Estado</label>
+                            <p:selectOneMenu id="estadoCandidato"
+                                             converter="omnifaces.SelectItemsIndexConverter"
+                                             value="#{candidatoCadastroWebBean.estado}"
+                                             autoWidth="false">
+                                <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+                                <f:selectItems value="#{candidatoCadastroWebBean.estados}"
+                                               var="estado"
+                                               itemLabel="#{estado.nome}"
+                                               itemValue="#{estado}" />
+                                <p:ajax listener="#{candidatoCadastroWebBean.filtraCidades()}" process="@this" update="panelCadastroCandidato" />
+                            </p:selectOneMenu>
+                        </div>
+                    </h:panelGroup>
+                    <h:panelGroup id="panelCidade" rendered="#{candidatoCadastroWebBean.renderizaCidade}">
+                        <div class="ui-g-12 ui-md-8 ui-lg-3">
+                            <label for="cidadeCandidato">Cidade</label>
+                            <p:selectOneMenu id="cidadeCandidato"
+                                             converter="omnifaces.SelectItemsIndexConverter"
+                                             value="#{candidatoCadastroWebBean.cidade}"
+                                             autoWidth="false">
+                                <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+                                <f:selectItems value="#{candidatoCadastroWebBean.cidades}"
+                                               var="cidade"
+                                               itemLabel="#{cidade.nome}"
+                                               itemValue="#{cidade}" />
+                                <p:ajax process="@this" update="panelCadastroCandidato" />
+                            </p:selectOneMenu>
+                        </div>
+                    </h:panelGroup>
+                </div>
+            </p:fieldset>
+            <br />
+            <p:fieldset legend="Candidato" id="fieldsetCandidato" rendered="#{candidatoCadastroWebBean.renderizarCandidato}">
+                <div class="ui-g-12 ui-md-12 ui-lg-12">
+                    <div class="ui-g-12 ui-md-8 ui-lg-3">
+                        <label for="pessoaSuggestion">Candidato</label>
+                        <p:autoComplete id="pessoaSuggestion"
+                                        value="#{candidatoCadastroWebBean.candidato.pessoa}"
+                                        emptyMessage="Nenhuma pessoa encontrada"
+                                        queryDelay="1000"
+                                        maxResults="10"
+                                        var="pessoa"
+                                        itemLabel="#{pessoa.nome}"
+                                        itemValue="#{pessoa}"
+                                        minQueryLength="3"
+                                        cache="true"
+                                        cacheTimeout="30000"
+                                        completeMethod="#{candidatoCadastroWebBean.consultaPessoas}">
+                            <p:ajax event="clear" update="panelCadastroCandidato" process="@this" global="false" />
+                            <p:ajax event="itemSelect" update="panelCadastroCandidato" process="@this" global="false" />
+                            <o:converter converterId="omnifaces.ListConverter" list="#{candidatoCadastroWebBean.pessoas}" />
+                        </p:autoComplete>
+                    </div>
+                    <div class="ui-g-12 ui-md-8 ui-lg-5">
+                        <label for="partidoSuggestion">Partido</label>
+                        <p:autoComplete id="partidoSuggestion"
+                                        value="#{candidatoCadastroWebBean.candidato.partido}"
+                                        emptyMessage="Nenhum partido encontrado"
+                                        queryDelay="1000"
+                                        maxResults="10"
+                                        var="partido"
+                                        itemLabel="#{partido.nomeFormatado}"
+                                        itemValue="#{partido}"
+                                        minQueryLength="2"
+                                        cache="true"
+                                        cacheTimeout="30000"
+                                        completeMethod="#{candidatoCadastroWebBean.consultaPartidos}">
+                            <p:ajax event="clear" update="panelCadastroCandidato" process="@this" global="false" listener="#{candidatoCadastroWebBean.verificaSetarNumeroCandidato()}" />
+                            <p:ajax event="itemSelect" update="panelCadastroCandidato" process="@this" global="false" listener="#{candidatoCadastroWebBean.verificaSetarNumeroCandidato()}" />
+                            <o:converter converterId="omnifaces.ListConverter" list="#{candidatoCadastroWebBean.partidos}" />
+                        </p:autoComplete>
+                    </div>
+                    <h:panelGroup rendered="#{candidatoCadastroWebBean.renderizarNumero}">
+                        <div class="ui-g-12 ui-md-12 ui-lg-2">
+                            <label for="numeroCandidato">Número</label>
+                            <p:inputNumber id="numeroCandidato"
+                                           value="#{candidatoCadastroWebBean.candidato.numero}"
+                                           disabled="#{candidatoCadastroWebBean.desabilitarNumero}"
+                                           thousandSeparator=""
+                                           decimalPlaces="0">
+                                <p:ajax process="@this" update="@this" global="false" />
+                            </p:inputNumber>
+                        </div>
+                    </h:panelGroup>
+                </div>
+            </p:fieldset>
+            <br />
+            <p:fieldset legend="Vice candidato" id="fieldsetViceCandidato" rendered="#{candidatoCadastroWebBean.renderizarVice}">
+                <div class="ui-g-12 ui-md-12 ui-lg-12">
+                    <div class="ui-g-12 ui-md-8 ui-lg-3">
+                        <label for="pessoaViceSuggestion">Vice candidato</label>
+                        <p:autoComplete id="pessoaViceSuggestion"
+                                        value="#{candidatoCadastroWebBean.candidato.viceCandidato.pessoa}"
+                                        emptyMessage="Nenhuma pessoa encontrada"
+                                        queryDelay="1000"
+                                        maxResults="10"
+                                        var="pessoa"
+                                        itemLabel="#{pessoa.nome}"
+                                        itemValue="#{pessoa}"
+                                        minQueryLength="3"
+                                        cache="true"
+                                        cacheTimeout="30000"
+                                        completeMethod="#{candidatoCadastroWebBean.consultaPessoasVice}">
+                            <p:ajax event="clear" update="panelCadastroCandidato" process="@this" global="false" />
+                            <p:ajax event="itemSelect" update="panelCadastroCandidato" process="@this" global="false" />
+                            <o:converter converterId="omnifaces.ListConverter" list="#{candidatoCadastroWebBean.pessoasVice}" />
+                        </p:autoComplete>
+                    </div>
+                    <div class="ui-g-12 ui-md-8 ui-lg-5">
+                        <label for="partidoViceSuggestion">Partido vice candidato</label>
+                        <p:autoComplete id="partidoViceSuggestion"
+                                        value="#{candidatoCadastroWebBean.candidato.viceCandidato.partido}"
+                                        emptyMessage="Nenhum partido encontrado"
+                                        queryDelay="1000"
+                                        maxResults="10"
+                                        var="partido"
+                                        itemLabel="#{partido.nomeFormatado}"
+                                        itemValue="#{partido}"
+                                        minQueryLength="2"
+                                        cache="true"
+                                        cacheTimeout="30000"
+                                        completeMethod="#{candidatoCadastroWebBean.consultaPartidosVice}">
+                            <p:ajax event="clear" update="panelCadastroCandidato" process="@this" global="false" listener="#{candidatoCadastroWebBean.verificaSetarNumeroCandidato()}" />
+                            <p:ajax event="itemSelect" update="panelCadastroCandidato" process="@this" global="false" listener="#{candidatoCadastroWebBean.verificaSetarNumeroCandidato()}" />
+                            <o:converter converterId="omnifaces.ListConverter" list="#{candidatoCadastroWebBean.partidosVice}" />
+                        </p:autoComplete>
+                    </div>
+                </div>
+            </p:fieldset>
+            <div class="ui-g-12 ui-md-12 ui-lg-12">
+                <div class="ui-g-12 ui-md-12 ui-lg-2">
+                    <p:commandButton id="salvarCandidato"
+                                     value="Salvar"
+                                     icon="fa fa-save"
+                                     process="@this"
+                                     update="panelCadastroCandidato"
+                                     action="#{candidatoCadastroWebBean.salvar()}" />
+                </div>
+                <div class="ui-g-12 ui-md-12 ui-lg-2">
+                    <p:commandButton id="novoCandidato"
+                                     value="Novo candidato"
+                                     icon="fa fa-plus"
+                                     process="@this"
+                                     update="panelCadastroCandidato"
+                                     action="#{candidatoCadastroWebBean.novoCandidato()}" />
+                </div>
             </div>
-            <h:panelGroup id="panelEstado" rendered="#{candidatoCadastroWebBean.renderizaEstado}">
-                <div class="ui-g-12 ui-md-8 ui-lg-3">
-                    <label for="estados">Estado</label>
-                    <p:selectOneMenu id="estados"
-                                     converter="omnifaces.SelectItemsIndexConverter"
-                                     value="#{candidatoCadastroWebBean.estado}"
-                                     autoWidth="false">
-                        <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
-                        <f:selectItems value="#{candidatoCadastroWebBean.estados}"
-                                       var="estado"
-                                       itemLabel="#{estado.nome}"
-                                       itemValue="#{estado}" />
-                        <p:ajax listener="#{candidatoCadastroWebBean.filtraCidades()}" process="@this" update="@form" />
-                    </p:selectOneMenu>
-                </div>
-            </h:panelGroup>
-            <h:panelGroup id="panelCidade" rendered="#{candidatoCadastroWebBean.renderizaCidade}">
-                <div class="ui-g-12 ui-md-8 ui-lg-3">
-                    <label for="cidades">Cidade</label>
-                    <p:selectOneMenu id="cidades"
-                                     converter="omnifaces.SelectItemsIndexConverter"
-                                     value="#{candidatoCadastroWebBean.cidade}"
-                                     autoWidth="false">
-                        <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
-                        <f:selectItems value="#{candidatoCadastroWebBean.cidades}"
-                                       var="cidade"
-                                       itemLabel="#{cidade.nome}"
-                                       itemValue="#{cidade}" />
-                        <p:ajax process="@this" update="@this" />
-                    </p:selectOneMenu>
-                </div>
-            </h:panelGroup>
-
-        </div>
+        </h:panelGroup>
     </div>
 </ui:composition>

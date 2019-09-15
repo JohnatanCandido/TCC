@@ -1,0 +1,70 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <p:dialog id="modalNovoPartido"
+              widgetVar="modalNovoPartido"
+              modal="true"
+              dynamic="true"
+              closeOnEscape="true"
+              width="50%"
+              resizable="false"
+              header="Cadastrar partido"
+              closable="true">
+        <h:panelGroup id="panelCadastroPartido">
+            <div class="ui-g-12 ui-md-12 ui-lg-12">
+                <div class="ui-g-12 ui-md-12 ui-lg-7">
+                    <label for="nomePartido">Nome</label>
+                    <p:inputText id="nomePartido" value="#{cadastroPartidoWebBean.partido.nome}">
+                        <p:ajax process="@this" update="@this" global="false" />
+                    </p:inputText>
+                </div>
+                <div class="ui-g-12 ui-md-12 ui-lg-3">
+                    <label for="siglaPartido">Sigla</label>
+                    <p:inputText id="siglaPartido" value="#{cadastroPartidoWebBean.partido.sigla}">
+                        <p:ajax process="@this" update="@this" global="false" />
+                    </p:inputText>
+                </div>
+                <div class="ui-g-12 ui-md-12 ui-lg-2">
+                    <label for="numeroPartido">Número</label>
+                    <p:inputNumber id="numeroPartido"
+                                   value="#{cadastroPartidoWebBean.partido.numeroPartido}"
+                                   decimalPlaces="0"
+                                   thousandSeparator=""
+                                   maxlength="2">
+                        <p:ajax process="@this" update="@this" global="false" />
+                    </p:inputNumber>
+                </div>
+                <div class="ui-g-12 ui-md-12 ui-lg-12">
+                    <label for="coligacoesDisponiveis">Coligação</label>
+                    <p:selectOneMenu id="coligacoesDisponiveis"
+                                     converter="omnifaces.SelectItemsIndexConverter"
+                                     filter="true"
+                                     filterMatchMode="contains"
+                                     value="#{cadastroPartidoWebBean.partido.idColigacao}"
+                                     autoWidth="false">
+                        <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+                        <f:selectItems value="#{cadastroPartidoWebBean.coligacoes}"
+                                       var="coligacao"
+                                       itemLabel="#{coligacao.nome}"
+                                       itemValue="#{coligacao.idColigacao}" />
+                        <p:ajax process="@this" update="@this" global="false" />
+                    </p:selectOneMenu>
+                </div>
+                <div class="ui-g-12 ui-md-12 ui-lg-12">
+                    <div class="ui-g-12 ui-md-12 ui-lg-2">
+                        <p:commandButton id="salvarPartido"
+                                         value="Salvar"
+                                         icon="fa fa-save"
+                                         action="#{cadastroPartidoWebBean.salvar()}"
+                                         process="@this"
+                                         update="@this" />
+                    </div>
+                </div>
+            </div>
+        </h:panelGroup>
+    </p:dialog>
+
+</ui:composition>

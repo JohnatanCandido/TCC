@@ -20,6 +20,12 @@ public class Candidato implements Serializable {
         this.idEleicao = idEleicao;
     }
 
+    public String getPartidoFormatado() {
+        if (turnoCargoRegiao.getEstado() != null)
+            return partido.getSigla() + " - " + turnoCargoRegiao.getEstado().getSigla();
+        return partido.getSigla();
+    }
+
 //    GETTERS E SETTERS
 
     public Long getIdCandidato() {

@@ -7,8 +7,10 @@ import br.com.svo.entities.Turno;
 import br.com.svo.entities.TurnoCargo;
 import br.com.svo.service.eleicao.EleicaoServiceLocal;
 import br.com.svo.util.Messages;
+import br.com.svo.util.RedirectUtils;
 import org.omnifaces.cdi.Param;
 import org.omnifaces.cdi.ViewScoped;
+import org.primefaces.PrimeFaces;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -33,7 +35,6 @@ public class EleicaoWebBean implements Serializable {
     private List<Cargo> cargosDisponiveis;
     private Cargo cargoSelecionado;
 
-
     @PostConstruct
     public void init() {
         try {
@@ -51,7 +52,7 @@ public class EleicaoWebBean implements Serializable {
 
     public void adicionarCargo(Turno turno) {
         if (cargoSelecionado != null) {
-            turno.getTurnoCargos().add(new TurnoCargo(cargoSelecionado));
+            turno.getTurnoCargos().add(new TurnoCargo(turno.getIdTurno(), cargoSelecionado));
             cargosDisponiveis.remove(cargoSelecionado);
             cargoSelecionado = null;
         } else {
@@ -70,7 +71,9 @@ public class EleicaoWebBean implements Serializable {
 
     public void salvar() {
         try {
-            eleicaoService.salvar(eleicao);
+            Long idEleicao = eleicaoService.salvar(eleicao);
+            if (eleicao.getIdEleicao() == null)
+                RedirectUtils.redirect("eleicao/eleicao.html?idEleicao=" + idEleicao);
             Messages.addMessage("Salvo com sucesso.");
         } catch (BusinessException e) {
             Messages.addErrorMessage(e);

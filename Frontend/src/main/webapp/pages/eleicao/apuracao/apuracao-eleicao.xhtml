@@ -4,5 +4,106 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
 
-    Apuração
+    <div class="ui-g-12">
+        <h:panelGroup id="panelApuracao">
+            <p:fieldset legend="Cargo">
+                <div class="ui-g-12 ui-md-12 ui-lg-12">
+                    <div class="ui-g-12 ui-md-8 ui-lg-3">
+                        <label for="turnosCargosApuracao">Cargo</label>
+                        <p:selectOneMenu id="turnosCargosApuracao"
+                                         converter="omnifaces.SelectItemsIndexConverter"
+                                         value="#{apuracaoEleicaoWebBean.turnoCargo}"
+                                         autoWidth="false">
+                            <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+                            <f:selectItems value="#{apuracaoEleicaoWebBean.turnoCargos}"
+                                           var="turnoCargo"
+                                           itemLabel="#{turnoCargo.cargo.nome}"
+                                           itemValue="#{turnoCargo}" />
+                            <p:ajax listener="#{apuracaoEleicaoWebBean.filtraEstados()}" process="@this" update="panelApuracao" />
+                        </p:selectOneMenu>
+                    </div>
+                    <h:panelGroup id="panelEstadoApuracao" rendered="#{apuracaoEleicaoWebBean.renderizaEstado}">
+                        <div class="ui-g-12 ui-md-8 ui-lg-3">
+                            <label for="estadoApuracao">Estado</label>
+                            <p:selectOneMenu id="estadoApuracao"
+                                             converter="omnifaces.SelectItemsIndexConverter"
+                                             value="#{apuracaoEleicaoWebBean.estado}"
+                                             autoWidth="false">
+                                <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+                                <f:selectItems value="#{apuracaoEleicaoWebBean.estados}"
+                                               var="estado"
+                                               itemLabel="#{estado.nome}"
+                                               itemValue="#{estado}" />
+                                <p:ajax listener="#{apuracaoEleicaoWebBean.filtraCidades()}" process="@this" update="panelApuracao" />
+                            </p:selectOneMenu>
+                        </div>
+                    </h:panelGroup>
+                    <h:panelGroup id="panelCidadeApuracao" rendered="#{apuracaoEleicaoWebBean.renderizaCidade}">
+                        <div class="ui-g-12 ui-md-8 ui-lg-3">
+                            <label for="cidadeApuracao">Cidade</label>
+                            <p:selectOneMenu id="cidadeApuracao"
+                                             converter="omnifaces.SelectItemsIndexConverter"
+                                             value="#{apuracaoEleicaoWebBean.cidade}"
+                                             autoWidth="false">
+                                <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+                                <f:selectItems value="#{apuracaoEleicaoWebBean.cidades}"
+                                               var="cidade"
+                                               itemLabel="#{cidade.nome}"
+                                               itemValue="#{cidade}" />
+                                <p:ajax listener="#{apuracaoEleicaoWebBean.buscaCandidatos()}" process="@this" update="panelApuracao" />
+                            </p:selectOneMenu>
+                        </div>
+                    </h:panelGroup>
+                </div>
+                <div class="ui-g-12 ui-md-12 ui-lg-12">
+                    <p:dataTable id="tabelaCandidatos"
+                                 rows="20"
+                                 reflow="true"
+                                 paginator="true"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                                 paginatorAlwaysVisible="false"
+                                 value="#{apuracaoEleicaoWebBean.candidatos}"
+                                 var="candidato"
+                                 emptyMessage="Nenhum candidato cadastrado">
+                        <p:column headerText="Ação" width="5%">
+
+                        </p:column>
+                        <p:column headerText="Número" width="7%">
+                            <h:outputText value="#{candidato.numero}" />
+                        </p:column>
+                        <p:column headerText="Nome">
+                            <h:outputText value="#{candidato.pessoa.nome}" />
+                            <h:panelGroup rendered="#{candidato.viceCandidato != null}">
+                                <br />
+                                <h:outputText value="Vice: #{candidato.viceCandidato.pessoa.nome}" />
+                            </h:panelGroup>
+                        </p:column>
+                        <p:column headerText="Partido" width="10%">
+                            <p:tooltip for="partidoPrincipal" value="#{candidato.partido.infoPartido}" position="bottom" />
+                            <h:outputText id="partidoPrincipal" value="#{candidato.partidoFormatado}" />
+                            <h:panelGroup rendered="#{candidato.viceCandidato != null}">
+                                <br />
+                                <p:tooltip for="partidoVice"
+                                           value="#{candidato.viceCandidato.partido.infoPartido}"
+                                           position="bottom" />
+                                <h:outputText id="partidoVice"
+                                              value="Vice: #{candidato.viceCandidato.partidoFormatado}" />
+                            </h:panelGroup>
+                        </p:column>
+                        <p:column headerText="Votos" width="10%">
+                            <h:outputText value="0" />
+                        </p:column>
+                        <p:column headerText="Votos segundo turno"
+                                  width="15%"
+                                  rendered="#{apuracaoEleicaoWebBean.turnoCargo.cargo.permiteSegundoTurno}">
+                            <h:outputText value="0" />
+                        </p:column>
+                        <p:column headerText="Eleito" width="6%">
+                            <p:selectBooleanCheckbox disabled="true" />
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </p:fieldset>
+        </h:panelGroup>
+    </div>
 </ui:composition>

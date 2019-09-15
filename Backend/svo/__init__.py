@@ -16,6 +16,7 @@ from svo.endpoints.voto_endpoint import votos
 from svo.endpoints.eleicao_endpoint import eleicoes
 from svo.endpoints.regiao_endpoint import regioes
 from svo.endpoints.pessoa_endpoint import pessoas
+from svo.endpoints.partido_endpoint import partidos
 
 
 app.register_blueprint(logins, url_prefix='/login')
@@ -24,3 +25,4 @@ app.register_blueprint(votos, url_prefix='/voto')
 app.register_blueprint(eleicoes, url_prefix='/eleicao')
 app.register_blueprint(regioes, url_prefix='/regiao')
 app.register_blueprint(pessoas, url_prefix='/pessoa')
+app.register_blueprint(partidos, url_prefix='/partido')

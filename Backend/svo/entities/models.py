@@ -4,6 +4,7 @@ from svo import db
 class Estado(db.Model):
     id_estado = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
+    sigla = db.Column(db.String(2), nullable=False)
     cidades = db.relationship('Cidade', backref='estado', lazy=True)
     turno_cargo_regioes = db.relationship('TurnoCargoRegiao', backref='estado', lazy=True)
 
@@ -47,6 +48,7 @@ class Eleicao(db.Model):
     titulo = db.Column(db.String(50), nullable=False, unique=True)
     observacao = db.Column(db.Text)
     turnos = db.relationship('Turno', backref='eleicao', lazy=True)
+    coligacoes = db.relationship('Coligacao', backref='eleicao', lazy=True)
 
     def __repr__(self):
         return f'idEleicao: {self.id_eleicao}, título: {self.titulo}'
@@ -186,12 +188,36 @@ class TurnoCargoRegiao(db.Model):
     )
 
 
+coligacao_partido = db.Table('coligacao_partido', db.Model.metadata,
+                             db.Column('id_coligacao', db.Integer, db.ForeignKey('coligacao.id_coligacao')),
+                             db.Column('id_partido', db.Integer, db.ForeignKey('partido.id_partido')))
+
+
+class Coligacao(db.Model):
+    id_coligacao = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(100), nullable=False)
+    id_eleicao = db.Column(db.Integer, db.ForeignKey('eleicao.id_eleicao'), nullable=False)
+    partidos = db.relationship('Partido', secondary=coligacao_partido)
+
+    def __repr__(self):
+        return f'idColigacao: {self.id_coligacao}, nome: {self.nome}'
+
+    def to_json(self):
+        return {
+            'idColigacao': self.id_coligacao,
+            'nome': self.nome,
+            'idEleicao': self.id_eleicao,
+            'partidos': [p.to_json() for p in self.partidos]
+        }
+
+
 class Partido(db.Model):
     id_partido = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(50), nullable=False, unique=True)
     sigla = db.Column(db.String(10), nullable=False, unique=True)
     numero_partido = db.Column(db.Integer, nullable=False, unique=True)
     candidatos = db.relationship('Candidato', backref='partido', lazy=True)
+    coligacoes = db.relationship('Coligacao', secondary=coligacao_partido)
 
     def __repr__(self):
         return f'idPartido: {self.id_partido}, nome: {self.nome}, sigla: {self.sigla}'
@@ -201,13 +227,7 @@ class Partido(db.Model):
             'idPartido': self.id_partido,
             'nome': self.nome,
             'sigla': self.sigla,
-            'numeroPartido': self.id_partido
-        }
-
-    def campos_consulta(self):
-        return {
-            'idPartido': self.id_partido,
-            'nome': f'{self.numero_partido} - {self.nome} ({self.sigla})'
+            'numeroPartido': self.numero_partido
         }
 
 
@@ -246,10 +266,12 @@ class Candidato(db.Model):
     id_candidato = db.Column(db.Integer, primary_key=True)
     numero = db.Column(db.Integer, nullable=False)
     id_partido = db.Column(db.Integer, db.ForeignKey('partido.id_partido'), nullable=False)
-    id_turno_cargo_regiao = db.Column(db.Integer, db.ForeignKey('turno_cargo_regiao.id_turno_cargo_regiao'), nullable=False)
+    id_turno_cargo_regiao = db.Column(db.Integer, db.ForeignKey('turno_cargo_regiao.id_turno_cargo_regiao'),
+                                      nullable=False)
     id_candidato_principal = db.Column(db.Integer, db.ForeignKey('candidato.id_candidato'))
     id_pessoa = db.Column(db.Integer, db.ForeignKey('pessoa.id_pessoa'), nullable=False)
-    vice = db.relationship('Candidato', backref=db.backref('candidato_principal', remote_side='Candidato.id_candidato', uselist=False), uselist=False)
+    vice = db.relationship('Candidato', backref=db.backref('candidato_principal', remote_side='Candidato.id_candidato',
+                                                           uselist=False), uselist=False)
     votos = db.relationship('VotoApurado', backref='candidato', lazy=True)
 
     def __repr__(self):
@@ -259,9 +281,10 @@ class Candidato(db.Model):
         return {
             'idCandidato': self.id_candidato,
             'numero': self.numero,
-            'idPartido': self.id_partido,
-            'idCargo': self.id_cargo,
-            'idEleicao': self.id_eleicao
+            'partido': self.partido.to_json(),
+            'turnoCargoRegiao': self.turnoCargoRegiao.to_json(),
+            'pessoa': self.pessoa.to_json(),
+            'viceCandidato': self.vice.to_json() if self.vice is not None else None
         }
 
 
@@ -328,7 +351,8 @@ class Perfil(db.Model):
 
 class VotoEncriptado(db.Model):
     id_voto_encriptado = db.Column(db.Integer, primary_key=True)
-    id_turno_cargo_regiao = db.Column(db.Integer, db.ForeignKey('turno_cargo_regiao.id_turno_cargo_regiao'), nullable=False)
+    id_turno_cargo_regiao = db.Column(db.Integer, db.ForeignKey('turno_cargo_regiao.id_turno_cargo_regiao'),
+                                      nullable=False)
     id_cidade = db.Column(db.Integer, db.ForeignKey('cidade.id_cidade'), nullable=False)
     id_candidato = db.Column(db.Text, nullable=False)
     id_eleitor = db.Column(db.Text, nullable=False)
@@ -336,7 +360,8 @@ class VotoEncriptado(db.Model):
 
 class VotoApurado(db.Model):
     id_voto_apurado = db.Column(db.Integer, primary_key=True)
-    id_turno_cargo_regiao = db.Column(db.Integer, db.ForeignKey('turno_cargo_regiao.id_turno_cargo_regiao'), nullable=False)
+    id_turno_cargo_regiao = db.Column(db.Integer, db.ForeignKey('turno_cargo_regiao.id_turno_cargo_regiao'),
+                                      nullable=False)
     id_cidade = db.Column(db.Integer, db.ForeignKey('cidade.id_cidade'))
     id_candidato = db.Column(db.Integer, db.ForeignKey('candidato.id_candidato'), nullable=False)
     id_eleitor = db.Column(db.Text, nullable=False)

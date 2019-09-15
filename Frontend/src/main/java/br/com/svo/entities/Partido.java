@@ -10,6 +10,15 @@ public class Partido implements Serializable {
     private Integer numeroPartido;
     private String sigla;
     private String nome;
+    private Long idColigacao;
+
+    public String getNomeFormatado() {
+        return nome + " (" + sigla + ")";
+    }
+
+    public String getInfoPartido() {
+        return numeroPartido + " - " + getNomeFormatado();
+    }
 
 //    GETTERS E SETTERS
 
@@ -45,7 +54,11 @@ public class Partido implements Serializable {
         this.nome = nome;
     }
 
-    public String getNomeFormatado() {
-        return numeroPartido + " - " + nome + " (" + sigla + ")";
+    public Long getIdColigacao() {
+        return idColigacao;
+    }
+
+    public void setIdColigacao(Long idColigacao) {
+        this.idColigacao = idColigacao;
     }
 }

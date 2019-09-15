@@ -8,6 +8,7 @@ public class Estado implements Serializable {
 
     private Long idEstado;
     private String nome;
+    private String sigla;
 
     public Estado() {}
 
@@ -32,6 +33,14 @@ public class Estado implements Serializable {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getSigla() {
+        return sigla;
+    }
+
+    public void setSigla(String sigla) {
+        this.sigla = sigla;
     }
 
     @Override

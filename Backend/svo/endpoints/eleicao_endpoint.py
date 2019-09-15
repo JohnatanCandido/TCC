@@ -14,8 +14,7 @@ def salvar(user):
         return jsonify(['Você não tem permissão para executar esta ação.']), 403
     eleicao = request.json
     try:
-        eleicao_business.salvar(eleicao)
-        return 'Salvo com sucesso', 200
+        return eleicao_business.salvar(eleicao), 200
     except ValidationException as e:
         return jsonify(e.errors), 400
 

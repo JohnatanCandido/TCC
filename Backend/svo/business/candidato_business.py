@@ -1,20 +1,21 @@
 from svo.business import model_factory as mf
-from svo.entities.models import Candidato, TurnoCargoRegiao, TurnoCargo, Turno, Partido
+from svo.entities.models import Candidato, TurnoCargoRegiao, TurnoCargo, Turno
 from svo.exception.validation_exception import ValidationException
 from svo.util import database_utils as db
 
 
 def cadastrar(candidato_json):
     candidato = mf.cria_candidato(candidato_json)
-    verifica_pessoa_ja_candidatada(candidato.id_pessoa, int(candidato_json['idEleicao']))
     validar_candidato(candidato)
+    verifica_pessoa_ja_candidatada(candidato.id_pessoa, int(candidato_json['idEleicao']), candidato_json['pessoa']['nome'])
     if candidato.id_candidato is None:
         db.create(candidato)
     if 'viceCandidato' in candidato_json:
         vice = mf.cria_candidato(candidato_json['viceCandidato'])
-        vice.id_candidato_principal = candidato.id_candidato
-        verifica_pessoa_ja_candidatada(vice.id_pessoa, int(candidato_json['idEleicao']))
+        vice.id_turno_cargo_regiao = candidato.id_turno_cargo_regiao
+        candidato.vice = vice
         validar_candidato(vice)
+        verifica_pessoa_ja_candidatada(vice.id_pessoa, int(candidato_json['idEleicao']), candidato_json['viceCandidato']['pessoa']['nome'])
         if vice.id_candidato is None:
             db.create(vice)
     db.commit()
@@ -22,22 +23,24 @@ def cadastrar(candidato_json):
 
 def validar_candidato(candidato):
     errors = []
-    if candidato.id_eleicao is None:
-        errors.append("A eleição é obrigatória")
     if candidato.id_partido is None:
         errors.append("O partido é obrigatório")
-    if candidato.id_cargo is None:
+    if candidato.id_turno_cargo_regiao is None:
         errors.append("O cargo é obrigatório")
-    if candidato.nome is None:
-        errors.append("O nome é obrigatório")
     if candidato.numero is None:
         errors.append("O número do candidato é obrigatório")
+    if candidato.id_pessoa is None:
+        errors.append("É necessário selecionar uma pessoa")
+    if candidato.id_partido is not None and candidato.numero is not None:
+        partido = db.find_partido(candidato.id_partido)
+        if str(candidato.numero)[:2] != str(partido.numero_partido):
+            errors.append("Os dois primeiros dígitos do número do candidato devem ser iguais ao do partido")
 
     if errors:
         raise ValidationException('Erros de validação', errors)
 
 
-def verifica_pessoa_ja_candidatada(id_pessoa, id_eleicao):
+def verifica_pessoa_ja_candidatada(id_pessoa, id_eleicao, nome):
     eleicoes = db.query(Candidato)\
                  .join(Candidato.turnoCargoRegiao)\
                  .join(TurnoCargoRegiao.turnoCargo)\
@@ -46,39 +49,20 @@ def verifica_pessoa_ja_candidatada(id_pessoa, id_eleicao):
                  .filter(Turno.id_eleicao == id_eleicao)\
                  .all()
     if eleicoes:
-        raise ValidationException('Esta pessoa já se candidatou nesta eleição',
-                                  'Esta pessoa já se candidatou nesta eleição')
+        raise ValidationException(f'{nome} já se candidatou nesta eleição',
+                                  [f'{nome} já se candidatou nesta eleição'])
 
 
-def busca_partido(nome):
-    partidos = db.query(Partido).filter(Partido.nome == nome).all()
-    if not partidos:
-        return []
-    return [p.campos_consulta() for p in partidos]
-
-
-def cadastrar_partido(dados):
-    partido = mf.cria_partido(dados)
-    validar_partido(partido)
-    if partido.id_partido is None:
-        db.create(partido)
-    db.commit()
-
-
-def validar_partido(partido):
-    errors = []
-    if partido.numero_partido is None:
-        errors.append("O número do partido é obrigatório")
-    if partido.sigla is None:
-        errors.append("A sigla do partido é obrigatória")
-    if partido.nome is None:
-        errors.append("O nome do partido é obrigatório")
-    if errors:
-        raise ValidationException('Erros de validação', errors)
-
-
+# noinspection PyComparisonWithNone
 def busca_candidatos(id_turno_cargo_regiao):
-    candidatos = db.query(Candidato).filter(Candidato.id_turno_cargo_regiao == id_turno_cargo_regiao).all()
+    candidatos = db.query(Candidato)\
+                   .join(Candidato.turnoCargoRegiao)\
+                   .join(TurnoCargoRegiao.turnoCargo)\
+                   .join(TurnoCargo.turno)\
+                   .filter(Turno.turno == 1)\
+                   .filter(Candidato.id_turno_cargo_regiao == id_turno_cargo_regiao)\
+                   .filter(Candidato.id_candidato_principal == None)\
+                   .all()
     if not candidatos:
         return []
     return [c.to_json() for c in candidatos]

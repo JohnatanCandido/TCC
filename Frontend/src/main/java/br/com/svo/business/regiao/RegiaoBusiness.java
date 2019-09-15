@@ -19,7 +19,7 @@ public class RegiaoBusiness implements Serializable {
 
     public List<Estado> consultarEstados(String filtro) throws BusinessException {
         try {
-            String response = new RestUtil("regiao/estado/" + filtro).get();
+            String response = new RestUtil("regiao/estado/" + filtro.replaceAll(" ", "+")).get();
             return GSON.fromJson(response, new TypeToken<List<Estado>>(){}.getType());
         } catch (RestException e) {
             throw new BusinessException(e.getMessages().get(0));
@@ -28,7 +28,7 @@ public class RegiaoBusiness implements Serializable {
 
     public List<Cidade> consultarCidades(Long idEstado, String filtro) throws BusinessException {
         try {
-            String response = new RestUtil("regiao/estado/" + idEstado + "/cidade/" + filtro).get();
+            String response = new RestUtil("regiao/estado/" + idEstado + "/cidade/" + filtro.replaceAll(" ", "+")).get();
             return GSON.fromJson(response, new TypeToken<List<Cidade>>(){}.getType());
         } catch (RestException e) {
             throw new BusinessException(e.getMessages().get(0));

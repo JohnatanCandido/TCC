@@ -5,18 +5,22 @@ import br.com.svo.entities.enums.TipoCargo;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class TurnoCargo implements Serializable {
 
     public static final long serialVersionUID = 1L;
 
     private Long idTurnoCargo;
+    private Long idTurno;
     private Cargo cargo;
     private List<TurnoCargoRegiao> turnoCargoRegioes = new ArrayList<>();
 
     public TurnoCargo() {}
 
-    public TurnoCargo(Cargo cargo) {
+    public TurnoCargo(Long idTurno, Cargo cargo) {
+        this.idTurno = idTurno;
         this.cargo = cargo;
         if (cargo.getNome().equals("Presidente")) {
             TurnoCargoRegiao tcr = new TurnoCargoRegiao(1, true);
@@ -41,6 +45,18 @@ public class TurnoCargo implements Serializable {
 
     public boolean contemCidade(Cidade cidade) {
         return this.turnoCargoRegioes.stream().anyMatch(tcr -> tcr.getCidade().equals(cidade));
+    }
+
+    public TurnoCargoRegiao turnoCargoRegiaoByEstado(Estado estado) {
+        return filterByEstado(estado).filter(e -> e.getCidade() == null).findFirst().orElse(null);
+    }
+
+    public TurnoCargoRegiao turnoCargoRegiaoByCidade(Estado estado, Cidade cidade) {
+        return filterByEstado(estado).filter(t -> t.getCidade().equals(cidade)).findFirst().orElse(null);
+    }
+
+    private Stream<TurnoCargoRegiao> filterByEstado(Estado estado) {
+        return turnoCargoRegioes.stream().filter(t -> t.getEstado().equals(estado));
     }
 
 //    GETTERS E SETTERS
@@ -69,6 +85,14 @@ public class TurnoCargo implements Serializable {
         this.turnoCargoRegioes = turnoCargoRegioes;
     }
 
+    public Long getIdTurno() {
+        return idTurno;
+    }
+
+    public void setIdTurno(Long idTurno) {
+        this.idTurno = idTurno;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -76,7 +100,10 @@ public class TurnoCargo implements Serializable {
         if (!(obj instanceof TurnoCargo))
             return false;
         TurnoCargo other = (TurnoCargo) obj;
-        return this.idTurnoCargo.equals(other.idTurnoCargo);
+
+        if (this.idTurnoCargo != null && other.idTurnoCargo != null)
+            return this.idTurnoCargo.equals(other.idTurnoCargo);
+        return this.idTurno.equals(other.idTurnoCargo) && this.cargo.equals(other.cargo);
     }
 
     @Override

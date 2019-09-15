@@ -1,0 +1,91 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <p:dialog id="modalNovaColigacao"
+              widgetVar="modalNovaColigacao"
+              modal="true"
+              dynamic="true"
+              closeOnEscape="true"
+              width="50%"
+              resizable="false"
+              header="Cadastrar partido"
+              closable="true">
+        <h:panelGroup id="panelCadastroColigacao">
+            <div class="ui-g-12 ui-md-12 ui-lg-12">
+                <div class="ui-g-12 ui-md-12 ui-lg-12">
+                    <label for="nomeColigacao">Nome</label>
+                    <p:inputText id="nomeColigacao" value="#{cadastroColigacaoWebBean.coligacao.nome}">
+                        <p:ajax process="@this" update="@this" global="false" />
+                    </p:inputText>
+                </div>
+                <div class="ui-g-12 ui-md-8 ui-lg-5">
+                    <label for="coligacaoPartidoSuggestion">Partido</label>
+                    <p:autoComplete id="coligacaoPartidoSuggestion"
+                                    value="#{cadastroColigacaoWebBean.partido}"
+                                    emptyMessage="Nenhum partido encontrado"
+                                    queryDelay="1000"
+                                    maxResults="10"
+                                    var="partido"
+                                    itemLabel="#{partido.nomeFormatado}"
+                                    itemValue="#{partido}"
+                                    minQueryLength="2"
+                                    cache="true"
+                                    cacheTimeout="30000"
+                                    completeMethod="#{cadastroColigacaoWebBean.consultaPartidos}">
+                        <p:ajax event="clear" update="panelCadastroColigacao" process="@this" global="false" />
+                        <p:ajax event="itemSelect" update="panelCadastroColigacao" process="@this" global="false" />
+                        <o:converter converterId="omnifaces.ListConverter" list="#{cadastroColigacaoWebBean.partidos}" />
+                    </p:autoComplete>
+                </div>
+                <div class="ui-g-12 ui-md-12 ui-lg-2">
+                    <br />
+                    <p:commandButton id="adicionarPartido"
+                                     icon="fa fa-plus"
+                                     value="Adicionar"
+                                     action="#{cadastroColigacaoWebBean.adicionarPartido()}"
+                                     process="@this"
+                                     update="panelCadastroColigacao" />
+                </div>
+                <div class="ui-g-12 ui-md-12 ui-lg-12">
+                    <p:dataTable id="tabelaPartidos"
+                                 rows="10"
+                                 reflow="true"
+                                 paginator="true"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                                 paginatorAlwaysVisible="false"
+                                 value="#{cadastroColigacaoWebBean.coligacao.partidos}"
+                                 var="partido"
+                                 emptyMessage="Nenhum partido vinculado">
+                        <p:column headerText="Ação">
+
+                        </p:column>
+                        <p:column headerText="Nome">
+                            <h:outputText value="#{partido.nome}" />
+                        </p:column>
+                        <p:column headerText="Sigla">
+                            <h:outputText value="#{partido.sigla}" />
+                        </p:column>
+                        <p:column headerText="Número">
+                            <h:outputText value="#{partido.numeroPartido}" />
+                        </p:column>
+                    </p:dataTable>
+                </div>
+                <div class="ui-g-12 ui-md-12 ui-lg-12">
+                    <div class="ui-g-12 ui-md-12 ui-lg-2">
+                        <p:commandButton id="salvarColigacao"
+                                         value="Salvar"
+                                         icon="fa fa-save"
+                                         action="#{cadastroColigacaoWebBean.salvar()}"
+                                         process="@this"
+                                         update="@this, tabelaColigacoes" />
+                    </div>
+                </div>
+            </div>
+        </h:panelGroup>
+    </p:dialog>
+
+</ui:composition>

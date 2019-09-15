@@ -1,5 +1,6 @@
 from svo import db
-from svo.entities.models import VotoEncriptado, Login, Pessoa, Cargo, Estado, Cidade, Eleicao, Perfil
+from svo.entities.models import VotoEncriptado, Login, Pessoa, Cargo, Estado, Cidade, Eleicao, Perfil, Partido, \
+    Coligacao
 
 
 def create(entidade):
@@ -60,3 +61,11 @@ def lista_perfis():
 
 def find_perfil(id_perfil):
     return Perfil.query.get(id_perfil)
+
+
+def find_partido(id_partido):
+    return Partido.query.get(id_partido)
+
+
+def find_coligacao(id_coligacao):
+    return Coligacao.query.get(id_coligacao)

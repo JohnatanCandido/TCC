@@ -36,9 +36,4 @@ public class Perfil implements Serializable {
         Perfil other = (Perfil) obj;
         return this.idPerfil.equals(other.idPerfil);
     }
-
-    @Override
-    public String toString() {
-        return nome;
-    }
 }

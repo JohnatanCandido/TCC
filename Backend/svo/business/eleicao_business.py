@@ -42,6 +42,7 @@ def salvar(dados):
     if eleicao.id_eleicao is None:
         db.create(eleicao)
     db.commit()
+    return str(eleicao.id_eleicao)
 
 
 def validar_eleicao(eleicao):

@@ -1,4 +1,4 @@
-from svo.entities.models import Eleicao, Cargo, Partido, Candidato, Eleitor, Login, VotoEncriptado
+from svo.entities.models import Cargo, Eleitor, Login, VotoEncriptado
 from svo.exception.validation_exception import ValidationException
 
 
@@ -10,8 +10,6 @@ def validar(entidade):
         validar_eleitor(entidade, errors)
     elif type(entidade) == Login:
         validar_login(entidade, errors)
-    elif type(entidade) == Partido:
-        validar_partido(entidade, errors)
     elif type(entidade) == VotoEncriptado:
         validar_voto(entidade, errors)
 
