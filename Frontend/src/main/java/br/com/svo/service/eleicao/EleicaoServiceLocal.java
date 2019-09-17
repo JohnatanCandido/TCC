@@ -33,4 +33,6 @@ public interface EleicaoServiceLocal {
     void salvarPartido(Partido partido) throws BusinessException;
 
     Long salvarColigacao(Coligacao coligacao) throws BusinessException;
+
+    List<EleicaoConsultaDTO> consultaEleicoesUsuario();
 }

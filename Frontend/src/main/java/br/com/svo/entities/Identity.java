@@ -28,6 +28,10 @@ public class Identity implements Serializable {
         this.token = null;
     }
 
+    public boolean hasPerfil(String perfil) {
+        return perfis.stream().anyMatch(p -> p.getNome().equals(perfil));
+    }
+
 //    GETTERS E SETTERS
 
     public Pessoa getPessoa() {

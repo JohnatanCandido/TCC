@@ -10,6 +10,9 @@ public class EleicaoConsultaDTO implements Serializable {
     private Long idEleicao;
     private String titulo;
     private Date data;
+    private Date inicio;
+    private Date termino;
+    private boolean votou;
 
 //    GETTERS E SETTERS
 
@@ -35,5 +38,34 @@ public class EleicaoConsultaDTO implements Serializable {
 
     public void setData(Date data) {
         this.data = data;
+    }
+
+    public Date getInicio() {
+        return inicio;
+    }
+
+    public void setInicio(Date inicio) {
+        this.inicio = inicio;
+    }
+
+    public Date getTermino() {
+        return termino;
+    }
+
+    public void setTermino(Date termino) {
+        this.termino = termino;
+    }
+
+    public boolean isVotou() {
+        return votou;
+    }
+
+    public void setVotou(boolean votou) {
+        this.votou = votou;
+    }
+
+    public boolean isAberta() {
+        Date agora = new Date();
+        return !inicio.after(agora) && !termino.before(agora);
     }
 }

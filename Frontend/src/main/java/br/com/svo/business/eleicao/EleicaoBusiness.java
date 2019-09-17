@@ -154,4 +154,15 @@ public class EleicaoBusiness implements Serializable {
             throw new BusinessException("Erros ao cadastrar coligação:", e.getMessages());
         }
     }
+
+    public List<EleicaoConsultaDTO> consultaEleicoesUsuario() throws BusinessException {
+        try {
+            String response = new RestUtil("eleicao/usuario").withHeader("Content-Type", "application/json")
+                                                             .withHeader("Authorization", identity.getToken())
+                                                             .get();
+            return GSON.fromJson(response, new TypeToken<List<EleicaoConsultaDTO>>(){}.getType());
+        } catch (RestException e) {
+            throw new BusinessException("Erros ao buscar eleições:", e.getMessages());
+        }
+    }
 }

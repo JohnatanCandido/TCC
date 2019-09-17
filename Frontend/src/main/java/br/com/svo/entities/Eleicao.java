@@ -2,6 +2,7 @@ package br.com.svo.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Eleicao implements Serializable {
@@ -12,9 +13,15 @@ public class Eleicao implements Serializable {
     private String titulo;
     private String observacao;
     private List<Turno> turnos = new ArrayList<>();
+    private boolean usuarioVotou;
 
     public Eleicao() {
         this.turnos.add(new Turno(this, 1));
+    }
+
+    public boolean isAberta() {
+        Date agora = new Date();
+        return turnos.stream().anyMatch(t -> !t.getInicio().after(agora) && !t.getTermino().before(agora));
     }
 
 //    GETTERS E SETTERS
@@ -49,5 +56,13 @@ public class Eleicao implements Serializable {
 
     public void setTurnos(List<Turno> turnos) {
         this.turnos = turnos;
+    }
+
+    public boolean isUsuarioVotou() {
+        return usuarioVotou;
+    }
+
+    public void setUsuarioVotou(boolean usuarioVotou) {
+        this.usuarioVotou = usuarioVotou;
     }
 }

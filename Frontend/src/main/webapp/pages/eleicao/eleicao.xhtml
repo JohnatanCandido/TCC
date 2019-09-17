@@ -9,17 +9,26 @@
         <div class="ui-fluid">
             <div class="card-body">
                 <p:tabView id="tabViewEleicao" styleClass="ui-g-12 ui-md-12 ui-lg-12">
-                    <p:tab title="Eleição">
+                    <p:tab title="Eleição" rendered="#{eleicaoWebBean.possuiPermissaoAdministrador}">
                         <ui:include src="padrao/eleicao-padrao.xhtml" />
                     </p:tab>
-                    <p:tab title="Candidatos" styleClass="ui-g-12 ui-md-12 ui-lg-12">
+                    <p:tab title="Candidatos"
+                           rendered="#{eleicaoWebBean.possuiPermissaoAdministrador}"
+                           styleClass="ui-g-12 ui-md-12 ui-lg-12">
                         <ui:include src="candidato/candidato.xhtml" />
                     </p:tab>
                     <p:tab title="Apuração" styleClass="ui-g-12 ui-md-12 ui-lg-12">
                         <ui:include src="apuracao/apuracao-eleicao.xhtml" />
                     </p:tab>
-                    <p:tab title="Partidos e Coligações" styleClass="ui-g-12 ui-md-12 ui-lg-12">
+                    <p:tab title="Partidos e Coligações"
+                           rendered="#{eleicaoWebBean.possuiPermissaoAdministrador}"
+                           styleClass="ui-g-12 ui-md-12 ui-lg-12">
                         <ui:include src="coligacao/coligacao.xhtml" />
+                    </p:tab>
+                    <p:tab title="Votar"
+                           rendered="#{eleicaoWebBean.renderizarAbaVotar}"
+                           styleClass="ui-g-12 ui-md-12 ui-lg-12">
+                        <ui:include src="votar/votar.xhtml" />
                     </p:tab>
                 </p:tabView>
             </div>

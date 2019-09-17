@@ -3,10 +3,12 @@ package br.com.svo.web.eleicao.web.bean;
 import br.com.svo.business.exception.BusinessException;
 import br.com.svo.entities.Cargo;
 import br.com.svo.entities.Eleicao;
+import br.com.svo.entities.Identity;
 import br.com.svo.entities.Turno;
 import br.com.svo.entities.TurnoCargo;
 import br.com.svo.service.eleicao.EleicaoServiceLocal;
 import br.com.svo.util.Messages;
+import br.com.svo.util.Perfis;
 import br.com.svo.util.RedirectUtils;
 import org.omnifaces.cdi.Param;
 import org.omnifaces.cdi.ViewScoped;
@@ -30,6 +32,9 @@ public class EleicaoWebBean implements Serializable {
 
     @Inject
     private EleicaoServiceLocal eleicaoService;
+
+    @Inject
+    private Identity identity;
 
     private Eleicao eleicao;
     private List<Cargo> cargosDisponiveis;
@@ -78,6 +83,14 @@ public class EleicaoWebBean implements Serializable {
         } catch (BusinessException e) {
             Messages.addErrorMessage(e);
         }
+    }
+
+    public boolean isPossuiPermissaoAdministrador() {
+        return identity.hasPerfil(Perfis.ADMINISTRADOR);
+    }
+
+    public boolean isRenderizarAbaVotar() {
+        return eleicao.isAberta() && !eleicao.isUsuarioVotou();
     }
 
 //    GETTERS E SETTERS

@@ -73,4 +73,9 @@ public class EleicaoService implements EleicaoServiceLocal, Serializable {
     public Long salvarColigacao(Coligacao coligacao) throws BusinessException {
         return eleicaoBusiness.salvarColigacao(coligacao);
     }
+
+    @Override
+    public List<EleicaoConsultaDTO> consultaEleicoesUsuario() {
+        return eleicaoBusiness.consultaEleicoesUsuario();
+    }
 }
