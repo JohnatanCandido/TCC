@@ -20,6 +20,7 @@ def salvar_pessoa(dados):
     if pessoa.id_pessoa is None:
         db.create(pessoa)
     db.commit()
+    return str(pessoa.id_pessoa)
 
 
 def validar_pessoa(pessoa):

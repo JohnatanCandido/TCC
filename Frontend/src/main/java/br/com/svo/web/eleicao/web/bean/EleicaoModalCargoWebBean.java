@@ -8,7 +8,7 @@ import br.com.svo.entities.TurnoCargoRegiao;
 import br.com.svo.entities.enums.SistemaEleicao;
 import br.com.svo.entities.enums.TipoCargo;
 import br.com.svo.service.regiao.RegiaoServiceLocal;
-import br.com.svo.util.Messages;
+import br.com.svo.util.SvoMessages;
 import org.omnifaces.cdi.ViewScoped;
 
 import javax.inject.Inject;
@@ -39,7 +39,7 @@ public class EleicaoModalCargoWebBean implements Serializable {
             estados = regiaoService.consultarEstados(filtro);
         } catch (BusinessException e) {
             estados = new ArrayList<>();
-            Messages.addErrorMessage(e);
+            SvoMessages.addErrorMessage(e);
         }
         return estados;
     }
@@ -49,14 +49,14 @@ public class EleicaoModalCargoWebBean implements Serializable {
             cidades = regiaoService.consultarCidades(estado.getIdEstado(), filtro);
         } catch (BusinessException e) {
             cidades = new ArrayList<>();
-            Messages.addErrorMessage(e);
+            SvoMessages.addErrorMessage(e);
         }
         return cidades;
     }
 
     public void adicionaRegiao() {
         if (cidade != null && turnoCargo.contemCidade(cidade) || estado != null && turnoCargo.contemEstado(estado)) {
-            Messages.addErrorMessage("Esta região já foi adicionada para este cargo.");
+            SvoMessages.addErrorMessage("Esta região já foi adicionada para este cargo.");
         } else {
             TurnoCargoRegiao regiao = new TurnoCargoRegiao(cidade, estado);
             turnoCargo.getTurnoCargoRegioes().add(regiao);

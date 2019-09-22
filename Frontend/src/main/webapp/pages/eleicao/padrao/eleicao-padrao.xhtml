@@ -26,9 +26,7 @@
                                         mask="true"
                                         value="#{turno.inicio}"
                                         showOn="both"
-                                        pattern="dd/MM/yyyy HH:mm">
-                                <p:ajax process="@this" update="@this" global="false" />
-                            </p:calendar>
+                                        pattern="dd/MM/yyyy HH:mm" />
                         </div>
                         <div class="ui-g-12 ui-md-6 ui-lg-6">
                             <label for="terminoTurno">Término</label>
@@ -36,12 +34,10 @@
                                         mask="true"
                                         value="#{turno.termino}"
                                         showOn="both"
-                                        pattern="dd/MM/yyyy HH:mm">
-                                <p:ajax process="@this" update="@this" global="false" />
-                            </p:calendar>
+                                        pattern="dd/MM/yyyy HH:mm" />
                         </div>
                     </div>
-                    <div>
+                    <h:panelGroup id="panelGroupCargos">
                         <label>Cargos</label>
                         <div class="ui-g-12 ui-md-12 ui-lg-12">
                             <div class="ui-g-12 ui-md-8 ui-lg-8">
@@ -61,7 +57,7 @@
                                 <p:commandButton id="adicionarCargo"
                                                  value="Adicionar"
                                                  process="@this"
-                                                 update="formEleicao:tabViewEleicao:turnos"
+                                                 update="panelGroupCargos"
                                                  icon="fa fa-plus"
                                                  action="#{eleicaoWebBean.adicionarCargo(turno)}" />
                             </div>
@@ -103,7 +99,7 @@
                                 </p:column>
                             </p:dataTable>
                         </div>
-                    </div>
+                    </h:panelGroup>
                 </p:tab>
             </p:accordionPanel>
         </p:fieldset>

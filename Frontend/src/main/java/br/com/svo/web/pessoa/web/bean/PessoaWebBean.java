@@ -7,7 +7,8 @@ import br.com.svo.entities.Perfil;
 import br.com.svo.entities.Pessoa;
 import br.com.svo.service.pessoa.PessoaServiceLocal;
 import br.com.svo.service.regiao.RegiaoServiceLocal;
-import br.com.svo.util.Messages;
+import br.com.svo.util.SvoMessages;
+import br.com.svo.util.RedirectUtils;
 import org.omnifaces.cdi.Param;
 import org.omnifaces.cdi.ViewScoped;
 import org.primefaces.model.DualListModel;
@@ -72,7 +73,7 @@ public class PessoaWebBean implements Serializable {
             estados = regiaoService.consultarEstados(filtro);
         } catch (BusinessException e) {
             estados = new ArrayList<>();
-            Messages.addErrorMessage(e);
+            SvoMessages.addErrorMessage(e);
         }
         return estados;
     }
@@ -82,7 +83,7 @@ public class PessoaWebBean implements Serializable {
             cidades = regiaoService.consultarCidades(estado.getIdEstado(), filtro);
         } catch (BusinessException e) {
             cidades = new ArrayList<>();
-            Messages.addErrorMessage(e);
+            SvoMessages.addErrorMessage(e);
         }
         return cidades;
     }
@@ -90,11 +91,13 @@ public class PessoaWebBean implements Serializable {
     public void salvar() {
         try {
             pessoa.setPerfis(perfis.getTarget());
-            pessoaService.salvar(pessoa);
+            Long idPessoa = pessoaService.salvar(pessoa);
+            SvoMessages.addMessage("Salvo com sucesso.");
+            if (pessoa.getIdPessoa() == null)
+                RedirectUtils.redirect("pessoa/cadastro-pessoa.html?idPessoa=" + idPessoa);
             initPerfis();
-            Messages.addMessage("Salvo com sucesso.");
         } catch (BusinessException e) {
-            Messages.addErrorMessage(e);
+            SvoMessages.addErrorMessage(e);
         }
     }
 

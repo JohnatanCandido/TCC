@@ -14,7 +14,8 @@ class Estado(db.Model):
     def to_json(self):
         return {
             'idEstado': self.id_estado,
-            'nome': self.nome
+            'nome': self.nome,
+            'sigla': self.sigla
         }
 
 
@@ -117,6 +118,8 @@ class Cargo(db.Model):
     id_cargo = db.Column(db.Integer, primary_key=True)
     id_tipo_cargo = db.Column(db.Integer, db.ForeignKey('tipo_cargo.id_tipo_cargo'), nullable=False)
     nome = db.Column(db.String(20), nullable=False, unique=True)
+    max_votos = db.Column(db.Integer, nullable=False)
+    tam_numero_candidato = db.Column(db.Integer, nullable=False)
     sistema_eleicao = db.Column(db.String(30), nullable=False)
     permite_segundo_turno = db.Column(db.Boolean, nullable=False)
     turnosCargos = db.relationship('TurnoCargo', backref='cargo', lazy=True)
@@ -130,7 +133,8 @@ class Cargo(db.Model):
             'nome': self.nome,
             'sistemaEleicao': self.sistema_eleicao,
             'permiteSegundoTurno': self.permite_segundo_turno,
-            'tipoCargo': self.tipoCargo.nome
+            'tipoCargo': self.tipoCargo.nome,
+            'tamNumeroCandiato': self.tam_numero_candidato
         }
 
 
@@ -354,7 +358,8 @@ class VotoEncriptado(db.Model):
     id_turno_cargo_regiao = db.Column(db.Integer, db.ForeignKey('turno_cargo_regiao.id_turno_cargo_regiao'),
                                       nullable=False)
     id_cidade = db.Column(db.Integer, db.ForeignKey('cidade.id_cidade'), nullable=False)
-    id_candidato = db.Column(db.Text, nullable=False)
+    id_candidato = db.Column(db.Text)
+    id_partido = db.Column(db.Text)
     id_eleitor = db.Column(db.Text, nullable=False)
 
 
@@ -363,7 +368,8 @@ class VotoApurado(db.Model):
     id_turno_cargo_regiao = db.Column(db.Integer, db.ForeignKey('turno_cargo_regiao.id_turno_cargo_regiao'),
                                       nullable=False)
     id_cidade = db.Column(db.Integer, db.ForeignKey('cidade.id_cidade'))
-    id_candidato = db.Column(db.Integer, db.ForeignKey('candidato.id_candidato'), nullable=False)
+    id_candidato = db.Column(db.Integer, db.ForeignKey('candidato.id_candidato'))
+    id_partido = db.Column(db.Integer, db.ForeignKey('partido.id_partido'))
     id_eleitor = db.Column(db.Text, nullable=False)
 
     def to_json(self):

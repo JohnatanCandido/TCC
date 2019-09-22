@@ -1,6 +1,8 @@
+from sqlalchemy.sql import text
+
 from svo import db
 from svo.entities.models import VotoEncriptado, Login, Pessoa, Cargo, Estado, Cidade, Eleicao, Perfil, Partido, \
-    Coligacao
+    Coligacao, TurnoCargoRegiao, Turno
 
 
 def create(entidade):
@@ -21,6 +23,10 @@ def commit():
 
 def query(clazz):
     return db.session.query(clazz)
+
+
+def native(sql, params):
+    return db.engine.execute(text(sql), params)
 
 
 def find_login(login):
@@ -69,3 +75,11 @@ def find_partido(id_partido):
 
 def find_coligacao(id_coligacao):
     return Coligacao.query.get(id_coligacao)
+
+
+def find_turno_cargo_regiao(id_turno_cargo_regiao):
+    return TurnoCargoRegiao.query.get(id_turno_cargo_regiao)
+
+
+def find_turno(id_turno):
+    return Turno.query.get(id_turno)

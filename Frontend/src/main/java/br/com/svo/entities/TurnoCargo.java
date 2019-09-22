@@ -25,9 +25,6 @@ public class TurnoCargo implements Serializable {
         if (cargo.getNome().equals("Presidente")) {
             TurnoCargoRegiao tcr = new TurnoCargoRegiao(1, true);
             turnoCargoRegioes.add(tcr);
-        } else if (cargo.getTipoCargo().equals(TipoCargo.FEDERAL.getTipo())) {
-            TurnoCargoRegiao tcr = new TurnoCargoRegiao(0, false);
-            turnoCargoRegioes.add(tcr);
         }
     }
 

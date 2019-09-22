@@ -1,7 +1,7 @@
 package br.com.svo.web.login.web.bean;
 
 import br.com.svo.entities.Identity;
-import br.com.svo.entities.VotoEncriptado;
+import br.com.svo.entities.Voto;
 import org.omnifaces.cdi.ViewScoped;
 
 import javax.annotation.PostConstruct;
@@ -15,25 +15,25 @@ public class TesteWebBean implements Serializable {
 
     public static final long serialVersionUID = 1L;
 
-    private VotoEncriptado votoEncriptado;
+    private Voto voto;
 
     @Inject
     private Identity identity;
 
     @PostConstruct
     public void init() {
-        votoEncriptado = new VotoEncriptado();
+        voto = new Voto();
     }
 
     public void votar() {
-        votoEncriptado = new VotoEncriptado();
+        voto = new Voto();
     }
 
-    public VotoEncriptado getVotoEncriptado() {
-        return votoEncriptado;
+    public Voto getVoto() {
+        return voto;
     }
 
-    public void setVotoEncriptado(VotoEncriptado votoEncriptado) {
-        this.votoEncriptado = votoEncriptado;
+    public void setVoto(Voto voto) {
+        this.voto = voto;
     }
 }

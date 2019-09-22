@@ -13,7 +13,7 @@
               resizable="false"
               header="Cadastrar partido"
               closable="true">
-        <h:panelGroup id="panelCadastroPartido">
+        <h:panelGroup id="panelCadastroPartido" rendered="#{cadastroPartidoWebBean.partido != null}">
             <div class="ui-g-12 ui-md-12 ui-lg-12">
                 <div class="ui-g-12 ui-md-12 ui-lg-7">
                     <label for="nomePartido">Nome</label>

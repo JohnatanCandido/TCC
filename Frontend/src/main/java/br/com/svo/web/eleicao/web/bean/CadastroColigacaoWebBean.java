@@ -4,7 +4,7 @@ import br.com.svo.business.exception.BusinessException;
 import br.com.svo.entities.Coligacao;
 import br.com.svo.entities.Partido;
 import br.com.svo.service.eleicao.EleicaoServiceLocal;
-import br.com.svo.util.Messages;
+import br.com.svo.util.SvoMessages;
 import org.omnifaces.cdi.ViewScoped;
 import org.primefaces.PrimeFaces;
 
@@ -42,10 +42,10 @@ public class CadastroColigacaoWebBean implements Serializable {
             coligacao.setIdColigacao(eleicaoService.salvarColigacao(coligacao));
             if (coligacoes != null)
                 coligacoes.add(coligacao);
-            Messages.addMessage("Salvo com sucesso");
+            SvoMessages.addMessage("Salvo com sucesso");
             PrimeFaces.current().executeScript("PF('modalNovaColigacao').hide();");
         } catch (BusinessException e) {
-            Messages.addErrorMessage(e);
+            SvoMessages.addErrorMessage(e);
         }
     }
 

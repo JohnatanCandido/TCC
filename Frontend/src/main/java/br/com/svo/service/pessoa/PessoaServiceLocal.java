@@ -15,7 +15,7 @@ public interface PessoaServiceLocal {
 
     List<Perfil> listarPerfis() throws BusinessException;
 
-    void salvar(Pessoa pessoa) throws BusinessException;
+    Long salvar(Pessoa pessoa) throws BusinessException;
 
     List<PessoaConsultaDTO> buscarPessoas(PessoaConsultaDTO pessoaConsultaDTO) throws BusinessException;
 }

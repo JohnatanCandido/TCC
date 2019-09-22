@@ -6,8 +6,8 @@ import br.com.svo.entities.Login;
 import br.com.svo.service.login.LoginServiceLocal;
 import br.com.svo.util.EncryptionUtils;
 import br.com.svo.util.IdentityUtil;
-import br.com.svo.util.Messages;
 import br.com.svo.util.RedirectUtils;
+import br.com.svo.util.exception.RestException;
 import org.omnifaces.cdi.ViewScoped;
 
 import javax.annotation.PostConstruct;
@@ -43,15 +43,11 @@ public class LoginWebBean implements Serializable {
         this.login = new Login();
     }
 
-    public String getKey() {
-        return EncryptionUtils.getKey();
-    }
-
     public void login() {
         try {
             identity.init(loginService.login(login));
             IdentityUtil.login(identity);
-            RedirectUtils.redirect("index.html");
+            RedirectUtils.redirectToHome();
         } catch (BusinessException e) {
             loginFalhou = true;
         }

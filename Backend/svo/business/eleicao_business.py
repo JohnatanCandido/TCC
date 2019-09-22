@@ -70,3 +70,28 @@ def validar_turno(turno, errors):
 def validar_turno_cargo(turno_cargo, errors):
     if len(turno_cargo.turno_cargo_regioes) == 0:
         errors.append(f"É necessário adicionar pelo menos uma regiao para o cargo {turno_cargo.cargo.nome}")
+
+
+def consulta_eleicao_por_usuario(user):
+    sql = '''SELECT DISTINCT e.id_eleicao, e.titulo, t.inicio, t.termino, et IS NOT NULL AS votou 
+             FROM eleicao e
+             JOIN turno t ON e.id_eleicao = t.id_eleicao
+             JOIN turno_cargo tc ON t.id_turno = tc.id_turno
+             JOIN turno_cargo_regiao tcr ON tc.id_turno_cargo = tcr.id_turno_cargo
+             LEFT JOIN eleitor_turno et ON t.id_turno = et.id_turno AND et.id_eleitor = :idEleitor
+             WHERE ((tcr.id_estado IS NULL AND tcr.id_cidade IS NULL)
+             OR (tcr.id_estado = :idEstado AND tcr.id_cidade IS NULL)
+             OR (tcr.id_estado = :idEstado AND tcr.id_cidade = :idCidade))'''
+
+    resultado = db.native(sql, {'idEstado': user.eleitor.cidade.id_estado,
+                                'idCidade': user.eleitor.id_cidade,
+                                'idEleitor': user.eleitor.id_eleitor})
+
+    eleicoes = []
+    for r in resultado:
+        eleicoes.append({'idEleicao': r['id_eleicao'],
+                         'titulo': r['titulo'],
+                         'inicio': str(r['inicio']),
+                         'termino': str(r['termino']),
+                         'votou': r['votou']})
+    return eleicoes

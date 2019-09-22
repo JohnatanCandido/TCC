@@ -1,0 +1,44 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <p:dialog id="modalConfirmaVoto"
+              widgetVar="modalConfirmaVoto"
+              modal="true"
+              dynamic="true"
+              closeOnEscape="true"
+              width="50%"
+              style="max-width: 500px;"
+              resizable="false"
+              header="Confirmar voto"
+              closable="true">
+        <h:panelGroup rendered="#{!votoWebBean.cargosNulos.isEmpty()}">
+            <div class="ui-g-12 ui-md-12 ui-lg-12">
+                <h:outputText value="Você está votando em branco nos seguintes cargos:" />
+            </div>
+            <div class="ui-g-12 ui-md-12 ui-lg-12">
+                <p:repeat value="#{votoWebBean.cargosNulos}" var="cargoNulo">
+                    <h:outputText value="- #{cargoNulo}" />
+                    <br />
+                </p:repeat>
+            </div>
+            <div class="ui-g-12 ui-md-12 ui-lg-12">
+                <h:outputText value="Deseja confirmar o voto?" />
+            </div>
+            <div class="ui-g-12 ui-md-12 ui-lg-12">
+                <div class="ui-g-12 ui-md-12 ui-lg-3">
+                    <p:commandButton value="Sim"
+                                     icon="fa fa-check"
+                                     action="#{votoWebBean.confirmaVoto()}"
+                                     oncomplete="PF('modalConfirmaVoto').hide();" />
+                </div>
+                <div class="ui-g-12 ui-md-12 ui-lg-3">
+                    <p:commandButton value="Não"
+                                     icon="fa fa-remove"
+                                     oncomplete="PF('modalConfirmaVoto').hide();" />
+                </div>
+            </div>
+        </h:panelGroup>
+    </p:dialog>
+</ui:composition>

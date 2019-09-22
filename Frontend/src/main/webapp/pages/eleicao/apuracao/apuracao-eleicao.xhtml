@@ -78,7 +78,7 @@
                                 <h:outputText value="Vice: #{candidato.viceCandidato.pessoa.nome}" />
                             </h:panelGroup>
                         </p:column>
-                        <p:column headerText="Partido" width="10%">
+                        <p:column headerText="Partido" width="15%">
                             <p:tooltip for="partidoPrincipal" value="#{candidato.partido.infoPartido}" position="bottom" />
                             <h:outputText id="partidoPrincipal" value="#{candidato.partidoFormatado}" />
                             <h:panelGroup rendered="#{candidato.viceCandidato != null}">

@@ -28,8 +28,8 @@ public class PessoaService implements PessoaServiceLocal, Serializable {
     }
 
     @Override
-    public void salvar(Pessoa pessoa) throws BusinessException {
-        pessoaBusiness.salvar(pessoa);
+    public Long salvar(Pessoa pessoa) throws BusinessException {
+        return pessoaBusiness.salvar(pessoa);
     }
 
     @Override

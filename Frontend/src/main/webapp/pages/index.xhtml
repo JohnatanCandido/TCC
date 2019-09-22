@@ -21,7 +21,7 @@
                                  reflow="true"
                                  emptyMessage="Não há nenhuma eleição em aberto...">
                         <p:column headerText="Ação">
-                            <p:link outcome="/pages/eleicao/eleicao.xhtml">
+                            <p:link rendered="#{!eleicao.votou}" outcome="/pages/eleicao/votar/votar.xhtml">
                                 <i class="fa fa-pencil" />
                                 <f:param name="idEleicao" value="#{eleicao.idEleicao}" />
                             </p:link>
@@ -40,7 +40,7 @@
                             </h:outputText>
                         </p:column>
                         <p:column headerText="Votou">
-                            <h:outputText value="#{eleicao.votou}" />
+                            <h:selectBooleanCheckbox value="#{eleicao.votou}" disabled="true" />
                         </p:column>
                     </p:dataTable>
                 </div>
@@ -55,7 +55,7 @@
                                  paginatorAlwaysVisible="false"
                                  reflow="true"
                                  emptyMessage="Nenhuma eleição encontrada...">
-                        <p:column headerText="Ação">
+                        <p:column headerText="Ação" width="100">
                             <p:link value="Mais detalhes" outcome="/pages/eleicao/eleicao.xhtml">
                                 <f:param name="idEleicao" value="#{eleicao.idEleicao}" />
                             </p:link>
@@ -64,12 +64,12 @@
                             <h:outputText value="#{eleicao.titulo}" />
                         </p:column>
                         <p:column headerText="Data">
-                            <h:outputText value="#{eleicao.data}">
+                            <h:outputText value="#{eleicao.inicio}">
                                 <f:convertDateTime pattern="dd/MM/yyyy" />
                             </h:outputText>
                         </p:column>
                         <p:column headerText="Participou">
-                            <h:outputText value="#{eleicao.votou}" />
+                            <h:selectBooleanCheckbox value="#{eleicao.votou}" disabled="true" />
                         </p:column>
                     </p:dataTable>
                 </div>

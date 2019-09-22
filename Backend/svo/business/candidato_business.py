@@ -7,7 +7,9 @@ from svo.util import database_utils as db
 def cadastrar(candidato_json):
     candidato = mf.cria_candidato(candidato_json)
     validar_candidato(candidato)
-    verifica_pessoa_ja_candidatada(candidato.id_pessoa, int(candidato_json['idEleicao']), candidato_json['pessoa']['nome'])
+    verifica_pessoa_ja_candidatada(candidato.id_pessoa,
+                                   int(candidato_json['idEleicao']),
+                                   candidato_json['pessoa']['nome'])
     if candidato.id_candidato is None:
         db.create(candidato)
     if 'viceCandidato' in candidato_json:
@@ -15,7 +17,9 @@ def cadastrar(candidato_json):
         vice.id_turno_cargo_regiao = candidato.id_turno_cargo_regiao
         candidato.vice = vice
         validar_candidato(vice)
-        verifica_pessoa_ja_candidatada(vice.id_pessoa, int(candidato_json['idEleicao']), candidato_json['viceCandidato']['pessoa']['nome'])
+        verifica_pessoa_ja_candidatada(vice.id_pessoa,
+                                       int(candidato_json['idEleicao']),
+                                       candidato_json['viceCandidato']['pessoa']['nome'])
         if vice.id_candidato is None:
             db.create(vice)
     db.commit()
@@ -27,17 +31,27 @@ def validar_candidato(candidato):
         errors.append("O partido é obrigatório")
     if candidato.id_turno_cargo_regiao is None:
         errors.append("O cargo é obrigatório")
-    if candidato.numero is None:
-        errors.append("O número do candidato é obrigatório")
     if candidato.id_pessoa is None:
         errors.append("É necessário selecionar uma pessoa")
-    if candidato.id_partido is not None and candidato.numero is not None:
-        partido = db.find_partido(candidato.id_partido)
-        if str(candidato.numero)[:2] != str(partido.numero_partido):
-            errors.append("Os dois primeiros dígitos do número do candidato devem ser iguais ao do partido")
+    valida_numero_candidato(candidato, errors)
 
     if errors:
         raise ValidationException('Erros de validação', errors)
+
+
+def valida_numero_candidato(candidato, errors):
+    if candidato.numero is None:
+        errors.append("O número do candidato é obrigatório")
+    else:
+        tcr = db.find_turno_cargo_regiao(candidato.id_turno_cargo_regiao)
+        tamanho_numero = tcr.turnoCargo.cargo.tam_numero_candidato
+        if len(str(candidato.numero)) != tamanho_numero:
+            errors.append(f"O número do candiato deve ter {tamanho_numero} algarismos")
+        if candidato.id_partido is not None:
+            partido = db.find_partido(candidato.id_partido)
+            if str(candidato.numero)[:2] != str(partido.numero_partido):
+                errors.append(f"Os dois primeiros dígitos do número do candidato "
+                              f"devem ser iguais ao do partido ({partido.numero_partido})")
 
 
 def verifica_pessoa_ja_candidatada(id_pessoa, id_eleicao, nome):

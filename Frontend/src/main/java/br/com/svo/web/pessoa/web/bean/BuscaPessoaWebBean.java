@@ -6,7 +6,7 @@ import br.com.svo.entities.Estado;
 import br.com.svo.entities.dto.PessoaConsultaDTO;
 import br.com.svo.service.pessoa.PessoaServiceLocal;
 import br.com.svo.service.regiao.RegiaoServiceLocal;
-import br.com.svo.util.Messages;
+import br.com.svo.util.SvoMessages;
 import org.omnifaces.cdi.ViewScoped;
 
 import javax.inject.Inject;
@@ -60,10 +60,10 @@ public class BuscaPessoaWebBean implements Serializable {
     public void buscar() {
         try {
             pessoas = pessoaService.buscarPessoas(pessoaConsultaDTO);
-            Messages.addFoundMessage(pessoas.size());
+            SvoMessages.addFoundMessage(pessoas.size());
         } catch (BusinessException e) {
             pessoas = new ArrayList<>();
-            Messages.addErrorMessage(e);
+            SvoMessages.addErrorMessage(e);
         }
     }
 

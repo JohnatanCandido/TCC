@@ -11,6 +11,7 @@ public class Cargo implements Serializable {
     private String sistemaEleicao;
     private boolean permiteSegundoTurno;
     private String tipoCargo;
+    private int tamNumeroCandiato;
 
 //    GETTERS E SETTERS
 
@@ -52,6 +53,14 @@ public class Cargo implements Serializable {
 
     public void setTipoCargo(String tipoCargo) {
         this.tipoCargo = tipoCargo;
+    }
+
+    public int getTamNumeroCandiato() {
+        return tamNumeroCandiato;
+    }
+
+    public void setTamNumeroCandiato(int tamNumeroCandiato) {
+        this.tamNumeroCandiato = tamNumeroCandiato;
     }
 
     @Override

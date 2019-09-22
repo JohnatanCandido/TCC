@@ -1,13 +1,14 @@
 package br.com.svo.util;
 
 import br.com.svo.business.exception.BusinessException;
+import org.omnifaces.util.Messages;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.List;
 
-public class Messages implements Serializable {
+public class SvoMessages implements Serializable {
 
     public static final long serialVersionUID = 1L;
 
@@ -24,8 +25,15 @@ public class Messages implements Serializable {
         e.getMessages().forEach(m -> addErrorMessage(" - " + m));
     }
 
+    public static void addFlashGlobalError(BusinessException e) {
+        if (e.getMessage() != null)
+            Messages.addFlashGlobalError(e.getMessage());
+        for (String m: e.getMessages())
+            Messages.addFlashGlobalError(m);
+    }
+
     private static void addMessage(FacesMessage.Severity severity, String message) {
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severity, null, message));
+        Messages.add(null, new FacesMessage(severity, null, message));
     }
 
     public static void addFoundMessage(int numeroRegistros) {

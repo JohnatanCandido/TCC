@@ -47,6 +47,6 @@ public class Identity implements Serializable {
     }
 
     public String getToken() {
-        return token;
+        return "Bearer " + token;
     }
 }

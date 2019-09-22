@@ -8,6 +8,7 @@ public class EleicaoConsultaDTO implements Serializable {
     public static final long serialVersionUID = 1L;
 
     private Long idEleicao;
+    private Long idTurno;
     private String titulo;
     private Date data;
     private Date inicio;
@@ -22,6 +23,14 @@ public class EleicaoConsultaDTO implements Serializable {
 
     public void setIdEleicao(Long idEleicao) {
         this.idEleicao = idEleicao;
+    }
+
+    public Long getIdTurno() {
+        return idTurno;
+    }
+
+    public void setIdTurno(Long idTurno) {
+        this.idTurno = idTurno;
     }
 
     public String getTitulo() {

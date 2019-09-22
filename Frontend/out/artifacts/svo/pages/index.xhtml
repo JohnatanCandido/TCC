@@ -7,7 +7,74 @@
 
 <ui:define name="content">
     <h:form>
-        TODO
+        <div class="ui-fluid">
+            <div class="card-body">
+                <div class="ui-g-12 ui-md-12 ui-lg-12">
+                    <label for="eleicoesAberto">Eleições em aberto</label>
+                    <p:dataTable id="eleicoesAberto"
+                                 value="#{homeWebBean.eleicoesAbertas}"
+                                 var="eleicao"
+                                 rows="10"
+                                 paginator="true"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                                 paginatorAlwaysVisible="false"
+                                 reflow="true"
+                                 emptyMessage="Não há nenhuma eleição em aberto...">
+                        <p:column headerText="Ação">
+                            <p:link rendered="#{!eleicao.votou}" outcome="/pages/eleicao/votar/votar.xhtml">
+                                <i class="fa fa-pencil" />
+                                <f:param name="idEleicao" value="#{eleicao.idEleicao}" />
+                            </p:link>
+                        </p:column>
+                        <p:column headerText="Título">
+                            <h:outputText value="#{eleicao.titulo}" />
+                        </p:column>
+                        <p:column headerText="Inicio">
+                            <h:outputText value="#{eleicao.inicio}">
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Término">
+                            <h:outputText value="#{eleicao.termino}">
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Votou">
+                            <h:selectBooleanCheckbox value="#{eleicao.votou}" disabled="true" />
+                        </p:column>
+                    </p:dataTable>
+                </div>
+                <div class="ui-g-12 ui-md-12 ui-lg-12">
+                    <label for="eleicoesFinalizadas">Últimas eleições</label>
+                    <p:dataTable id="eleicoesFinalizadas"
+                                 value="#{homeWebBean.eleicoesFinalizadas}"
+                                 var="eleicao"
+                                 rows="10"
+                                 paginator="true"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                                 paginatorAlwaysVisible="false"
+                                 reflow="true"
+                                 emptyMessage="Nenhuma eleição encontrada...">
+                        <p:column headerText="Ação" width="100">
+                            <p:link value="Mais detalhes" outcome="/pages/eleicao/eleicao.xhtml">
+                                <f:param name="idEleicao" value="#{eleicao.idEleicao}" />
+                            </p:link>
+                        </p:column>
+                        <p:column headerText="Título">
+                            <h:outputText value="#{eleicao.titulo}" />
+                        </p:column>
+                        <p:column headerText="Data">
+                            <h:outputText value="#{eleicao.inicio}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Participou">
+                            <h:selectBooleanCheckbox value="#{eleicao.votou}" disabled="true" />
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+        </div>
     </h:form>
 </ui:define>
 </ui:composition>

@@ -5,6 +5,7 @@ from flask import request
 from jwt import ExpiredSignatureError
 
 from svo.util import database_utils
+from svo import c
 
 secret = 'CRIAR UM SECRET'  # TODO Colocar em um lugar seguro
 
@@ -43,7 +44,8 @@ def protected(f):
 
         try:
             data = jwt.decode(token, secret, algorithms=['HS256'])
-            user = database_utils.find_pessoa(data['idPessoa'])
+            id_pessoa = c.dec(data['idPessoa'])
+            user = database_utils.find_pessoa(id_pessoa)
         except ExpiredSignatureError:
             return 'Sessão inválida', 401
         return f(user, *args, **kwargs)

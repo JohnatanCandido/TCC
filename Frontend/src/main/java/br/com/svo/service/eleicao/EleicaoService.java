@@ -75,7 +75,7 @@ public class EleicaoService implements EleicaoServiceLocal, Serializable {
     }
 
     @Override
-    public List<EleicaoConsultaDTO> consultaEleicoesUsuario() {
+    public List<EleicaoConsultaDTO> consultaEleicoesUsuario() throws BusinessException {
         return eleicaoBusiness.consultaEleicoesUsuario();
     }
 }

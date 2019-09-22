@@ -2,7 +2,7 @@ package br.com.svo.web.eleicao.web.bean;
 
 import br.com.svo.business.exception.BusinessException;
 import br.com.svo.entities.*;
-import br.com.svo.util.Messages;
+import br.com.svo.util.SvoMessages;
 import org.omnifaces.cdi.ViewScoped;
 
 import javax.annotation.PostConstruct;
@@ -84,20 +84,20 @@ public class CandidatoCadastroWebBean extends FiltroCandidatoWebBean implements 
         try {
             insertCargo();
             eleicaoService.salvarCandidato(candidato);
-            Messages.addMessage("Salvo com sucesso");
+            SvoMessages.addMessage("Salvo com sucesso");
             novoCandidato();
         } catch (BusinessException e) {
-            Messages.addErrorMessage(e);
+            SvoMessages.addErrorMessage(e);
         }
     }
 
-    public void novoCandidato() {
+    public void novoCandidato()  {
         Eleicao eleicao = eleicaoWebBean.getEleicao();
         candidato = new Candidato(eleicao.getIdEleicao());
         estado = null;
         cidade = null;
-        turnoCargo = turnoCargos.size() == 1 ? turnoCargos.get(0) : null;
         limpaDadosCandidato();
+        turnoCargo = turnoCargos.size() == 1 ? turnoCargos.get(0) : null;
     }
 
     private void insertCargo() {

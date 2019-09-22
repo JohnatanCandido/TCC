@@ -13,6 +13,10 @@ public class RedirectUtils {
         Faces.redirect(SVO_URL + "pages/" + url);
     }
 
+    public static void redirectToHome() {
+        redirect("index.html");
+    }
+
     public static void redirectToLogin() {
         Faces.redirect(SVO_URL + "login.html");
     }

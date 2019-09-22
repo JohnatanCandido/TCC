@@ -42,12 +42,14 @@ public class PessoaBusiness implements Serializable {
         }
     }
 
-    public void salvar(Pessoa pessoa) throws BusinessException {
+    public Long salvar(Pessoa pessoa) throws BusinessException {
         try {
-            new RestUtil("pessoa/salvar").withBody(pessoa)
-                                         .withHeader("Content-Type", "application/json")
-                                         .withHeader("Authorization", identity.getToken())
-                                         .post();
+            String response = new RestUtil("pessoa/salvar").withBody(pessoa)
+                                                           .withHeader("Content-Type", "application/json")
+                                                           .withHeader("Authorization", identity.getToken())
+                                                           .post();
+
+            return new Long(response);
         } catch (RestException e) {
             throw new BusinessException("Erros ao salvar a eleição:", e.getMessages());
         }

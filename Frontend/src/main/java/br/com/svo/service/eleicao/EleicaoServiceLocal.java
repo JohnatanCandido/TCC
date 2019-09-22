@@ -34,5 +34,5 @@ public interface EleicaoServiceLocal {
 
     Long salvarColigacao(Coligacao coligacao) throws BusinessException;
 
-    List<EleicaoConsultaDTO> consultaEleicoesUsuario();
+    List<EleicaoConsultaDTO> consultaEleicoesUsuario() throws BusinessException;
 }

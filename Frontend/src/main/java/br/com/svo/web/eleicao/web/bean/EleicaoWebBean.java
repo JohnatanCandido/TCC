@@ -7,12 +7,11 @@ import br.com.svo.entities.Identity;
 import br.com.svo.entities.Turno;
 import br.com.svo.entities.TurnoCargo;
 import br.com.svo.service.eleicao.EleicaoServiceLocal;
-import br.com.svo.util.Messages;
+import br.com.svo.util.SvoMessages;
 import br.com.svo.util.Perfis;
 import br.com.svo.util.RedirectUtils;
 import org.omnifaces.cdi.Param;
 import org.omnifaces.cdi.ViewScoped;
-import org.primefaces.PrimeFaces;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -51,7 +50,7 @@ public class EleicaoWebBean implements Serializable {
             cargosDisponiveis = eleicaoService.consultaCargos();
             cargosDisponiveis.removeIf(cargo -> eleicao.getTurnos().get(0).contemCargo(cargo));
         } catch (BusinessException e) {
-            Messages.addErrorMessage(e);
+            SvoMessages.addErrorMessage(e);
         }
     }
 
@@ -61,7 +60,7 @@ public class EleicaoWebBean implements Serializable {
             cargosDisponiveis.remove(cargoSelecionado);
             cargoSelecionado = null;
         } else {
-            Messages.addErrorMessage("Selecione um cargo.");
+            SvoMessages.addErrorMessage("Selecione um cargo.");
         }
     }
 
@@ -77,11 +76,11 @@ public class EleicaoWebBean implements Serializable {
     public void salvar() {
         try {
             Long idEleicao = eleicaoService.salvar(eleicao);
+            SvoMessages.addMessage("Salvo com sucesso.");
             if (eleicao.getIdEleicao() == null)
                 RedirectUtils.redirect("eleicao/eleicao.html?idEleicao=" + idEleicao);
-            Messages.addMessage("Salvo com sucesso.");
         } catch (BusinessException e) {
-            Messages.addErrorMessage(e);
+            SvoMessages.addErrorMessage(e);
         }
     }
 
@@ -89,8 +88,12 @@ public class EleicaoWebBean implements Serializable {
         return identity.hasPerfil(Perfis.ADMINISTRADOR);
     }
 
-    public boolean isRenderizarAbaVotar() {
-        return eleicao.isAberta() && !eleicao.isUsuarioVotou();
+    public boolean isEleicaoPersistida() {
+        return eleicao.getIdEleicao() != null;
+    }
+
+    public boolean isRenderizaAbasPermissaoAdministrador() {
+        return isEleicaoPersistida() && isPossuiPermissaoAdministrador();
     }
 
 //    GETTERS E SETTERS

@@ -1,5 +1,6 @@
 from svo.entities.models import Eleicao, Turno, TurnoCargo, TurnoCargoRegiao, Partido, Candidato, Eleitor, Login, \
     VotoEncriptado, Pessoa, Coligacao
+from svo.exception.validation_exception import ValidationException
 from svo.util import database_utils as db, senha_util
 
 import re
@@ -193,12 +194,19 @@ def cria_login(dados):
     return login
 
 
-# ======================================================================================================================
+# Voto =================================================================================================================
 
-def cria_voto_encriptado(dados):
+def cria_voto_encriptado(dados, id_cidade, id_eleitor):
     voto = VotoEncriptado()
-    voto.id_candidato = str(dados['idCandidato'])
-    voto.id_eleicao = str(dados['idEleitor'])
-    voto.id_eleitor = str(dados['idEleicao'])
-    voto.id_cargo = str(dados['idCargo'])
+    if 'idCandidato' in dados:
+        voto.id_candidato = dados['idCandidato']
+    elif 'idPartido' in dados:
+        voto.id_partido = dados['idPartido']
+    else:
+        msg = 'É necessário informar um candidato ou um partido'
+        raise ValidationException(msg, [msg])
+    voto.id_eleitor = id_eleitor
+    voto.id_turno_cargo_regiao = dados['idTurnoCargoRegiao']
+    voto.id_cidade = id_cidade
+
     return voto

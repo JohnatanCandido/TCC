@@ -12,28 +12,34 @@ public final class EncryptionUtils {
     private static PaillierPublicKey pub;
 
     static {
+        buscaChave();
+    }
+
+    public static String encrypt(Long valor) throws RestException {
+        return encrypt(new BigInteger(valor.toString())).toString();
+    }
+
+    public static BigInteger encrypt(BigInteger valor) throws RestException {
+        verificaChave();
+        return pub.raw_encrypt(valor);
+    }
+
+    private static void verificaChave() throws RestException {
+        if (pub == null)
+            buscaChave();
+        if (pub == null)
+            throw new RestException("Não foi possível buscar a chave pública.");
+    }
+
+    private static void buscaChave() {
         String key = null;
         try {
-            key = new RestUtil("get_public_key").get();
+            key = new RestUtil("voto/chave-publica").get();
         } catch (RestException | BusinessException e) {
             e.printStackTrace();
         }
         if (key == null)
             throw new NullPointerException("Erro ao buscar chave pública no backend");
         pub = new PaillierPublicKey(new BigInteger(key));
-    }
-
-    public static BigInteger encrypt(String valor) {
-        return encrypt(new BigInteger(valor));
-    }
-
-    public static BigInteger encrypt(BigInteger valor) {
-        return pub.raw_encrypt(valor);
-    }
-
-    public static String getKey() {
-        if (pub == null)
-            return "nulo";
-        return pub.getModulus().toString();
     }
 }
