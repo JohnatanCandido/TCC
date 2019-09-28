@@ -17,8 +17,8 @@ public class VotacaoService implements VotacaoServiceLocal, Serializable {
     private VotacaoBusiness votacaoBusiness;
 
     @Override
-    public void votar(Long idEleicao, List<Voto> votos) throws BusinessException {
-        votacaoBusiness.votar(idEleicao, votos);
+    public void votar(String usuario, String senha, Long idEleicao, List<Voto> votos) throws BusinessException {
+        votacaoBusiness.votar(usuario, senha, idEleicao, votos);
     }
 
     @Override

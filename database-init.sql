@@ -61,7 +61,7 @@ insert into eleitor(id_pessoa, zona_eleitoral, secao, numero_inscricao, id_cidad
 where not exists((select 1 from eleitor e2 where p.id_pessoa = e2.id_pessoa)));
 
 insert into login(usuario, senha, id_pessoa)
-(select e.numero_inscricao, md5('teste'), e.id_pessoa from eleitor e where not exists(select 1 from login l2 where e.id_pessoa = l2.id_pessoa));
+(select md5(e.numero_inscricao), md5('teste'), e.id_pessoa from eleitor e where not exists(select 1 from login l2 where e.id_pessoa = l2.id_pessoa));
 
 insert into partido(nome, sigla, numero_partido) values ('Partido Social Liberal', 'PSL', '17');
 insert into partido(nome, sigla, numero_partido) values ('Partido Renovador Trabalhista Brasileiro', 'PRTB', '28');

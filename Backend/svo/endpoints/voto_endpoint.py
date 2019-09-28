@@ -10,10 +10,10 @@ votos = Blueprint('votos', __name__)
 
 @votos.route("/eleicao/<id_eleicao>/votar", methods=["POST"])
 @protected
-def vote(user, id_eleicao):
+def votar(user, id_eleicao):
     try:
-        voto_json = request.json
-        voto_business.votar(user, id_eleicao, voto_json)
+        votos_json = request.json
+        voto_business.votar(user, id_eleicao, votos_json)
         return '200'
     except ValidationException as e:
         return jsonify(e.errors), 403

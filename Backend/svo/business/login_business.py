@@ -1,11 +1,9 @@
-from svo.business import model_factory as mf
-from svo.util import database_utils, token_util
 from svo import c
+from svo.util import database_utils, token_util
 
 
 def auth(dados):
-    login = mf.cria_login(dados)
-    user = database_utils.find_login(login)
+    user = database_utils.find_login(dados['usuario'], dados['senha'])
     if user is not None:
         identity = user.to_json()
         identity['token'] = get_token(user)

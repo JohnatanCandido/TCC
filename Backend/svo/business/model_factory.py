@@ -1,7 +1,8 @@
 from svo.entities.models import Eleicao, Turno, TurnoCargo, TurnoCargoRegiao, Partido, Candidato, Eleitor, Login, \
-    VotoEncriptado, Pessoa, Coligacao
+    VotoEncriptado, Pessoa, Coligacao, VotoApurado
 from svo.exception.validation_exception import ValidationException
 from svo.util import database_utils as db, senha_util
+from svo import c
 
 import re
 
@@ -185,15 +186,6 @@ def cria_coligacao(dados):
     return coligacao
 
 
-# Login ================================================================================================================
-
-def cria_login(dados):
-    login = Login()
-    login.usuario = dados['usuario']
-    login.senha = dados['senha']
-    return login
-
-
 # Voto =================================================================================================================
 
 def cria_voto_encriptado(dados, id_cidade, id_eleitor):
@@ -210,3 +202,17 @@ def cria_voto_encriptado(dados, id_cidade, id_eleitor):
     voto.id_cidade = id_cidade
 
     return voto
+
+
+def cria_voto(voto_enc):
+    va = VotoApurado()
+    va.id_turno_cargo_regiao = voto_enc.id_turno_cargo_regiao
+    va.id_cidade = voto_enc.id_cidade
+    va.id_eleitor = voto_enc.id_eleitor
+
+    id_candidato = c.dec(voto_enc.id_candidato)
+    id_partido = c.dec(voto_enc.id_partido)
+    if id_candidato != -1:
+        va.id_candidato = id_candidato
+    if id_partido != -1:
+        va.id_partido = id_partido

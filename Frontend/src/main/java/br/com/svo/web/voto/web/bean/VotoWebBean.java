@@ -4,6 +4,7 @@ import br.com.svo.business.exception.BusinessException;
 import br.com.svo.entities.Voto;
 import br.com.svo.entities.dto.CandidatoDTO;
 import br.com.svo.service.votacao.VotacaoServiceLocal;
+import br.com.svo.util.EncryptionUtils;
 import br.com.svo.util.RedirectUtils;
 import br.com.svo.util.SvoMessages;
 import org.omnifaces.cdi.Param;
@@ -15,6 +16,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +33,8 @@ public class VotoWebBean implements Serializable {
     @Inject
     private VotacaoServiceLocal votacaoService;
 
+    private String usuario;
+    private String senha;
     private List<Voto> votos = new ArrayList<>();
 
     private List<String> cargosNulos = new ArrayList<>();
@@ -66,30 +70,25 @@ public class VotoWebBean implements Serializable {
         }
     }
 
-    public void votar() {
-        if (validaVoto()) {
-            confirmaVoto();
-        } else {
-            PrimeFaces.current().executeScript("PF('modalConfirmaVoto').show();");
-        }
-    }
-
-    private boolean validaVoto() {
+    public void abrirModalConfirmacao() {
         cargosNulos.clear();
         for (Voto voto: votos) {
             if (voto.getIdCandidato() == null && voto.getIdPartido() == null)
                 cargosNulos.add(getNomeCargo(voto));
         }
-        return cargosNulos.isEmpty();
+        PrimeFaces.current().executeScript("PF('modalConfirmaVoto').show();");
     }
 
     public void confirmaVoto() {
         try {
-            votacaoService.votar(idEleicao, votos);
+            votacaoService.votar(usuario, senha, idEleicao, votos);
             SvoMessages.addMessage("Voto computado com sucesso!");
             RedirectUtils.redirectToHome();
         } catch (BusinessException e) {
             SvoMessages.addErrorMessage(e);
+            PrimeFaces.current().executeScript("PF('modalConfirmaVoto').hide();");
+            usuario = null;
+            senha = null;
         }
     }
 
@@ -117,5 +116,21 @@ public class VotoWebBean implements Serializable {
 
     public void setCargosNulos(List<String> cargosNulos) {
         this.cargosNulos = cargosNulos;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 }

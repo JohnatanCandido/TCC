@@ -50,6 +50,7 @@ class Eleicao(db.Model):
     observacao = db.Column(db.Text)
     turnos = db.relationship('Turno', backref='eleicao', lazy=True)
     coligacoes = db.relationship('Coligacao', backref='eleicao', lazy=True)
+    apuracao = db.relationship('Apuracao', backref='eleicao', uselist=False)
 
     def __repr__(self):
         return f'idEleicao: {self.id_eleicao}, título: {self.titulo}'
@@ -72,6 +73,13 @@ class Eleicao(db.Model):
     def turno_by_id(self, id_turno):
         turnos = [t for t in self.turnos if t.id_turno == id_turno]
         return turnos[0] if len(turnos) == 1 else Turno()
+
+
+class Apuracao(db.Model):
+    id_apuracao = db.Column(db.Integer, primary_key=True)
+    id_eleicao = db.Column(db.Integer, db.ForeignKey('eleicao.id_eleicao'), nullable=False)
+    inicio_apuracao = db.Column(db.DateTime, nullable=False)
+    termino_apuracao = db.Column(db.DateTime, nullable=False)
 
 
 class Turno(db.Model):

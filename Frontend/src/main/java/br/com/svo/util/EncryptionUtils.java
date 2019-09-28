@@ -6,6 +6,8 @@ import com.n1analytics.paillier.PaillierPublicKey;
 
 import javax.inject.Inject;
 import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public final class EncryptionUtils {
 
@@ -22,6 +24,12 @@ public final class EncryptionUtils {
     public static BigInteger encrypt(BigInteger valor) throws RestException {
         verificaChave();
         return pub.raw_encrypt(valor);
+    }
+
+    public static String encryptMD5(String texto) throws NoSuchAlgorithmException {
+        MessageDigest m = MessageDigest.getInstance("MD5");
+        m.update(texto.getBytes());
+        return new BigInteger(1, m.digest()).toString(16).trim();
     }
 
     private static void verificaChave() throws RestException {

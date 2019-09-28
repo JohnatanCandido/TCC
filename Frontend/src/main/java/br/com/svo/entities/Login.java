@@ -1,5 +1,7 @@
 package br.com.svo.entities;
 
+import br.com.svo.util.EncryptionUtils;
+
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -12,10 +14,9 @@ public class Login implements Serializable {
     private String usuario;
     private String senha;
 
-    public void encriptaSenha() throws NoSuchAlgorithmException {
-        MessageDigest m = MessageDigest.getInstance("MD5");
-        m.update(senha.getBytes());
-        senha = new BigInteger(1, m.digest()).toString(16).trim();
+    public void encriptaCredenciais() throws NoSuchAlgorithmException {
+        usuario = EncryptionUtils.encryptMD5(usuario);
+        senha = EncryptionUtils.encryptMD5(senha);
     }
 
 //    GETTERS E SETTERS

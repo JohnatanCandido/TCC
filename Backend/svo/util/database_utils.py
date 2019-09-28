@@ -29,8 +29,8 @@ def native(sql, params):
     return db.engine.execute(text(sql), params)
 
 
-def find_login(login):
-    return Login.query.filter_by(usuario=login.usuario, senha=login.senha).first()
+def find_login(usuario, senha):
+    return Login.query.filter_by(usuario=usuario, senha=senha).first()
 
 
 def find_pessoa(id_pessoa):
