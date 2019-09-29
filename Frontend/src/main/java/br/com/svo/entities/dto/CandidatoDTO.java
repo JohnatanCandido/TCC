@@ -6,21 +6,29 @@ public class CandidatoDTO implements Serializable {
 
     public static final long serialVersionUID = 1L;
 
-    private Long id;
+    private Long idCandidato;
+    private Long idPartido;
     private String nome;
-    private boolean isCandidato;
     private String partido;
     private String vice;
     private String partidoVice;
 
 //    GETTERS E SETTERS
 
-    public Long getId() {
-        return id;
+    public Long getIdCandidato() {
+        return idCandidato;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdCandidato(Long idCandidato) {
+        this.idCandidato = idCandidato;
+    }
+
+    public Long getIdPartido() {
+        return idPartido;
+    }
+
+    public void setIdPartido(Long idPartido) {
+        this.idPartido = idPartido;
     }
 
     public String getNome() {
@@ -29,14 +37,6 @@ public class CandidatoDTO implements Serializable {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public boolean isCandidato() {
-        return isCandidato;
-    }
-
-    public void setCandidato(boolean candidato) {
-        isCandidato = candidato;
     }
 
     public String getPartido() {

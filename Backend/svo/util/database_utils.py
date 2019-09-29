@@ -2,7 +2,7 @@ from sqlalchemy.sql import text
 
 from svo import db
 from svo.entities.models import VotoEncriptado, Login, Pessoa, Cargo, Estado, Cidade, Eleicao, Perfil, Partido, \
-    Coligacao, TurnoCargoRegiao, Turno
+    Coligacao, TurnoCargoRegiao, Turno, Apuracao
 
 
 def create(entidade):
@@ -83,3 +83,7 @@ def find_turno_cargo_regiao(id_turno_cargo_regiao):
 
 def find_turno(id_turno):
     return Turno.query.get(id_turno)
+
+
+def apuracao_by_id_turno(id_turno):
+    return query(Apuracao).filter(Apuracao.id_turno == id_turno).first()

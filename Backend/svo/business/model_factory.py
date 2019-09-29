@@ -192,9 +192,9 @@ def cria_voto_encriptado(dados, id_cidade, id_eleitor):
     voto = VotoEncriptado()
     if 'idCandidato' in dados:
         voto.id_candidato = dados['idCandidato']
-    elif 'idPartido' in dados:
+    if 'idPartido' in dados:
         voto.id_partido = dados['idPartido']
-    else:
+    if 'idCandidato' not in dados and 'idPartido' not in dados:
         msg = 'É necessário informar um candidato ou um partido'
         raise ValidationException(msg, [msg])
     voto.id_eleitor = id_eleitor
@@ -209,10 +209,12 @@ def cria_voto(voto_enc):
     va.id_turno_cargo_regiao = voto_enc.id_turno_cargo_regiao
     va.id_cidade = voto_enc.id_cidade
     va.id_eleitor = voto_enc.id_eleitor
+    va.id_voto_encriptado = voto_enc.id_voto_encriptado
 
-    id_candidato = c.dec(voto_enc.id_candidato)
-    id_partido = c.dec(voto_enc.id_partido)
+    id_candidato = c.dec(int(voto_enc.id_candidato))
+    id_partido = c.dec(int(voto_enc.id_partido))
     if id_candidato != -1:
         va.id_candidato = id_candidato
     if id_partido != -1:
         va.id_partido = id_partido
+    return va

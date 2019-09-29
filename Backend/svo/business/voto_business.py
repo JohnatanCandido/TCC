@@ -77,15 +77,14 @@ def monta_partido(tcr, partido):
                    .all()
     if not candidatos:
         return None
-    return {'id': partido.id_partido,
-            'nome': partido.nome,
-            'isCandidato': False}
+    return {'idPartido': partido.id_partido,
+            'nome': partido.nome}
 
 
 def monta_candidato(candidato):
-    retorno = {'id': candidato.id_partido,
+    retorno = {'idCandidato': candidato.id_partido,
                'nome': candidato.pessoa.nome,
-               'isCandidato': True,
+               'idPartido': candidato.partido.id_partido,
                'partido': candidato.partido.sigla}
     if candidato.vice is not None:
         retorno['vice'] = candidato.vice.pessoa.nome

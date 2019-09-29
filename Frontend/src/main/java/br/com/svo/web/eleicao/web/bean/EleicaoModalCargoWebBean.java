@@ -95,7 +95,7 @@ public class EleicaoModalCargoWebBean implements Serializable {
     }
 
     public boolean isDesabilitaQtdCadeiras() {
-        return turnoCargo.getCargo().getSistemaEleicao().equals(SistemaEleicao.MAIORIA_SIMPLES.getTipo());
+        return turnoCargo.getCargo().isPermiteSegundoTurno();
     }
 
 //    GETTERS E SETTERS
