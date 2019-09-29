@@ -1,10 +1,13 @@
+from threading import Thread
+from datetime import datetime
+
 from svo.business import model_factory as mf
 from svo.exception.validation_exception import ValidationException
 from svo.util import database_utils as db
 
 # Usado na consulta de eleições
 # noinspection PyUnresolvedReferences
-from svo.entities.models import Eleicao
+from svo.entities.models import Eleicao, VotoApurado, Apuracao
 
 
 def consulta_cargos():
@@ -95,3 +98,53 @@ def consulta_eleicao_por_usuario(user):
                          'termino': str(r['termino']),
                          'votou': r['votou']})
     return eleicoes
+
+
+def apurar_eleicao(id_eleicao, turno):
+    turno = db.find_eleicao(id_eleicao).turnos[turno-1]
+    insere_apuracao(turno)
+    for turno_cargo in turno.turnosCargos:
+        for tcr in turno_cargo.turno_cargo_regioes:
+            Thread(target=apurar_votos, kwargs={'tcr': tcr}).start()
+
+
+def valida_apuracao(id_eleicao, turno):
+    turno = db.find_eleicao(id_eleicao).turnos[turno - 1]
+    if turno.apuracao is not None:
+        msg = f'O {turno.turno}º desta eleição já foi apurado!'
+        raise ValidationException(msg, [msg])
+
+
+def insere_apuracao(turno):
+    id_turno = turno.id_turno
+    apuracao = Apuracao()
+    apuracao.id_turno = id_turno
+    apuracao.inicio_apuracao = str(datetime.now())
+    db.create(apuracao)
+    db.commit()
+
+
+def apurar_votos(tcr):
+    print(f'Iniciada apuração: {tcr.turnoCargo.cargo.nome} ===========================================================')
+    for voto_enc in tcr.votosEncriptados:
+        voto = mf.cria_voto(voto_enc)
+        db.create(voto)
+        db.commit()
+    verifica_apuracao_finalizada(tcr.turnoCargo.id_turno)
+    print(f'Finalizada apuração: {tcr.turnoCargo.cargo.nome} =========================================================')
+
+
+def verifica_apuracao_finalizada(id_turno):
+    sql = '''SELECT NOT exists(SELECT 1 FROM voto_encriptado ve 
+                               JOIN turno_cargo_regiao USING(id_turno_cargo_regiao)
+                               JOIN turno_cargo USING(id_turno_cargo)
+                               JOIN turno USING(id_turno)
+                               WHERE NOT exists(SELECT 1 FROM voto_apurado va
+                                                WHERE va.id_voto_encriptado = ve.id_voto_encriptado)
+                               AND turno.id_turno = :idTurno)'''
+
+    finalizado = db.native(sql, {'idTurno': id_turno}).first()[0]
+    if finalizado:
+        apuracao = db.apuracao_by_id_turno(id_turno)
+        apuracao.termino_apuracao = datetime.now()
+        db.commit()

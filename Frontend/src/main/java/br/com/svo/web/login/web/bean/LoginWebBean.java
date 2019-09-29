@@ -37,6 +37,7 @@ public class LoginWebBean implements Serializable {
     private LoginServiceLocal loginService;
 
     private boolean loginFalhou;
+    private String usuario;
 
     @PostConstruct
     public void init() {
@@ -45,11 +46,13 @@ public class LoginWebBean implements Serializable {
 
     public void login() {
         try {
+            usuario = login.getUsuario();
             identity.init(loginService.login(login));
             IdentityUtil.login(identity);
             RedirectUtils.redirectToHome();
         } catch (BusinessException e) {
             loginFalhou = true;
+            login.setUsuario(usuario);
         }
     }
 

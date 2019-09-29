@@ -15,7 +15,7 @@ public class LoginBusiness {
 
     public Identity login(Login login) throws BusinessException {
         try {
-            login.encriptaSenha();
+            login.encriptaCredenciais();
             String response = new RestUtil("login/autenticar").withBody(login)
                                                               .withHeader("Content-Type", "application/json")
                                                               .post();

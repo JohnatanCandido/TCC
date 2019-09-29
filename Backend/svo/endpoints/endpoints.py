@@ -1,7 +1,7 @@
-from flask import request, json
+from flask import request
 
 from svo import app, c
-from svo.business import model_factory as mf, business
+from svo.business import business
 
 # TODO Remover esse arquivo
 

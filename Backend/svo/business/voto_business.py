@@ -77,15 +77,14 @@ def monta_partido(tcr, partido):
                    .all()
     if not candidatos:
         return None
-    return {'id': partido.id_partido,
-            'nome': partido.nome,
-            'isCandidato': False}
+    return {'idPartido': partido.id_partido,
+            'nome': partido.nome}
 
 
 def monta_candidato(candidato):
-    retorno = {'id': candidato.id_partido,
+    retorno = {'idCandidato': candidato.id_partido,
                'nome': candidato.pessoa.nome,
-               'isCandidato': True,
+               'idPartido': candidato.partido.id_partido,
                'partido': candidato.partido.sigla}
     if candidato.vice is not None:
         retorno['vice'] = candidato.vice.pessoa.nome
@@ -94,10 +93,11 @@ def monta_candidato(candidato):
 
 
 def votar(user, id_eleicao, votos):
+    valida_credenciais(votos['usuario'], votos['senha'])
     id_eleitor = c.enc(user.eleitor.id_eleitor)
     valida_voto(user, id_eleicao)
     id_cidade = user.eleitor.id_cidade
-    for voto in votos:
+    for voto in votos['votos']:
         voto_enc = mf.cria_voto_encriptado(voto, id_cidade, id_eleitor)
         db.create(voto_enc)
     db.commit()
@@ -107,3 +107,10 @@ def valida_voto(user, id_eleicao):
     id_turno = valida_usuario_votou_e_retorna_turno_aberto(id_eleicao, user)
     turno = db.find_turno(id_turno)
     user.eleitor.turnos.append(turno)
+
+
+def valida_credenciais(usuario, senha):
+    login = db.find_login(usuario, senha)
+    if login is None:
+        msg = 'Credenciais incorretas'
+        raise ValidationException(msg, [msg])

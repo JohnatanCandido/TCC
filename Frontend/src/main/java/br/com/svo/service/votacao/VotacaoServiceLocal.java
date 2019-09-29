@@ -10,7 +10,7 @@ import java.util.List;
 @Local
 public interface VotacaoServiceLocal {
 
-    void votar(Long idEleicao, List<Voto> votos) throws BusinessException;
+    void votar(String usuario, String senha, Long idEleicao, List<Voto> votos) throws BusinessException;
 
     List<Voto> consultaCargos(Long idEleicao) throws BusinessException;
 

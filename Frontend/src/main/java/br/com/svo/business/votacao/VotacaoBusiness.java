@@ -5,6 +5,7 @@ import br.com.svo.entities.Identity;
 import br.com.svo.entities.Voto;
 import br.com.svo.entities.dto.CandidatoDTO;
 import br.com.svo.entities.dto.VotoDTO;
+import br.com.svo.entities.dto.VotosDTO;
 import br.com.svo.util.EncryptionUtils;
 import br.com.svo.util.RestUtil;
 import br.com.svo.util.exception.RestException;
@@ -13,6 +14,7 @@ import com.google.gson.reflect.TypeToken;
 
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,16 +52,20 @@ public class VotacaoBusiness implements Serializable {
         }
     }
 
-    public void votar(Long idEleicao, List<Voto> votos) throws BusinessException {
+    public void votar(String usuario, String senha, Long idEleicao, List<Voto> votos) throws BusinessException {
         try {
-            List<VotoDTO> votosCriptografados = getVotosCriptografados(votos);
+            usuario = EncryptionUtils.encryptMD5(usuario);
+            senha = EncryptionUtils.encryptMD5(senha);
+            VotosDTO votosDTO  = new VotosDTO(usuario, senha, getVotosCriptografados(votos));
             String url = String.format("voto/eleicao/%s/votar", idEleicao);
             new RestUtil(url).withHeader("Content-Type", "application/json")
                              .withHeader("Authorization", identity.getToken())
-                             .withBody(votosCriptografados)
+                             .withBody(votosDTO)
                              .post();
         } catch (RestException e) {
             throw new BusinessException(e.getMessages().get(0));
+        } catch (NoSuchAlgorithmException e) {
+            throw new BusinessException("Houve um problema na criptografia dos dados");
         }
     }
 

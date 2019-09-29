@@ -21,10 +21,8 @@ public class Voto implements Serializable {
 
     public void selecionaCandidato(CandidatoDTO candidato) {
         limpaCampos();
-        if (candidato.isCandidato())
-            idCandidato = candidato.getId();
-        else
-            idPartido = candidato.getId();
+        idCandidato = candidato.getIdCandidato();
+        idPartido = candidato.getIdPartido();
         nome = candidato.getNome();
         partido = candidato.getPartido();
         if (candidato.getVice() != null) {
