@@ -78,8 +78,8 @@ class Turno(db.Model):
     id_turno = db.Column(db.Integer, primary_key=True)
     id_eleicao = db.Column(db.Integer, db.ForeignKey('eleicao.id_eleicao'), nullable=False)
     turno = db.Column(db.Integer, nullable=False)
-    inicio = db.Column(db.DateTime, nullable=False)
-    termino = db.Column(db.DateTime, nullable=False)
+    inicio = db.Column(db.DateTime)
+    termino = db.Column(db.DateTime)
     turnosCargos = db.relationship('TurnoCargo', backref='turno', lazy=True)
     apuracao = db.relationship('Apuracao', backref='turno', uselist=False)
 
@@ -94,8 +94,8 @@ class Turno(db.Model):
         return {
             'idTurno': self.id_turno,
             'turno': self.turno,
-            'inicio': str(self.inicio),
-            'termino': str(self.termino),
+            'inicio': str(self.inicio) if self.inicio is not None else None,
+            'termino': str(self.termino) if self.termino is not None else None,
             'turnoCargos': [tc.to_json() for tc in self.turnosCargos]
         }
 
@@ -284,12 +284,13 @@ class Candidato(db.Model):
                                       nullable=False)
     id_candidato_principal = db.Column(db.Integer, db.ForeignKey('candidato.id_candidato'))
     id_pessoa = db.Column(db.Integer, db.ForeignKey('pessoa.id_pessoa'), nullable=False)
-    vice = db.relationship('Candidato', backref=db.backref('candidato_principal', remote_side='Candidato.id_candidato',
-                                                           uselist=False), uselist=False)
+    vice = db.relationship('Candidato', backref=db.backref('candidato_principal',
+                                                           remote_side='Candidato.id_candidato',
+                                                           uselist=False),
+                           uselist=False)
     votos = db.relationship('VotoApurado', backref='candidato', lazy=True)
-    qt_votos = db.Column(db.Integer)
-    qt_votos_segundo_turno = db.Column(db.Integer)
-    eleito = db.Column(db.Boolean)
+    qt_votos = db.Column(db.Integer, nullable=False, default=0)
+    situacao = db.Column(db.String(50), nullable=False, default='Não Eleito')
 
     def __repr__(self):
         return f'idCandidato: {self.id_candidato}, número: {self.numero}'
@@ -301,6 +302,8 @@ class Candidato(db.Model):
             'partido': self.partido.to_json(),
             'turnoCargoRegiao': self.turnoCargoRegiao.to_json(),
             'pessoa': self.pessoa.to_json(),
+            'situacao': self.situacao,
+            'votos': self.qt_votos,
             'viceCandidato': self.vice.to_json() if self.vice is not None else None
         }
 
@@ -374,6 +377,8 @@ class VotoEncriptado(db.Model):
     id_candidato = db.Column(db.Text)
     id_partido = db.Column(db.Text)
     id_eleitor = db.Column(db.Text, nullable=False)
+
+    voto_apurado = db.relationship('VotoApurado', backref='votoEncriptado', uselist=False)
 
 
 class VotoApurado(db.Model):

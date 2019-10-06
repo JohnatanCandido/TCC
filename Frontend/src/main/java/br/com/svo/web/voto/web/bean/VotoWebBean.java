@@ -4,19 +4,16 @@ import br.com.svo.business.exception.BusinessException;
 import br.com.svo.entities.Voto;
 import br.com.svo.entities.dto.CandidatoDTO;
 import br.com.svo.service.votacao.VotacaoServiceLocal;
-import br.com.svo.util.EncryptionUtils;
 import br.com.svo.util.RedirectUtils;
 import br.com.svo.util.SvoMessages;
 import org.omnifaces.cdi.Param;
 import org.omnifaces.cdi.ViewScoped;
-import org.omnifaces.util.Messages;
 import org.primefaces.PrimeFaces;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 

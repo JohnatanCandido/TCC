@@ -13,6 +13,8 @@ public class Candidato implements Serializable {
     private Pessoa pessoa;
     private Long idEleicao;
     private Candidato viceCandidato;
+    private String situacao;
+    private Long votos;
 
     public Candidato() {}
 
@@ -82,5 +84,21 @@ public class Candidato implements Serializable {
 
     public void setViceCandidato(Candidato viceCandidato) {
         this.viceCandidato = viceCandidato;
+    }
+
+    public String getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(String situacao) {
+        this.situacao = situacao;
+    }
+
+    public Long getVotos() {
+        return votos;
+    }
+
+    public void setVotos(Long votos) {
+        this.votos = votos;
     }
 }

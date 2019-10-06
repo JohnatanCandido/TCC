@@ -10,6 +10,7 @@ public class EleicaoConsultaDTO implements Serializable {
     private Long idEleicao;
     private Long idTurno;
     private String titulo;
+    private int turno;
     private Date data;
     private Date inicio;
     private Date termino;
@@ -71,6 +72,18 @@ public class EleicaoConsultaDTO implements Serializable {
 
     public void setVotou(boolean votou) {
         this.votou = votou;
+    }
+
+    public int getTurno() {
+        return turno;
+    }
+
+    public void setTurno(int turno) {
+        this.turno = turno;
+    }
+
+    public String getTituloComTurno() {
+        return titulo + " - " + turno + "º turno";
     }
 
     public boolean isAberta() {

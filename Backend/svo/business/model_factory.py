@@ -119,7 +119,7 @@ def cria_pessoa(dados):
             pessoa.eleitor = cria_eleitor(dados['eleitor'], None)
     if pessoa.login is None:
         pessoa.login = Login()
-        pessoa.login.usuario = pessoa.eleitor.numero_inscricao
+        pessoa.login.usuario = senha_util.encrypt_md5(pessoa.eleitor.numero_inscricao)
         pessoa.login.senha = senha_util.generate_password()
     if 'perfis' in dados:
         pessoa.login.perfis.clear()

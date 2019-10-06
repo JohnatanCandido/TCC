@@ -11,22 +11,22 @@
     <title>Teste</title>
 </h:head>
 
-<h:body>
+<h:body styleClass="fundologin">
     <h:form>
         <div class="ui-fluid">
-            <div class="card-body">
+            <div class="centralizado">
                 <div class="ui-g-12 ui-md-6 ui-lg-3">
-                    <p:fieldset legend="Login">
+                    <p:fieldset legend="Sistema Eleitoral" styleClass="font-titulo">
                         <h:panelGroup rendered="#{loginWebBean.loginFalhou}">
                             <div class="ui-g-12 ui-md-12 ui-lg-12">
                                 <p:staticMessage severity="error" detail="Login ou senha incorretos" />
                             </div>
                         </h:panelGroup>
-                        <div class="ui-g-12 ui-md-12 ui-lg-12">
+                        <div class="ui-g-12 ui-md-12 ui-lg-12 font">
                             <label for="usuario">Usuário</label>
                             <p:inputText id="usuario" value="#{loginWebBean.login.usuario}" />
                         </div>
-                        <div class="ui-g-12 ui-md-12 ui-lg-12">
+                        <div class="ui-g-12 ui-md-12 ui-lg-12 font">
                             <label for="senha">Senha</label>
                             <p:password id="senha" value="#{loginWebBean.login.senha}" />
                         </div>
@@ -35,12 +35,13 @@
                                              value="Entrar"
                                              action="#{loginWebBean.login()}"
                                              update="@form"
-                                             process="@form" />
+                                             process="@form"
+                                             style="background: #144913; color: white"/>
                         </div>
                         <div class="form-group center">
                             <p:ajaxStatus>
                                 <f:facet name="start">
-                                    <i class="fa fa-circle-o-notch fa-spin fa-3x ajax-loader"/>
+                                    <i class="fa fa-circle-o-notch fa-spin fa-3x ajax-loader center" />
                                 </f:facet>
                                 <f:facet name="complete">
                                     <h:outputText value=""/>

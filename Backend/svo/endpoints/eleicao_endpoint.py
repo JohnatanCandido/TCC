@@ -52,12 +52,12 @@ def consulta_eleicoes_usuario(user):
     return jsonify(eleicoes), 200
 
 
-@eleicoes.route('/apurar/<id_eleicao>/turno/<turno>')
+@eleicoes.route('/<id_eleicao>/apurar/turno/<turno>')
 def apurar(id_eleicao, turno):
-    try :
+    try:
         eleicao_business.valida_apuracao(int(id_eleicao), int(turno))
         thread = Thread(target=eleicao_business.apurar_eleicao, kwargs={'id_eleicao': int(id_eleicao),
-                                                                        'turno': int(turno)})
+                                                                        'num_turno': int(turno)})
         thread.start()
         return 'Foi iniciada a apuração da eleição', 200
     except ValidationException as e:

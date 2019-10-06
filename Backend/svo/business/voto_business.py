@@ -33,6 +33,10 @@ def cargos_por_eleicao_e_usuario(id_eleicao, user):
 
 def valida_usuario_votou_e_retorna_turno_aberto(id_eleicao, user):
     id_turno = consulta_turno_aberto_por_eleicao(id_eleicao)
+
+    if id_turno is None:
+        msg = 'Não há nenhum turno em andamento para esta eleição'
+        raise ValidationException(msg, [msg])
     sql_votou = 'SELECT EXISTS(SELECT 1 FROM eleitor_turno ' \
                 '              WHERE id_eleitor = :idEleitor ' \
                 '              AND id_turno = :idTurno) AS votou'
@@ -45,8 +49,10 @@ def valida_usuario_votou_e_retorna_turno_aberto(id_eleicao, user):
 
 
 def consulta_turno_aberto_por_eleicao(id_eleicao):
-    sql = '''SELECT id_turno FROM turno t 
-             WHERE current_date BETWEEN t.inicio AND t.termino 
+    sql = '''SELECT t.id_turno FROM turno t 
+             LEFT JOIN apuracao a ON a.id_turno = t.id_turno
+             WHERE current_date BETWEEN t.inicio AND t.termino
+             AND a IS NULL 
              AND t.id_eleicao = :idEleicao'''
 
     result = db.native(sql, {'idEleicao': id_eleicao})
