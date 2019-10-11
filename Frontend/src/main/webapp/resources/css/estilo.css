@@ -1,14 +1,40 @@
-fundo{
-    background-color: gainsboro;
+.fundo{
+    background-color: #EFEDED;
 }
+
+
 
 .fundologin{
     background-color: #144913;
 }
 
-.flex-container {
+.vertical {
     display: flex;
     flex-direction: column;
+    padding-top: 20px;
+    background-color: #144913;
+    padding-bottom: 35%;
+}
+
+.horizontal {
+    display: flex;
+    flex-direction: row;
+    margin-left: 22%;
+    width: 70%;
+    margin-top: -600px;
+    float: left;
+}
+
+.menu{
+    background-color: #EFEDED;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    padding-left: 5px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    border-color: black;
+    border-radius: 5%;
+
 }
 
 .center{
@@ -28,13 +54,49 @@ fundo{
     font-family: "Comic Sans MS";
 }
 
+.centraliza-texto{
+   text-align: center;
+}
+
 .font{
     font-family: "Roboto Light";
 }
 
-.body{
-    background: url('../img/cadeado.png') no-repeat;
-    width: 1360px;
-    height: 559px;
-    visibility: visible;
+.font-branca{
+    font-size: 12px;
+    font-family: "Comic Sans MS";
+    color: white;
+}
+
+.font-preta{
+    font-family: "Comic Sans MS";
+    color: black;
+}
+
+.logo{
+    background-color: #EFEDED;
+    margin-bottom: 5px;
+    padding-left: 5px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    border-color: black;
+    border-radius: 5%;
+}
+
+.cabecalho{
+    width: 99%;
+    float: right;
+    margin-top: -110px;
+    font-size: 26px;
+}
+
+.cabecalho-usuario{
+    width: 15%;
+    background-color: #144913;
+    padding-top: 20px;
+}
+
+.tabela{
+    background-color: #144913;
+    color: white;
 }
