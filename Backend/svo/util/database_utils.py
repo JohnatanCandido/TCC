@@ -93,8 +93,8 @@ def apuracao_by_id_turno(id_turno):
 
 
 def busca_pin_valido_por_id_eleitor(id_eleitor):
-    sql = "SELECT pin FROM pin_eleitor pe "\
-          "WHERE pe.id_eleitor = :idEleitor AND extract(epoch from (:hora - criacao)) < 300"
+    sql = """SELECT pin FROM pin_eleitor pe 
+             WHERE pe.id_eleitor = :idEleitor AND extract(epoch from (:hora - criacao)) < 300"""
     pin = native(sql, {'idEleitor': id_eleitor, 'hora': str(datetime.now())}).fetchall()
     if not pin:
         return None
