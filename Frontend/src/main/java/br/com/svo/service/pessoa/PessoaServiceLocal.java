@@ -4,6 +4,7 @@ import br.com.svo.business.exception.BusinessException;
 import br.com.svo.business.exception.NoResultException;
 import br.com.svo.entities.Perfil;
 import br.com.svo.entities.Pessoa;
+import br.com.svo.entities.dto.AlteracaoSenhaDTO;
 import br.com.svo.entities.dto.PessoaConsultaDTO;
 
 import javax.ejb.Local;
@@ -19,4 +20,6 @@ public interface PessoaServiceLocal {
     Long salvar(Pessoa pessoa) throws BusinessException;
 
     List<PessoaConsultaDTO> buscarPessoas(PessoaConsultaDTO pessoaConsultaDTO) throws BusinessException, NoResultException;
+
+    void salvarSenha(AlteracaoSenhaDTO alteracaoSenhaDTO) throws BusinessException;
 }

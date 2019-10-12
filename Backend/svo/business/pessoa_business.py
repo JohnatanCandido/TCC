@@ -28,7 +28,8 @@ def salvar_pessoa(dados):
     if senha is not None:
         corpo_email = f'Parabéns! Agora você pode votar pela internet com as credenciais abaixo:.\n'\
                       f'Usuário: {pessoa.eleitor.numero_inscricao}\n'\
-                      f'Senha: {senha}'
+                      f'Senha: {senha}\n\n' \
+                      f'Sugerimos que você troque a senha ao entrar.'
         email_util.enviar_email(pessoa.email, corpo_email)
     return str(pessoa.id_pessoa)
 
@@ -110,3 +111,19 @@ def join_cidade(filtro):
     if 'idCidade' in filtro:
         return True
     return False
+
+
+def alterar_senha(user, credenciais):
+    valida_credenciais(user, credenciais)
+    user.login.senha = credenciais['senhaNova']
+    db.commit()
+
+
+def valida_credenciais(user, credenciais):
+    msg = None
+    if credenciais['senhaNova'] != credenciais['confirmacaoSenhaNova']:
+        msg = 'A senha nova e a confirmação da senha nova devem ser iguais'
+    elif user.login.usuario != credenciais['usuario'] or user.login.senha != credenciais['senha']:
+        msg = 'Credenciais incorretas'
+    if msg is not None:
+        raise ValidationException(msg, [msg])

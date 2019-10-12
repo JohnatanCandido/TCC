@@ -5,7 +5,9 @@ import br.com.svo.business.exception.NoResultException;
 import br.com.svo.entities.Identity;
 import br.com.svo.entities.Perfil;
 import br.com.svo.entities.Pessoa;
+import br.com.svo.entities.dto.AlteracaoSenhaDTO;
 import br.com.svo.entities.dto.PessoaConsultaDTO;
+import br.com.svo.util.EncryptionUtils;
 import br.com.svo.util.RestUtil;
 import br.com.svo.util.exception.RestException;
 import com.google.gson.Gson;
@@ -13,6 +15,7 @@ import com.google.gson.reflect.TypeToken;
 
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,5 +70,17 @@ public class PessoaBusiness implements Serializable {
         } catch (RestException e) {
             throw new BusinessException("Erro ao consultar pessoa:", e.getMessages());
         }
+    }
+
+    public void salvarSenha(AlteracaoSenhaDTO alteracaoSenhaDTO) throws BusinessException {
+        alteracaoSenhaDTO.encriptarDados();
+        try {
+            new RestUtil("pessoa/alterar-senha").withBody(alteracaoSenhaDTO)
+                                                .withHeader("Content-Type", "application/json")
+                                                .withHeader("Authorization", identity.getToken())
+                                                .post();
+        } catch (RestException e) {
+            throw new BusinessException("Erro ao alterar senha", e.getMessages());
+        } catch (NoResultException ignored) {}
     }
 }
