@@ -10,7 +10,7 @@ def generate_password():
     password = ''
     for _ in range(10):
         password += tokens[randint(0, len(tokens)-1)]
-    return encrypt_md5(password)
+    return password
 
 
 def encrypt_md5(texto):

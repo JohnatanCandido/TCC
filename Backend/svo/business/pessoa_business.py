@@ -1,5 +1,5 @@
 from svo.exception.validation_exception import ValidationException
-from svo.util import database_utils as db
+from svo.util import database_utils as db, email_util
 from svo.business import model_factory as mf
 
 # Usado na consulta de pessoa
@@ -19,11 +19,17 @@ def pessoa_by_id(id_pessoa):
 
 
 def salvar_pessoa(dados):
-    pessoa = mf.cria_pessoa(dados)
+    pessoa, senha = mf.cria_pessoa(dados)
     validar_pessoa(pessoa)
     if pessoa.id_pessoa is None:
         db.create(pessoa)
     db.commit()
+
+    if senha is not None:
+        corpo_email = f'Parabéns! Agora você pode votar pela internet com as credenciais abaixo:.\n'\
+                      f'Usuário: {pessoa.eleitor.numero_inscricao}\n'\
+                      f'Senha: {senha}'
+        email_util.enviar_email(pessoa.email, corpo_email)
     return str(pessoa.id_pessoa)
 
 
