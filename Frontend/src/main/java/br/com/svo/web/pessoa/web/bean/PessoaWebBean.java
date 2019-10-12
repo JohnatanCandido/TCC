@@ -1,6 +1,7 @@
 package br.com.svo.web.pessoa.web.bean;
 
 import br.com.svo.business.exception.BusinessException;
+import br.com.svo.business.exception.NoResultException;
 import br.com.svo.entities.Cidade;
 import br.com.svo.entities.Estado;
 import br.com.svo.entities.Perfil;
@@ -57,6 +58,9 @@ public class PessoaWebBean implements Serializable {
             initPerfis();
         } catch (BusinessException e) {
             e.printStackTrace();
+        } catch (NoResultException e) {
+            SvoMessages.addFlashGlobalError("Pessoa não encontrada");
+            RedirectUtils.redirectToHome();
         }
     }
 
@@ -74,7 +78,7 @@ public class PessoaWebBean implements Serializable {
         } catch (BusinessException e) {
             estados = new ArrayList<>();
             SvoMessages.addErrorMessage(e);
-        }
+        } catch (NoResultException ignored) {}
         return estados;
     }
 
@@ -84,7 +88,7 @@ public class PessoaWebBean implements Serializable {
         } catch (BusinessException e) {
             cidades = new ArrayList<>();
             SvoMessages.addErrorMessage(e);
-        }
+        } catch (NoResultException ignored) {}
         return cidades;
     }
 
@@ -92,10 +96,13 @@ public class PessoaWebBean implements Serializable {
         try {
             pessoa.setPerfis(perfis.getTarget());
             Long idPessoa = pessoaService.salvar(pessoa);
-            SvoMessages.addMessage("Salvo com sucesso.");
-            if (pessoa.getIdPessoa() == null)
+            if (pessoa.getIdPessoa() == null) {
+                SvoMessages.addFlash("Salvo com sucesso");
                 RedirectUtils.redirect("pessoa/cadastro-pessoa.html?idPessoa=" + idPessoa);
-            initPerfis();
+            } else {
+                SvoMessages.addMessage("Salvo com sucesso.");
+                initPerfis();
+            }
         } catch (BusinessException e) {
             SvoMessages.addErrorMessage(e);
         }

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from svo import db
 
 
@@ -82,6 +84,10 @@ class Turno(db.Model):
     termino = db.Column(db.DateTime)
     turnosCargos = db.relationship('TurnoCargo', backref='turno', lazy=True)
     apuracao = db.relationship('Apuracao', backref='turno', uselist=False)
+
+    __table_args__ = (
+        db.UniqueConstraint('id_eleicao', 'turno', name='unique_turno_eleicao'),
+    )
 
     def __repr__(self):
         return f'idTurno: {self.id_turno}, idEleicao: {self.id_eleicao}, início: {self.inicio}, término: {self.termino}'
@@ -249,6 +255,7 @@ class Pessoa(db.Model):
     id_pessoa = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
     cpf = db.Column(db.String(11), nullable=False)
+    email = db.Column(db.String(50), nullable=False)
     candidatos = db.relationship('Candidato', backref='pessoa', lazy=True)
     eleitor = db.relationship('Eleitor', backref='pessoa', uselist=False)
     login = db.relationship('Login', backref='pessoa', lazy=True, uselist=False)
@@ -327,6 +334,21 @@ class Eleitor(db.Model):
             'numeroInscricao': self.numero_inscricao,
             'secao': self.secao,
             'cidade': self.cidade.to_json()
+        }
+
+
+class PinEleitor(db.Model):
+    id_pin_eleitor = db.Column(db.Integer, primary_key=True)
+    id_eleitor = db.Column(db.Integer, db.ForeignKey('eleitor.id_eleitor'), nullable=False)
+    pin = db.Column(db.String, nullable=False)
+    criacao = db.Column(db.DateTime, nullable=False, default=datetime.now())
+
+    def __repr__(self):
+        return f'idEleitor: {self.id_eleitor}, pin: {self.pin}, criação: {self.criacao}'
+
+    def to_json(self):
+        return {
+            'pin': self.pin
         }
 
 

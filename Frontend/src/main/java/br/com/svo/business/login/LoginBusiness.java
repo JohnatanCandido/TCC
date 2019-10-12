@@ -1,6 +1,7 @@
 package br.com.svo.business.login;
 
 import br.com.svo.business.exception.BusinessException;
+import br.com.svo.business.exception.NoResultException;
 import br.com.svo.entities.Identity;
 import br.com.svo.entities.Login;
 import br.com.svo.util.RestUtil;
@@ -24,6 +25,8 @@ public class LoginBusiness {
             throw new BusinessException(e.getMessages().get(0));
         } catch (NoSuchAlgorithmException e) {
             throw new BusinessException("Erro ao criptografar senha.");
+        } catch (NoResultException e) {
+            return null;
         }
     }
 

@@ -1,6 +1,7 @@
 package br.com.svo.web.voto.web.bean;
 
 import br.com.svo.business.exception.BusinessException;
+import br.com.svo.business.exception.NoResultException;
 import br.com.svo.entities.Voto;
 import br.com.svo.entities.dto.CandidatoDTO;
 import br.com.svo.service.votacao.VotacaoServiceLocal;
@@ -32,6 +33,7 @@ public class VotoWebBean implements Serializable {
 
     private String usuario;
     private String senha;
+    private String pin;
     private List<Voto> votos = new ArrayList<>();
 
     private List<String> cargosNulos = new ArrayList<>();
@@ -44,6 +46,9 @@ public class VotoWebBean implements Serializable {
             votos = votacaoService.consultaCargos(idEleicao);
         } catch (BusinessException e) {
             SvoMessages.addFlashGlobalError(e);
+            RedirectUtils.redirectToHome();
+        } catch (NoResultException e) {
+            SvoMessages.addFlashGlobalError("Nenhum turno em aberto para esta eleição");
             RedirectUtils.redirectToHome();
         }
     }
@@ -62,12 +67,13 @@ public class VotoWebBean implements Serializable {
                 voto.selecionaCandidato(candidato);
             } else if (voto.getNumero() == null)
                 voto.limpaCampos();
-        } catch (BusinessException e) {
+        } catch (BusinessException | NoResultException e) {
             voto.limpaCampos();
         }
     }
 
     public void abrirModalConfirmacao() {
+        votacaoService.gerarPin();
         cargosNulos.clear();
         for (Voto voto: votos) {
             if (voto.getIdCandidato() == null && voto.getIdPartido() == null)
@@ -76,9 +82,9 @@ public class VotoWebBean implements Serializable {
         PrimeFaces.current().executeScript("PF('modalConfirmaVoto').show();");
     }
 
-    public void confirmaVoto() {
+    public void confirmaVoto() throws NoResultException {
         try {
-            votacaoService.votar(usuario, senha, idEleicao, votos);
+            votacaoService.votar(usuario, senha, pin, idEleicao, votos);
             SvoMessages.addMessage("Voto computado com sucesso!");
             RedirectUtils.redirectToHome();
         } catch (BusinessException e) {
@@ -86,6 +92,7 @@ public class VotoWebBean implements Serializable {
             PrimeFaces.current().executeScript("PF('modalConfirmaVoto').hide();");
             usuario = null;
             senha = null;
+            pin = null;
         }
     }
 
@@ -129,5 +136,13 @@ public class VotoWebBean implements Serializable {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public String getPin() {
+        return pin;
+    }
+
+    public void setPin(String pin) {
+        this.pin = pin;
     }
 }

@@ -1,6 +1,7 @@
 package br.com.svo.web.eleicao.web.bean;
 
 import br.com.svo.business.exception.BusinessException;
+import br.com.svo.business.exception.NoResultException;
 import br.com.svo.entities.Candidato;
 import br.com.svo.entities.Eleicao;
 import br.com.svo.entities.TurnoCargo;
@@ -65,7 +66,7 @@ public class ApuracaoEleicaoWebBean extends FiltroCandidatoWebBean implements Se
             if (tcr != null && (turno != null || !tcr.isPossuiSegundoTurno())) {
                 try {
                     candidatos = eleicaoService.buscaCandidatos(tcr.getIdTurnoCargoRegiao());
-                } catch (BusinessException ignored) {}
+                } catch (BusinessException | NoResultException ignored) {}
             }
         }
     }

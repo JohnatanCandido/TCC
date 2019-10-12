@@ -1,8 +1,11 @@
+from datetime import datetime
+
 from sqlalchemy.sql import text
 
 from svo import db
 from svo.entities.models import VotoEncriptado, Login, Pessoa, Cargo, Estado, Cidade, Eleicao, Perfil, Partido, \
-    Coligacao, TurnoCargoRegiao, Turno, Apuracao
+    Coligacao, TurnoCargoRegiao, Turno, Apuracao, PinEleitor
+from svo.exception.validation_exception import ValidationException
 
 
 def create(entidade):
@@ -87,3 +90,12 @@ def find_turno(id_turno):
 
 def apuracao_by_id_turno(id_turno):
     return query(Apuracao).filter(Apuracao.id_turno == id_turno).first()
+
+
+def busca_pin_valido_por_id_eleitor(id_eleitor):
+    sql = "SELECT pin FROM pin_eleitor pe "\
+          "WHERE pe.id_eleitor = :idEleitor AND extract(epoch from (:hora - criacao)) < 300"
+    pin = native(sql, {'idEleitor': id_eleitor, 'hora': str(datetime.now())}).fetchall()
+    if not pin:
+        return None
+    return pin[0][0]

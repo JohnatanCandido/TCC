@@ -9,11 +9,13 @@ public class VotosDTO implements Serializable {
 
     private String usuario;
     private String senha;
+    private String pin;
     private List<VotoDTO> votos;
 
-    public VotosDTO(String usuario, String senha, List<VotoDTO> votos) {
+    public VotosDTO(String usuario, String senha, String pin, List<VotoDTO> votos) {
         this.usuario = usuario;
         this.senha = senha;
+        this.pin = pin;
         this.votos = votos;
     }
 
@@ -31,6 +33,14 @@ public class VotosDTO implements Serializable {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public String getPin() {
+        return pin;
+    }
+
+    public void setPin(String pin) {
+        this.pin = pin;
     }
 
     public List<VotoDTO> getVotos() {

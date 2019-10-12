@@ -19,7 +19,7 @@ def votar(user, id_eleicao):
         return jsonify(e.errors), 403
 
 
-@votos.route("/cargos/eleicao/<id_eleicao>")
+@votos.route("/cargos/eleicao/<id_eleicao>", methods=['GET'])
 @protected
 def get_cargos_eleitor(user, id_eleicao):
     try:
@@ -43,3 +43,10 @@ def busca_candidato(user, tcr, numero):
 @votos.route("/chave-publica", methods=["GET"])
 def get_key():
     return c.get_public_key()
+
+
+@votos.route("/eleitor/pin", methods=['POST'])
+@protected
+def gera_pin(user):
+    voto_business.gerar_pin(user)
+    return 'Pin gerado com sucesso!', 200

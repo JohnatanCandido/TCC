@@ -2,6 +2,7 @@ package br.com.svo.service.eleicao;
 
 import br.com.svo.business.eleicao.EleicaoBusiness;
 import br.com.svo.business.exception.BusinessException;
+import br.com.svo.business.exception.NoResultException;
 import br.com.svo.entities.*;
 import br.com.svo.entities.dto.EleicaoConsultaDTO;
 
@@ -20,37 +21,37 @@ public class EleicaoService implements EleicaoServiceLocal, Serializable {
         return eleicaoBusiness.consultaCargos();
     }
 
-    public Long salvar(Eleicao eleicao) throws BusinessException {
+    public Long salvar(Eleicao eleicao) throws BusinessException, NoResultException {
         return eleicaoBusiness.salvar(eleicao);
     }
 
     @Override
-    public Eleicao buscaEleicao(Long idEleicao) throws BusinessException {
+    public Eleicao buscaEleicao(Long idEleicao) throws BusinessException, NoResultException {
         return eleicaoBusiness.buscaEleicao(idEleicao);
     }
 
     @Override
-    public List<EleicaoConsultaDTO> consultarEleicoes(EleicaoConsultaDTO filtro) throws BusinessException {
+    public List<EleicaoConsultaDTO> consultarEleicoes(EleicaoConsultaDTO filtro) throws BusinessException, NoResultException {
         return eleicaoBusiness.consultarEleicoes(filtro);
     }
 
     @Override
-    public List<Pessoa> consultaPessoas(String filtro) throws BusinessException {
+    public List<Pessoa> consultaPessoas(String filtro) throws BusinessException, NoResultException {
         return eleicaoBusiness.consultaPessoas(filtro);
     }
 
     @Override
-    public List<Partido> consultaPartidos(String filtro) throws BusinessException {
+    public List<Partido> consultaPartidos(String filtro) throws BusinessException, NoResultException {
         return eleicaoBusiness.consultaPartidos(filtro);
     }
 
     @Override
-    public void salvarCandidato(Candidato candidato) throws BusinessException {
+    public void salvarCandidato(Candidato candidato) throws BusinessException, NoResultException {
         eleicaoBusiness.salvarCandidato(candidato);
     }
 
     @Override
-    public List<Candidato> buscaCandidatos(Long idTurnoCargoRegiao) throws BusinessException {
+    public List<Candidato> buscaCandidatos(Long idTurnoCargoRegiao) throws BusinessException, NoResultException {
         return eleicaoBusiness.buscaCandidatos(idTurnoCargoRegiao);
     }
 
@@ -65,17 +66,17 @@ public class EleicaoService implements EleicaoServiceLocal, Serializable {
     }
 
     @Override
-    public void salvarPartido(Partido partido) throws BusinessException {
+    public void salvarPartido(Partido partido) throws BusinessException, NoResultException {
         eleicaoBusiness.salvarPartido(partido);
     }
 
     @Override
-    public Long salvarColigacao(Coligacao coligacao) throws BusinessException {
+    public Long salvarColigacao(Coligacao coligacao) throws BusinessException, NoResultException {
         return eleicaoBusiness.salvarColigacao(coligacao);
     }
 
     @Override
-    public List<EleicaoConsultaDTO> consultaEleicoesUsuario() throws BusinessException {
+    public List<EleicaoConsultaDTO> consultaEleicoesUsuario() throws BusinessException, NoResultException {
         return eleicaoBusiness.consultaEleicoesUsuario();
     }
 }

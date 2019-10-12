@@ -1,6 +1,7 @@
 package br.com.svo.business.pessoa;
 
 import br.com.svo.business.exception.BusinessException;
+import br.com.svo.business.exception.NoResultException;
 import br.com.svo.entities.Identity;
 import br.com.svo.entities.Perfil;
 import br.com.svo.entities.Pessoa;
@@ -24,7 +25,7 @@ public class PessoaBusiness implements Serializable {
     @Inject
     private Identity identity;
 
-    public Pessoa buscaPessoa(Long idPessoa) throws BusinessException {
+    public Pessoa buscaPessoa(Long idPessoa) throws BusinessException, NoResultException {
         try {
             String response = new RestUtil("pessoa/" + idPessoa).get();
             return GSON.fromJson(response, Pessoa.class);
@@ -33,11 +34,11 @@ public class PessoaBusiness implements Serializable {
         }
     }
 
-    public List<Perfil> listarPerfis() throws BusinessException {
+    public List<Perfil> listarPerfis() {
         try {
             String response = new RestUtil("login/perfis").get();
             return GSON.fromJson(response, new TypeToken<List<Perfil>>(){}.getType());
-        } catch (RestException e) {
+        } catch (RestException | NoResultException e) {
             return new ArrayList<>();
         }
     }
@@ -52,10 +53,12 @@ public class PessoaBusiness implements Serializable {
             return new Long(response);
         } catch (RestException e) {
             throw new BusinessException("Erros ao salvar a eleição:", e.getMessages());
+        } catch (NoResultException ignored) {
+            return null;
         }
     }
 
-    public List<PessoaConsultaDTO> buscarPessoas(PessoaConsultaDTO pessoaConsultaDTO) throws BusinessException {
+    public List<PessoaConsultaDTO> buscarPessoas(PessoaConsultaDTO pessoaConsultaDTO) throws BusinessException, NoResultException {
         try {
             String response = new RestUtil("pessoa/consultar").withBody(pessoaConsultaDTO)
                                                               .withHeader("Content-Type", "application/json")

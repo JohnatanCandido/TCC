@@ -1,6 +1,7 @@
 package br.com.svo.web.pessoa.web.bean;
 
 import br.com.svo.business.exception.BusinessException;
+import br.com.svo.business.exception.NoResultException;
 import br.com.svo.entities.Cidade;
 import br.com.svo.entities.Estado;
 import br.com.svo.entities.dto.PessoaConsultaDTO;
@@ -39,7 +40,7 @@ public class BuscaPessoaWebBean implements Serializable {
         } catch (BusinessException e) {
             estados = new ArrayList<>();
             e.printStackTrace();
-        }
+        } catch (NoResultException ignored) {}
         return estados;
     }
 
@@ -53,7 +54,7 @@ public class BuscaPessoaWebBean implements Serializable {
         } catch (BusinessException e) {
             estados = new ArrayList<>();
             e.printStackTrace();
-        }
+        } catch (NoResultException ignored) {}
         return cidades;
     }
 
@@ -62,6 +63,9 @@ public class BuscaPessoaWebBean implements Serializable {
             pessoas = pessoaService.buscarPessoas(pessoaConsultaDTO);
             SvoMessages.addFoundMessage(pessoas.size());
         } catch (BusinessException e) {
+            pessoas = new ArrayList<>();
+            SvoMessages.addErrorMessage(e);
+        } catch (NoResultException e) {
             pessoas = new ArrayList<>();
             SvoMessages.addErrorMessage(e);
         }

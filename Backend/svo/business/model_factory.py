@@ -112,6 +112,8 @@ def cria_pessoa(dados):
         pessoa.nome = dados['nome']
     if 'cpf' in dados:
         pessoa.cpf = re.sub('[.-]', '', dados['cpf'])
+    if 'email' in dados:
+        pessoa.email = dados['email']
     if 'eleitor' in dados:
         if pessoa.eleitor is not None:
             cria_eleitor(dados['eleitor'], pessoa.eleitor)

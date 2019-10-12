@@ -1,6 +1,7 @@
 package br.com.svo.web.eleicao.web.bean;
 
 import br.com.svo.business.exception.BusinessException;
+import br.com.svo.business.exception.NoResultException;
 import br.com.svo.entities.Cidade;
 import br.com.svo.entities.Estado;
 import br.com.svo.entities.TurnoCargo;
@@ -40,7 +41,7 @@ public class EleicaoModalCargoWebBean implements Serializable {
         } catch (BusinessException e) {
             estados = new ArrayList<>();
             SvoMessages.addErrorMessage(e);
-        }
+        } catch (NoResultException ignored) {}
         return estados;
     }
 
@@ -50,7 +51,7 @@ public class EleicaoModalCargoWebBean implements Serializable {
         } catch (BusinessException e) {
             cidades = new ArrayList<>();
             SvoMessages.addErrorMessage(e);
-        }
+        } catch (NoResultException ignored) {}
         return cidades;
     }
 

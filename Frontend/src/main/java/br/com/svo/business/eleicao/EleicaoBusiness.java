@@ -1,6 +1,7 @@
 package br.com.svo.business.eleicao;
 
 import br.com.svo.business.exception.BusinessException;
+import br.com.svo.business.exception.NoResultException;
 import br.com.svo.entities.*;
 import br.com.svo.entities.dto.EleicaoConsultaDTO;
 import br.com.svo.entities.dto.PessoaConsultaDTO;
@@ -28,12 +29,12 @@ public class EleicaoBusiness implements Serializable {
         try {
             String response = new RestUtil("eleicao/cargos").get();
             return GSON.fromJson(response, ListaCargo.class).getCargos();
-        } catch (RestException | BusinessException e) {
+        } catch (RestException | NoResultException e) {
             return new ArrayList<>();
         }
     }
 
-    public Long salvar(Eleicao eleicao) throws BusinessException {
+    public Long salvar(Eleicao eleicao) throws BusinessException, NoResultException {
         try {
             String response = new RestUtil("eleicao/salvar").withBody(eleicao)
                                                             .withHeader("Content-Type", "application/json")
@@ -46,7 +47,7 @@ public class EleicaoBusiness implements Serializable {
         }
     }
 
-    public Eleicao buscaEleicao(Long idEleicao) throws BusinessException {
+    public Eleicao buscaEleicao(Long idEleicao) throws BusinessException, NoResultException {
         try {
             String response = new RestUtil("eleicao/" + idEleicao).get();
             return GSON.fromJson(response, Eleicao.class);
@@ -55,7 +56,7 @@ public class EleicaoBusiness implements Serializable {
         }
     }
 
-    public List<EleicaoConsultaDTO> consultarEleicoes(EleicaoConsultaDTO filtro) throws BusinessException {
+    public List<EleicaoConsultaDTO> consultarEleicoes(EleicaoConsultaDTO filtro) throws BusinessException, NoResultException {
         try {
             String response = new RestUtil("eleicao/consultar").withBody(filtro)
                                                                .withHeader("Content-Type", "application/json")
@@ -67,7 +68,7 @@ public class EleicaoBusiness implements Serializable {
         }
     }
 
-    public List<Pessoa> consultaPessoas(String filtro) throws BusinessException {
+    public List<Pessoa> consultaPessoas(String filtro) throws BusinessException, NoResultException {
         try {
             PessoaConsultaDTO pessoa = new PessoaConsultaDTO();
             pessoa.setNome(filtro);
@@ -81,7 +82,7 @@ public class EleicaoBusiness implements Serializable {
         }
     }
 
-    public List<Partido> consultaPartidos(String filtro) throws BusinessException {
+    public List<Partido> consultaPartidos(String filtro) throws BusinessException, NoResultException {
         try {
             String response = new RestUtil("partido/" +  filtro.replaceAll("%", "+")).withHeader("Content-Type", "application/json").get();
 
@@ -91,7 +92,7 @@ public class EleicaoBusiness implements Serializable {
         }
     }
 
-    public void salvarCandidato(Candidato candidato) throws BusinessException {
+    public void salvarCandidato(Candidato candidato) throws BusinessException, NoResultException {
         try {
             new RestUtil("candidato/cadastrar").withBody(candidato)
                                                .withHeader("Content-Type", "application/json")
@@ -102,7 +103,7 @@ public class EleicaoBusiness implements Serializable {
         }
     }
 
-    public List<Candidato> buscaCandidatos(Long idTurnoCargoRegiao) throws BusinessException {
+    public List<Candidato> buscaCandidatos(Long idTurnoCargoRegiao) throws BusinessException, NoResultException {
         try {
             String response = new RestUtil("candidato/turnoCargoRegiao/" + idTurnoCargoRegiao).get();
 
@@ -117,7 +118,7 @@ public class EleicaoBusiness implements Serializable {
             String response = new RestUtil("partido/coligacao/eleicao/" +  idEleicao).get();
 
             return GSON.fromJson(response, new TypeToken<List<Coligacao>>(){}.getType());
-        } catch (RestException | BusinessException e) {
+        } catch (RestException | NoResultException e) {
             return new ArrayList<>();
         }
     }
@@ -127,12 +128,12 @@ public class EleicaoBusiness implements Serializable {
             String response = new RestUtil("partido/coligacao/eleicao/" +  idColigacao).get();
 
             return GSON.fromJson(response, new TypeToken<List<Partido>>(){}.getType());
-        } catch (RestException | BusinessException e) {
+        } catch (RestException | NoResultException e) {
             return new ArrayList<>();
         }
     }
 
-    public void salvarPartido(Partido partido) throws BusinessException {
+    public void salvarPartido(Partido partido) throws BusinessException, NoResultException {
         try {
             new RestUtil("partido/cadastrar").withBody(partido)
                                              .withHeader("Content-Type", "application/json")
@@ -143,7 +144,7 @@ public class EleicaoBusiness implements Serializable {
         }
     }
 
-    public Long salvarColigacao(Coligacao coligacao) throws BusinessException {
+    public Long salvarColigacao(Coligacao coligacao) throws BusinessException, NoResultException {
         try {
             String response = new RestUtil("partido/coligacao").withBody(coligacao)
                                                                .withHeader("Content-Type", "application/json")
@@ -155,7 +156,7 @@ public class EleicaoBusiness implements Serializable {
         }
     }
 
-    public List<EleicaoConsultaDTO> consultaEleicoesUsuario() throws BusinessException {
+    public List<EleicaoConsultaDTO> consultaEleicoesUsuario() throws BusinessException, NoResultException {
         try {
             String response = new RestUtil("eleicao/usuario").withHeader("Content-Type", "application/json")
                                                              .withHeader("Authorization", identity.getToken())

@@ -1,6 +1,7 @@
 package br.com.svo.business.regiao;
 
 import br.com.svo.business.exception.BusinessException;
+import br.com.svo.business.exception.NoResultException;
 import br.com.svo.entities.Cidade;
 import br.com.svo.entities.Estado;
 import br.com.svo.util.RestUtil;
@@ -17,7 +18,7 @@ public class RegiaoBusiness implements Serializable {
 
     private static final Gson GSON = new Gson();
 
-    public List<Estado> consultarEstados(String filtro) throws BusinessException {
+    public List<Estado> consultarEstados(String filtro) throws BusinessException, NoResultException {
         try {
             String response = new RestUtil("regiao/estado/" + filtro.replaceAll(" ", "+")).get();
             return GSON.fromJson(response, new TypeToken<List<Estado>>(){}.getType());
@@ -26,7 +27,7 @@ public class RegiaoBusiness implements Serializable {
         }
     }
 
-    public List<Cidade> consultarCidades(Long idEstado, String filtro) throws BusinessException {
+    public List<Cidade> consultarCidades(Long idEstado, String filtro) throws BusinessException, NoResultException {
         try {
             String response = new RestUtil("regiao/estado/" + idEstado + "/cidade/" + filtro.replaceAll(" ", "+")).get();
             return GSON.fromJson(response, new TypeToken<List<Cidade>>(){}.getType());

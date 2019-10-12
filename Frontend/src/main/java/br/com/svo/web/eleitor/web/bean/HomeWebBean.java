@@ -1,6 +1,7 @@
 package br.com.svo.web.eleitor.web.bean;
 
 import br.com.svo.business.exception.BusinessException;
+import br.com.svo.business.exception.NoResultException;
 import br.com.svo.entities.dto.EleicaoConsultaDTO;
 import br.com.svo.service.eleicao.EleicaoServiceLocal;
 import br.com.svo.util.SvoMessages;
@@ -31,9 +32,12 @@ public class HomeWebBean implements Serializable {
         try {
             List<EleicaoConsultaDTO> eleicoes = eleicaoService.consultaEleicoesUsuario();
             eleicoesAbertas = eleicoes.stream().filter(EleicaoConsultaDTO::isAberta).collect(Collectors.toList());
-            eleicoesFinalizadas = eleicoes.stream().filter(e -> !e.isAberta()).collect(Collectors.toList());
+            eleicoesFinalizadas = eleicoes.stream().filter(e -> !e.isAberta() && e.getTurno() == 1).collect(Collectors.toList());
         } catch (BusinessException e) {
             SvoMessages.addErrorMessage(e);
+            eleicoesAbertas = new ArrayList<>();
+            eleicoesFinalizadas = new ArrayList<>();
+        } catch (NoResultException ignored) {
             eleicoesAbertas = new ArrayList<>();
             eleicoesFinalizadas = new ArrayList<>();
         }

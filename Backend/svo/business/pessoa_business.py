@@ -6,6 +6,10 @@ from svo.business import model_factory as mf
 # noinspection PyUnresolvedReferences
 from svo.entities.models import Pessoa, Eleitor, Cidade, Estado
 
+# Usado na consulta de pessoa
+# noinspection PyUnresolvedReferences
+import re
+
 
 def pessoa_by_id(id_pessoa):
     pessoa = db.find_pessoa(id_pessoa)
@@ -64,7 +68,7 @@ def consultar_pessoas(filtro):
     if 'nome' in filtro:
         query += '.filter(Pessoa.nome.ilike(f\'%{filtro["nome"]}%\'))'
     if 'cpf' in filtro:
-        query += '.filter(Pessoa.cpf.ilike(f\'%{filtro["cpf"]}%\'))'
+        query += '.filter(Pessoa.cpf.ilike(f\'%{re.sub("[.-]", "", filtro["cpf"])}%\'))'
     if 'idCidade' in filtro:
         query += '.filter(Cidade.id_cidade == filtro["idCidade"])'
     if 'zonaEleitoral' in filtro:
