@@ -71,9 +71,9 @@ INSERT INTO pessoa(nome, cpf, email) VALUES('Carlos Chiodini', substr((random() 
 
 INSERT INTO eleitor(id_pessoa, zona_eleitoral, secao, numero_inscricao, id_cidade)
 (SELECT id_pessoa,
-        substr((random() * 1000)::text, 0, 4),
-        substr((random() * 10000)::text, 0, 5),
-        substr((random() * 1000000000000)::text, 0, 13),
+        substr((random() * 10000)::text, 0, 4),
+        substr((random() * 100000)::text, 0, 5),
+        substr((random() * 10000000000000)::text, 0, 13),
         1
  FROM pessoa p
 WHERE NOT EXISTS((SELECT 1 FROM eleitor e2 WHERE p.id_pessoa = e2.id_pessoa)));

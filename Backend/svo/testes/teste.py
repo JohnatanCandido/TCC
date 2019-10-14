@@ -1,4 +1,4 @@
-from svo.entities.models import Pessoa, Eleitor
+from svo.entities.models import Pessoa, Eleitor, Candidato
 from svo.util import database_utils as db
 from svo.business import voto_business
 from svo import c
@@ -11,14 +11,11 @@ partidos = [1, 12]
 qt_votos = [0, 0]
 
 
-def testar(id_eleicao):
-    # cria_pessoas()
-    votar(id_eleicao)
-
-
 def cria_pessoas():
     for i in range(20000):
         cria_pessoa(i)
+        if i % 5000 == 0:
+            db.commit()
     db.commit()
 
 
@@ -26,6 +23,7 @@ def cria_pessoa(i):
     pessoa = Pessoa()
     pessoa.nome = f'Teste {i}'
     pessoa.cpf = numero_aleatorio(11)
+    pessoa.email = f'teste{i}.teste@teste.com'
     eleitor = Eleitor()
     eleitor.id_cidade = 1
     eleitor.zona_eleitoral = numero_aleatorio(3)
@@ -33,6 +31,7 @@ def cria_pessoa(i):
     eleitor.numero_inscricao = numero_aleatorio(12)
     pessoa.eleitor = eleitor
     db.create(pessoa)
+    print(f'Criando pessoa {pessoa.nome}')
 
 
 def numero_aleatorio(length):
@@ -52,17 +51,18 @@ def votar(id_eleicao):
     id_turno = voto_business.consulta_turno_aberto_por_eleicao(id_eleicao)
     result = db.native(sql, {'idTurno': id_turno}).fetchall()
     id_eleitores = [r[0] for r in result]
-    Thread(target=cria_votos, kwargs={'id_eleitores': id_eleitores[:1000], 'id_turno': id_turno}).start()
+    # Thread(target=cria_votos, kwargs={'id_eleitores': id_eleitores[:1000], 'id_turno': id_turno}).start()
+    cria_votos(id_eleitores, id_turno)
 
 
 def cria_votos(id_eleitores, id_turno):
     for id_eleitor in id_eleitores:
         print(f'Voto de {id_eleitor}')
-        n = randint(0, len(candidatos)-1)
-        id_candidato = c.enc(candidatos[n])
-        id_partido = c.enc(partidos[n])
+        cand = db.query(Candidato).get(randint(7, 506))
+        id_candidato = c.enc(cand.id_candidato)
+        id_partido = c.enc(cand.id_partido)
         id_eleitor_enc = c.enc(id_eleitor)
-        id_turno_cargo_regiao = 11
+        id_turno_cargo_regiao = 6
         id_cidade = 1
 
         sql = 'INSERT INTO voto_encriptado(id_turno_cargo_regiao, id_cidade, id_candidato, id_partido, id_eleitor)' \
@@ -81,3 +81,22 @@ def cria_votos(id_eleitores, id_turno):
 def insert_eleitor_turno(id_eleitor, id_turno):
     sql = 'INSERT INTO eleitor_turno(id_eleitor, id_turno) VALUES(:idEleitor, :idTurno)'
     db.native(sql, {'idEleitor': id_eleitor, 'idTurno': id_turno})
+
+
+def cria_candidatos(id_tcr, qt):
+    for i in range(qt):
+        print(f'Criando candidato {i}')
+        candidato = Candidato()
+        candidato.id_pessoa = randint(20045, 40044)
+        partido = db.find_partido(randint(1, 18))
+        candidato.numero = int(str(partido.numero_partido) + numero_aleatorio(2))
+        candidato.id_partido = partido.id_partido
+        candidato.id_turno_cargo_regiao = id_tcr
+        db.create(candidato)
+        if i % 500 == 0:
+            print(f'Commitando')
+            db.commit()
+            print(f'Commitado')
+    print(f'Commitando')
+    db.commit()
+    print(f'Commitado')

@@ -1,4 +1,4 @@
-from flask import request, jsonify, Blueprint
+from flask import request, Blueprint
 
 from svo import c
 from svo.business import business
@@ -21,7 +21,19 @@ def get_res(id_eleicao, id_cargo):
     return business.pegar_resultado(id_eleicao, id_cargo)
 
 
-@endpoints.route('/testar/<id_eleicao>', methods=['GET'])
-def testar(id_eleicao):
-    teste.testar(id_eleicao)
+@endpoints.route('/pessoas', methods=['GET'])
+def cria_pessoas():
+    teste.cria_pessoas()
+    return 'Pessoas criadas', 200
+
+
+@endpoints.route('/tcr/<id_tcr>/criar-candidatos/qt/<qt>')
+def cria_candidatos(id_tcr, qt):
+    teste.cria_candidatos(int(id_tcr), int(qt))
+    return 'Candidatos criados', 200
+
+
+@endpoints.route('/votar/<id_eleicao>', methods=['GET'])
+def votar(id_eleicao):
+    teste.votar(id_eleicao)
     return 'OK', 200
