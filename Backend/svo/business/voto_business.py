@@ -137,8 +137,8 @@ def gerar_pin(user):
         db.create(pin)
         db.commit()
 
-        email_util.enviar_email(user.email, f'Seu código para votar é: {user_pin} \n'
-                                            f'O código é válido por apenas 5 minutos!')
+        msg = f'Seu código para votar é: {user_pin} \nO código é válido por apenas 5 minutos!'
+        email_util.enviar_email(user.email, msg, 'Código para votação')
 
 
 def criar_hash_voto(user, votos):
@@ -146,5 +146,6 @@ def criar_hash_voto(user, votos):
     for voto in votos:
         hash_voto += voto['idCandidato']
     hash_voto = senha_util.encrypt_md5(hash_voto)
-    email_util.enviar_email(user.email, f'Voto computado com sucesso às {str(datetime.now())}!'
-                                        f'\nA sua hash é: {hash_voto}')
+    
+    msg = f'Voto computado com sucesso às {str(datetime.now())}!\nA sua hash é: {hash_voto}'
+    email_util.enviar_email(user.email, msg, 'Confirmação do voto')

@@ -30,7 +30,7 @@ def salvar_pessoa(dados):
                       f'Usuário: {pessoa.eleitor.numero_inscricao}\n'\
                       f'Senha: {senha}\n\n' \
                       f'Sugerimos que você troque a senha ao entrar.'
-        email_util.enviar_email(pessoa.email, corpo_email)
+        email_util.enviar_email(pessoa.email, corpo_email, 'Cadastro no Sistema de Votação Online')
     return str(pessoa.id_pessoa)
 
 
