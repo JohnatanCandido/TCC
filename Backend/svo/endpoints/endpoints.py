@@ -39,8 +39,8 @@ def votar(id_eleicao):
     teste.votar(id_eleicao)
     return 'OK', 200
 
-	
+
 @endpoints.route('/teste-email', methods=['GET'])
 def envia_email():
-	email_util.enviar_email('johnatanespindola@gmail.com', 'Teste msg', 'Teste assunto')
-	return 'ok', 200
+    email_util.enviar_email('johnatanespindola@gmail.com', 'Teste msg', 'Teste assunto')
+    return 'ok', 200

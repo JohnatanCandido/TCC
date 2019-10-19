@@ -6,6 +6,7 @@ import br.com.svo.entities.Login;
 import br.com.svo.service.login.LoginServiceLocal;
 import br.com.svo.util.EncryptionUtils;
 import br.com.svo.util.IdentityUtil;
+import br.com.svo.util.Perfis;
 import br.com.svo.util.RedirectUtils;
 import br.com.svo.util.exception.RestException;
 import org.omnifaces.cdi.ViewScoped;
@@ -59,6 +60,10 @@ public class LoginWebBean implements Serializable {
     public void logout() {
         IdentityUtil.logout();
         RedirectUtils.redirectToLogin();
+    }
+
+    public boolean isRenderizaMenuPessoa() {
+        return identity != null && identity.hasPerfil(Perfis.ADMINISTRADOR);
     }
 
 //    GETTERS E SETTERS

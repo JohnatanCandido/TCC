@@ -2,12 +2,10 @@ package br.com.svo.web.pessoa.web.bean;
 
 import br.com.svo.business.exception.BusinessException;
 import br.com.svo.business.exception.NoResultException;
-import br.com.svo.entities.Cidade;
-import br.com.svo.entities.Estado;
-import br.com.svo.entities.Perfil;
-import br.com.svo.entities.Pessoa;
+import br.com.svo.entities.*;
 import br.com.svo.service.pessoa.PessoaServiceLocal;
 import br.com.svo.service.regiao.RegiaoServiceLocal;
+import br.com.svo.util.Perfis;
 import br.com.svo.util.SvoMessages;
 import br.com.svo.util.RedirectUtils;
 import org.omnifaces.cdi.Param;
@@ -37,6 +35,9 @@ public class PessoaWebBean implements Serializable {
     @Inject
     private RegiaoServiceLocal regiaoService;
 
+    @Inject
+    private Identity identity;
+
     private Pessoa pessoa;
 
     private List<Estado> estados = new ArrayList<>();
@@ -48,6 +49,11 @@ public class PessoaWebBean implements Serializable {
 
     @PostConstruct
     public void init() {
+        if (!identity.hasPerfil(Perfis.ADMINISTRADOR)) {
+            RedirectUtils.redirect("index.html");
+            return;
+        }
+
         try {
             if (idPessoa == null)
                 pessoa = new Pessoa();

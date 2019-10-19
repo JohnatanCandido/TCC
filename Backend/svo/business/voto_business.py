@@ -146,6 +146,7 @@ def criar_hash_voto(user, votos):
     for voto in votos:
         hash_voto += voto['idCandidato']
     hash_voto = senha_util.encrypt_md5(hash_voto)
-    
-    msg = f'Voto computado com sucesso às {str(datetime.now())}!\nA sua hash é: {hash_voto}'
+
+    agora = datetime.now().strftime('%H:%M:%S %d/%m/%Y')
+    msg = f'Voto computado com sucesso às {agora}!\nA sua hash é: {hash_voto}'
     email_util.enviar_email(user.email, msg, 'Confirmação do voto')

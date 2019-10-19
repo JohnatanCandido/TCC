@@ -2,11 +2,7 @@ package br.com.svo.web.eleicao.web.bean;
 
 import br.com.svo.business.exception.BusinessException;
 import br.com.svo.business.exception.NoResultException;
-import br.com.svo.entities.Cargo;
-import br.com.svo.entities.Eleicao;
-import br.com.svo.entities.Identity;
-import br.com.svo.entities.Turno;
-import br.com.svo.entities.TurnoCargo;
+import br.com.svo.entities.*;
 import br.com.svo.service.eleicao.EleicaoServiceLocal;
 import br.com.svo.util.SvoMessages;
 import br.com.svo.util.Perfis;
@@ -44,6 +40,10 @@ public class EleicaoWebBean implements Serializable {
     public void init() {
         try {
             if (idEleicao == null) {
+                if (!identity.hasPerfil(Perfis.ADMINISTRADOR)) {
+                    RedirectUtils.redirect("eleicao/busca/buscar-eleicao.html");
+                    return;
+                }
                 eleicao = new Eleicao();
             } else {
                 eleicao = eleicaoService.buscaEleicao(idEleicao);
