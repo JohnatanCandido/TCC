@@ -4,6 +4,7 @@ import br.com.svo.business.eleicao.EleicaoBusiness;
 import br.com.svo.business.exception.BusinessException;
 import br.com.svo.business.exception.NoResultException;
 import br.com.svo.entities.*;
+import br.com.svo.entities.dto.ApuracaoCandidatoDTO;
 import br.com.svo.entities.dto.EleicaoConsultaDTO;
 
 import javax.inject.Inject;
@@ -51,7 +52,7 @@ public class EleicaoService implements EleicaoServiceLocal, Serializable {
     }
 
     @Override
-    public List<Candidato> buscaCandidatos(Long idTurnoCargoRegiao) throws BusinessException, NoResultException {
+    public List<ApuracaoCandidatoDTO> buscaCandidatos(Long idTurnoCargoRegiao) throws BusinessException, NoResultException {
         return eleicaoBusiness.buscaCandidatos(idTurnoCargoRegiao);
     }
 

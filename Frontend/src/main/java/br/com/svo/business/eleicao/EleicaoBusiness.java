@@ -3,6 +3,7 @@ package br.com.svo.business.eleicao;
 import br.com.svo.business.exception.BusinessException;
 import br.com.svo.business.exception.NoResultException;
 import br.com.svo.entities.*;
+import br.com.svo.entities.dto.ApuracaoCandidatoDTO;
 import br.com.svo.entities.dto.EleicaoConsultaDTO;
 import br.com.svo.entities.dto.PessoaConsultaDTO;
 import br.com.svo.util.RestUtil;
@@ -103,11 +104,11 @@ public class EleicaoBusiness implements Serializable {
         }
     }
 
-    public List<Candidato> buscaCandidatos(Long idTurnoCargoRegiao) throws BusinessException, NoResultException {
+    public List<ApuracaoCandidatoDTO> buscaCandidatos(Long idTurnoCargoRegiao) throws BusinessException, NoResultException {
         try {
             String response = new RestUtil("candidato/turnoCargoRegiao/" + idTurnoCargoRegiao).get();
 
-            return GSON.fromJson(response, new TypeToken<List<Candidato>>(){}.getType());
+            return GSON.fromJson(response, new TypeToken<List<ApuracaoCandidatoDTO>>(){}.getType());
         } catch (RestException e) {
             throw new BusinessException("Erros ao buscar candidatos:", e.getMessages());
         }

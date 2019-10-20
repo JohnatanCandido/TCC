@@ -310,7 +310,7 @@ class Candidato(db.Model):
             'turnoCargoRegiao': self.turnoCargoRegiao.to_json(),
             'pessoa': self.pessoa.to_json(),
             'situacao': self.situacao,
-            'votos': self.qt_votos,
+            'votos': self.qt_votos if self.qt_votos != 0 else len(self.votos),
             'viceCandidato': self.vice.to_json() if self.vice is not None else None
         }
 

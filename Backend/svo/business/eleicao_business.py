@@ -1,5 +1,6 @@
 from threading import Thread
 from datetime import datetime
+from types import SimpleNamespace
 
 from svo.business import model_factory as mf
 from svo.exception.validation_exception import ValidationException
@@ -188,7 +189,10 @@ def insere_apuracao(turno):
 
 def apurar_votos(tcr):
     print(f'Iniciada apuração: {tcr.turnoCargo.cargo.nome} ===========================================================')
-    votos = [v for v in tcr.votosEncriptados if v.voto_apurado is None]
+    votos = db.query(VotoEncriptado)\
+              .filter(VotoEncriptado.id_turno_cargo_regiao == tcr.id_turno_cargo_regiao)\
+              .filter(VotoEncriptado.voto_apurado == None)\
+              .all()
 
     for voto_enc in votos:
         voto = mf.cria_voto(voto_enc)
@@ -226,7 +230,7 @@ def verifica_eleitos(id_turno):
 def verifica_eleito_maioria_simples(tcr, segundo_turno):
     candidatos = tcr.candidatos
     candidatos.sort(key=lambda c: c.qt_votos, reverse=True)
-    if tcr.possui_segundo_turno:
+    if tcr.possui_segundo_turno and candidatos:
         sql_total_votos = '''SELECT count(*) FROM voto_apurado 
                              WHERE id_turno_cargo_regiao = :idTurnoCargoRegiao 
                              AND id_candidato IS NOT NULL'''
@@ -238,7 +242,7 @@ def verifica_eleito_maioria_simples(tcr, segundo_turno):
             candidatos[0].situacao = 'Segundo Turno'
             candidatos[1].situacao = 'Segundo Turno'
             adiciona_turno_cargo_regiao_segundo_turno(tcr, candidatos[:2], segundo_turno)
-    else:
+    elif candidatos:
         for i in range(tcr.qtd_cadeiras):
             candidatos[i].situacao = 'Eleito'
     db.commit()
@@ -251,5 +255,69 @@ def adiciona_turno_cargo_regiao_segundo_turno(tcr, candidatos, segundo_turno):
 
 
 def verifica_eleito_representacao_proporcional(tcr):
-    # TODO
-    pass
+    qt_votos_validos = get_qt_votos_validos(tcr.id_turno_cargo_regiao)
+    if qt_votos_validos > 0:
+        quociente_eleitoral = int(qt_votos_validos / tcr.qtd_cadeiras)
+        partidos = get_partidos(tcr.id_turno_cargo_regiao)
+
+        cadeiras_preenchidas = verifica_total_cadeiras_preenchidas(tcr.id_turno_cargo_regiao, partidos, quociente_eleitoral)
+        sobras = tcr.qtd_cadeiras - cadeiras_preenchidas
+        for i in range(sobras):
+            partidos_sobras = [p for p in partidos if p.qt_candidatos_elegiveis > p.cadeiras]
+            for partido in partidos_sobras:
+                partido.simulacao_cadeiras = partido.votos / (partido.cadeiras + 1)
+            partidos_sobras.sort(key=lambda p: p.simulacao_cadeiras, reverse=True)
+            partidos_sobras[0].cadeiras += 1
+        setar_candidatos_eleitos_representacao_proporcional(tcr.id_turno_cargo_regiao, partidos)
+
+
+def get_qt_votos_validos(id_tcr):
+    sql_qt_votos_validos = "SELECT count(*) FROM voto_apurado " \
+                           "WHERE id_partido IS NOT NULL AND id_turno_cargo_regiao = :idTcr"
+    return db.native(sql_qt_votos_validos, {'idTcr': id_tcr}).first()[0]
+
+
+def get_partidos(id_tcr):
+    sql_partidos = 'SELECT partido.id_partido, sum(qt_votos) ' \
+                   'FROM partido JOIN candidato ON partido.id_partido = candidato.id_partido ' \
+                   'WHERE id_turno_cargo_regiao = :idTcr ' \
+                   'GROUP BY partido.id_partido'
+
+    partidos = db.native(sql_partidos, {'idTcr': id_tcr}).fetchall()
+    return [SimpleNamespace(id_partido=p[0], votos=p[1]) for p in partidos]
+
+
+def verifica_total_cadeiras_preenchidas(id_tcr, partidos, quociente_eleitoral):
+    total_cadeiras_preenchidas = 0
+    for partido in partidos:
+        partido.cadeiras = int(partido.votos / quociente_eleitoral)
+        sql_candidatos_elegiveis = 'SELECT count(*) FROM candidato ' \
+                                   'WHERE candidato.id_turno_cargo_regiao = :idTcr ' \
+                                   'AND candidato.id_partido = :idPartido ' \
+                                   'AND candidato.qt_votos >= :quocienteEleitoral'
+        params = {
+            'idTcr': id_tcr,
+            'idPartido': partido.id_partido,
+            'quocienteEleitoral': quociente_eleitoral * 0.1
+        }
+        qt_candidatos_elegiveis = db.native(sql_candidatos_elegiveis, params).first()[0]
+        if qt_candidatos_elegiveis < partido.cadeiras:
+            total_cadeiras_preenchidas += qt_candidatos_elegiveis
+            partido.cadeiras = qt_candidatos_elegiveis
+        else:
+            total_cadeiras_preenchidas += partido.cadeiras
+        partido.qt_candidatos_elegiveis = qt_candidatos_elegiveis
+    return total_cadeiras_preenchidas
+
+
+def setar_candidatos_eleitos_representacao_proporcional(id_tcr, partidos):
+    for partido in partidos:
+        candidatos = db.query(Candidato)\
+                       .filter(Candidato.id_turno_cargo_regiao == id_tcr)\
+                       .filter(Candidato.id_partido == partido.id_partido)\
+                       .limit(partido.cadeiras)\
+                       .all()
+
+        for candidato in candidatos:
+            candidato.situacao = 'Eleito'
+    db.commit()

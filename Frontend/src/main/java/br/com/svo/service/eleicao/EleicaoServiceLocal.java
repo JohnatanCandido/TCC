@@ -3,6 +3,7 @@ package br.com.svo.service.eleicao;
 import br.com.svo.business.exception.BusinessException;
 import br.com.svo.business.exception.NoResultException;
 import br.com.svo.entities.*;
+import br.com.svo.entities.dto.ApuracaoCandidatoDTO;
 import br.com.svo.entities.dto.EleicaoConsultaDTO;
 
 import javax.ejb.Local;
@@ -25,7 +26,7 @@ public interface EleicaoServiceLocal {
 
     void salvarCandidato(Candidato candidato) throws BusinessException, NoResultException;
 
-    List<Candidato> buscaCandidatos(Long idTurnoCargoRegiao) throws BusinessException, NoResultException;
+    List<ApuracaoCandidatoDTO> buscaCandidatos(Long idTurnoCargoRegiao) throws BusinessException, NoResultException;
 
     List<Coligacao> buscarColigacoes(Long idEleicao);
 
