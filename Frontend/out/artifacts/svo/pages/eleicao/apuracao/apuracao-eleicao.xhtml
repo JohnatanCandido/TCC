@@ -54,6 +54,21 @@
                             </p:selectOneMenu>
                         </div>
                     </h:panelGroup>
+                    <h:panelGroup id="panelTurno" rendered="#{apuracaoEleicaoWebBean.renderizaTurno}">
+                        <div class="ui-g-12 ui-md-8 ui-lg-3">
+                            <label for="cidadeApuracao">Turno</label>
+                            <p:selectOneMenu id="turnoApuracao"
+                                             value="#{apuracaoEleicaoWebBean.turno}"
+                                             autoWidth="false">
+                                <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+                                <f:selectItems value="#{apuracaoEleicaoWebBean.turnos}"
+                                               var="turno"
+                                               itemLabel="#{turno.label}"
+                                               itemValue="#{turno.value}" />
+                                <p:ajax listener="#{apuracaoEleicaoWebBean.buscaCandidatos()}" process="@this" update="panelApuracao" />
+                            </p:selectOneMenu>
+                        </div>
+                    </h:panelGroup>
                 </div>
                 <div class="ui-g-12 ui-md-12 ui-lg-12">
                     <p:dataTable id="tabelaCandidatos"
@@ -91,15 +106,10 @@
                             </h:panelGroup>
                         </p:column>
                         <p:column headerText="Votos" width="10%">
-                            <h:outputText value="0" />
+                            <h:outputText value="#{candidato.votos}" />
                         </p:column>
-                        <p:column headerText="Votos segundo turno"
-                                  width="15%"
-                                  rendered="#{apuracaoEleicaoWebBean.turnoCargo.cargo.permiteSegundoTurno}">
-                            <h:outputText value="0" />
-                        </p:column>
-                        <p:column headerText="Eleito" width="6%">
-                            <p:selectBooleanCheckbox disabled="true" />
+                        <p:column headerText="Situação" width="20%">
+                            <h:outputText value="#{candidato.situacao}" />
                         </p:column>
                     </p:dataTable>
                 </div>

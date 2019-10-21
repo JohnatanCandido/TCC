@@ -73,10 +73,9 @@ def busca_candidatos(id_turno_cargo_regiao):
                    .join(Candidato.turnoCargoRegiao)\
                    .join(TurnoCargoRegiao.turnoCargo)\
                    .join(TurnoCargo.turno)\
-                   .filter(Turno.turno == 1)\
                    .filter(Candidato.id_turno_cargo_regiao == id_turno_cargo_regiao)\
                    .filter(Candidato.id_candidato_principal == None)\
                    .all()
     if not candidatos:
         return []
-    return [c.to_json() for c in candidatos]
+    return [c.to_json() for c in sorted(candidatos, key=lambda x: x.qt_votos, reverse=True)]

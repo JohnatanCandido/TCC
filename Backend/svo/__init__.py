@@ -13,7 +13,7 @@ q = 1457561946632440283715238627779546363387207404978295076167058738703721650367
 
 c = Crypto(n, p, q)
 
-from svo.endpoints import endpoints
+from svo.endpoints.endpoints import endpoints
 from svo.endpoints.login_endpoint import logins
 from svo.endpoints.candidato_endpoint import candidatos
 from svo.endpoints.voto_endpoint import votos
@@ -23,6 +23,7 @@ from svo.endpoints.pessoa_endpoint import pessoas
 from svo.endpoints.partido_endpoint import partidos
 
 
+app.register_blueprint(endpoints, url_prefix='/teste')
 app.register_blueprint(logins, url_prefix='/login')
 app.register_blueprint(candidatos, url_prefix='/candidato')
 app.register_blueprint(votos, url_prefix='/voto')

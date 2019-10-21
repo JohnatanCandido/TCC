@@ -3,14 +3,15 @@ package br.com.svo.web.eleicao.web.bean;
 import br.com.svo.business.exception.BusinessException;
 import br.com.svo.entities.Candidato;
 import br.com.svo.entities.Eleicao;
+import br.com.svo.entities.TurnoCargo;
 import br.com.svo.entities.TurnoCargoRegiao;
 import org.omnifaces.cdi.ViewScoped;
 
 import javax.annotation.PostConstruct;
+import javax.faces.model.SelectItem;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @ViewScoped
 @Named("apuracaoEleicaoWebBean")
@@ -19,11 +20,15 @@ public class ApuracaoEleicaoWebBean extends FiltroCandidatoWebBean implements Se
     public static final long serialVersionUID = 1L;
 
     private List<Candidato> candidatos = new ArrayList<>();
+    private Integer turno;
+    private List<TurnoCargo> turnoCargosSegundoTurno;
 
     @PostConstruct
     public void init() {
         Eleicao eleicao = eleicaoWebBean.getEleicao();
         this.turnoCargos = eleicao.getTurnos().get(0).getTurnoCargos();
+        if (eleicao.getTurnos().size() > 1)
+            this.turnoCargosSegundoTurno = eleicao.getTurnos().get(1).getTurnoCargos();
     }
 
     @Override
@@ -32,6 +37,8 @@ public class ApuracaoEleicaoWebBean extends FiltroCandidatoWebBean implements Se
         candidatos.clear();
         if (turnoCargo != null && !isRenderizaEstado())
             buscaCandidatos();
+        else
+            turno = null;
     }
 
     @Override
@@ -40,21 +47,41 @@ public class ApuracaoEleicaoWebBean extends FiltroCandidatoWebBean implements Se
         candidatos.clear();
         if (turnoCargo != null && !isRenderizaCidade())
             buscaCandidatos();
+        else
+            turno = null;
     }
 
     public void buscaCandidatos() {
+        candidatos.clear();
+        TurnoCargo tc = turno == null || turno == 1 ? turnoCargo : turnoCargosSegundoTurno.stream().filter(tcst -> tcst.getCargo().equals(turnoCargo.getCargo())).findFirst().orElse(null);
         TurnoCargoRegiao tcr = null;
-        if (isRenderizaCidade() && cidade != null)
-            tcr = turnoCargo.turnoCargoRegiaoByCidade(estado, cidade);
-        else if (isRenderizaEstado() && estado != null)
-            tcr = turnoCargo.turnoCargoRegiaoByEstado(estado);
-        else if (!isRenderizaCidade() && !isRenderizaEstado())
-            tcr = turnoCargo.getTurnoCargoRegioes().get(0);
-        if (tcr != null) {
-            try {
-                candidatos = eleicaoService.buscaCandidatos(tcr.getIdTurnoCargoRegiao());
-            } catch (BusinessException ignored) {}
+        if (tc != null) {
+            if (isRenderizaCidade() && cidade != null)
+                tcr = tc.turnoCargoRegiaoByCidade(estado, cidade);
+            else if (isRenderizaEstado() && estado != null)
+                tcr = tc.turnoCargoRegiaoByEstado(estado);
+            else if (!isRenderizaCidade() && !isRenderizaEstado())
+                tcr = tc.getTurnoCargoRegioes().get(0);
+            if (tcr != null && (turno != null || !tcr.isPossuiSegundoTurno())) {
+                try {
+                    candidatos = eleicaoService.buscaCandidatos(tcr.getIdTurnoCargoRegiao());
+                } catch (BusinessException ignored) {}
+            }
         }
+    }
+
+    public boolean isRenderizaTurno() {
+        if (turnoCargo != null) {
+            TurnoCargoRegiao tcr = null;
+            if (isRenderizaCidade() && cidade != null)
+                tcr = turnoCargo.turnoCargoRegiaoByCidade(estado, cidade);
+            else if (isRenderizaEstado() && !isRenderizaCidade() && estado != null)
+                tcr = turnoCargo.turnoCargoRegiaoByEstado(estado);
+            else if (!isRenderizaCidade() && !isRenderizaEstado())
+                tcr = turnoCargo.getTurnoCargoRegioes().get(0);
+            return tcr != null && tcr.isPossuiSegundoTurno();
+        }
+        return false;
     }
 
 //    GETTERS E SETTERS
@@ -65,5 +92,21 @@ public class ApuracaoEleicaoWebBean extends FiltroCandidatoWebBean implements Se
 
     public void setCandidatos(List<Candidato> candidatos) {
         this.candidatos = candidatos;
+    }
+
+    public Integer getTurno() {
+        return turno;
+    }
+
+    public void setTurno(Integer turno) {
+        this.turno = turno;
+    }
+
+    public List<SelectItem> getTurnos() {
+        SelectItem turno1 = new SelectItem(1, "1º Turno");
+        if (turnoCargosSegundoTurno == null)
+            return Collections.singletonList(turno1);
+        SelectItem turno2 = new SelectItem(2, "2º Turno");
+        return Arrays.asList(turno1, turno2);
     }
 }

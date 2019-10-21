@@ -100,7 +100,7 @@ public class TurnoCargo implements Serializable {
 
         if (this.idTurnoCargo != null && other.idTurnoCargo != null)
             return this.idTurnoCargo.equals(other.idTurnoCargo);
-        return this.idTurno.equals(other.idTurnoCargo) && this.cargo.equals(other.cargo);
+        return this.cargo.equals(other.cargo);
     }
 
     @Override

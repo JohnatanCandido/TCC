@@ -1,0 +1,40 @@
+fundo{
+    background-color: gainsboro;
+}
+
+.fundologin{
+    background-color: #144913;
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.center{
+    margin-left: 25%;
+}
+
+.centralizado {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center
+}
+
+.font-titulo{
+    font-family: "Comic Sans MS";
+}
+
+.font{
+    font-family: "Roboto Light";
+}
+
+.body{
+    background: url('../img/cadeado.png') no-repeat;
+    width: 1360px;
+    height: 559px;
+    visibility: visible;
+}
