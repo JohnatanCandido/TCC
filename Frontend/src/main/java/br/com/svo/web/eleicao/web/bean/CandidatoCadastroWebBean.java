@@ -1,6 +1,7 @@
 package br.com.svo.web.eleicao.web.bean;
 
 import br.com.svo.business.exception.BusinessException;
+import br.com.svo.business.exception.NoResultException;
 import br.com.svo.entities.*;
 import br.com.svo.util.SvoMessages;
 import org.omnifaces.cdi.ViewScoped;
@@ -47,7 +48,7 @@ public class CandidatoCadastroWebBean extends FiltroCandidatoWebBean implements 
     public List<Pessoa> consultaPessoas(String filtro) {
         try {
             pessoas = eleicaoService.consultaPessoas(filtro);
-        } catch (BusinessException e) {
+        } catch (BusinessException | NoResultException e) {
             pessoas = new ArrayList<>();
         }
         return pessoas;
@@ -56,7 +57,7 @@ public class CandidatoCadastroWebBean extends FiltroCandidatoWebBean implements 
     public List<Partido> consultaPartidos(String filtro) {
         try {
             partidos = eleicaoService.consultaPartidos(filtro);
-        } catch (BusinessException e) {
+        } catch (BusinessException | NoResultException e) {
             partidos = new ArrayList<>();
         }
         return partidos;
@@ -65,7 +66,7 @@ public class CandidatoCadastroWebBean extends FiltroCandidatoWebBean implements 
     public List<Pessoa> consultaPessoasVice(String filtro) {
         try {
             pessoasVice = eleicaoService.consultaPessoas(filtro);
-        } catch (BusinessException e) {
+        } catch (BusinessException | NoResultException e) {
             pessoasVice = new ArrayList<>();
         }
         return pessoasVice;
@@ -74,13 +75,13 @@ public class CandidatoCadastroWebBean extends FiltroCandidatoWebBean implements 
     public List<Partido> consultaPartidosVice(String filtro) {
         try {
             partidosVice = eleicaoService.consultaPartidos(filtro);
-        } catch (BusinessException e) {
+        } catch (BusinessException | NoResultException e) {
             partidosVice = new ArrayList<>();
         }
         return partidosVice;
     }
 
-    public void salvar() {
+    public void salvar() throws NoResultException {
         try {
             insertCargo();
             eleicaoService.salvarCandidato(candidato);

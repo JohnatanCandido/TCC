@@ -10,8 +10,15 @@ def generate_password():
     password = ''
     for _ in range(10):
         password += tokens[randint(0, len(tokens)-1)]
-    return encrypt_md5(password)
+    return password
 
 
 def encrypt_md5(texto):
     return md5(texto.encode()).hexdigest()
+
+
+def generate_pin():
+    pin = ''
+    for _ in range(5):
+        pin += tokens[randint(0, len(tokens)-1)]
+    return pin

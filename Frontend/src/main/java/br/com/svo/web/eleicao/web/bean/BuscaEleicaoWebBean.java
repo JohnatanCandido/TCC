@@ -1,8 +1,12 @@
 package br.com.svo.web.eleicao.web.bean;
 
 import br.com.svo.business.exception.BusinessException;
+import br.com.svo.business.exception.NoResultException;
+import br.com.svo.entities.Identity;
 import br.com.svo.entities.dto.EleicaoConsultaDTO;
 import br.com.svo.service.eleicao.EleicaoServiceLocal;
+import br.com.svo.util.Perfis;
+import br.com.svo.util.RedirectUtils;
 import br.com.svo.util.SvoMessages;
 import org.omnifaces.cdi.ViewScoped;
 
@@ -25,6 +29,9 @@ public class BuscaEleicaoWebBean implements Serializable {
     @Inject
     private EleicaoServiceLocal eleicaoService;
 
+    @Inject
+    private Identity identity;
+
     @PostConstruct
     public void init() {
         this.eleicaoConsultaDTO = new EleicaoConsultaDTO();
@@ -34,13 +41,16 @@ public class BuscaEleicaoWebBean implements Serializable {
     public void buscar() {
         try {
             eleicoes = eleicaoService.consultarEleicoes(eleicaoConsultaDTO);
-            if (eleicoes.isEmpty())
-                SvoMessages.addErrorMessage("Nenhuma eleição encontrada!");
-            else
-                SvoMessages.addFoundMessage(eleicoes.size());
+            SvoMessages.addFoundMessage(eleicoes.size());
         } catch (BusinessException e) {
             SvoMessages.addErrorMessage(e);
+        } catch (NoResultException e) {
+            SvoMessages.addErrorMessage("Nenhuma eleição encontrada!");
         }
+    }
+
+    public boolean isRenderizaBotaoNovaEleicao() {
+        return identity.hasPerfil(Perfis.ADMINISTRADOR);
     }
 
 //    GETTERS E SETTERS

@@ -1,6 +1,6 @@
 package br.com.svo.util;
 
-import br.com.svo.business.exception.BusinessException;
+import br.com.svo.business.exception.NoResultException;
 import br.com.svo.util.exception.RestException;
 import com.google.gson.Gson;
 import org.apache.http.HttpResponse;
@@ -48,7 +48,7 @@ public class RestUtil {
         return this;
     }
 
-    public String get() throws RestException, BusinessException {
+    public String get() throws RestException, NoResultException {
         HttpGet httpGet = new HttpGet(createUrl());
         setHeaders(httpGet);
         setBody(httpGet);
@@ -62,7 +62,7 @@ public class RestUtil {
         }
     }
 
-    public String post() throws RestException, BusinessException {
+    public String post() throws RestException, NoResultException {
         HttpPost httpPost = new HttpPost(createUrl());
         try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
             setHeaders(httpPost);
@@ -85,12 +85,12 @@ public class RestUtil {
         }
     }
 
-    private String getResponse(HttpResponse response) throws RestException, IOException, BusinessException {
+    private String getResponse(HttpResponse response) throws RestException, IOException, NoResultException {
         int statusCode = response.getStatusLine().getStatusCode();
         if (statusCode == 200)
             return EntityUtils.toString(response.getEntity());
         if (statusCode == 204)
-            throw new BusinessException("Nenhum registro encontrado");
+            throw new NoResultException("Nenhum registro encontrado");
         throw new RestException(GSON.fromJson(EntityUtils.toString(response.getEntity()), List.class));
     }
 

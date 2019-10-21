@@ -32,15 +32,21 @@
                     </h:panelGroup>
                     <br />
                     <div class="ui-g-12 ui-md-12 ui-lg-12">
-                        <label for="usuario">Usuário</label>
+                        <label for="usuario">Usuário:</label>
                         <p:inputText id="usuario" value="#{votoWebBean.usuario}">
                             <p:ajax update="@this" process="@this" global="false" />
                         </p:inputText>
                     </div>
                     <div class="ui-g-12 ui-md-12 ui-lg-12">
-                        <label for="senha">Senha</label>
+                        <label for="senha">Senha:</label>
                         <p:password id="senha" value="#{votoWebBean.senha}">
-                            <p:ajax update="@this" process="@this" global="false" />
+                            <p:ajax global="false" />
+                        </p:password>
+                    </div>
+                    <div class="ui-g-12 ui-md-12 ui-lg-12">
+                        <label for="pin">Insira o código enviado para o seu e-mail:</label>
+                        <p:password id="pin" value="#{votoWebBean.pin}">
+                            <p:ajax global="false" />
                         </p:password>
                     </div>
                     <div class="ui-g-12 ui-md-12 ui-lg-12">

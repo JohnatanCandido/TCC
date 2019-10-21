@@ -1,8 +1,10 @@
-from svo.entities.models import Candidato, Partido
-from svo.exception.validation_exception import ValidationException
-from svo.util import database_utils as db
-from svo.business import model_factory as mf
+from datetime import datetime
+
 from svo import c
+from svo.business import model_factory as mf
+from svo.entities.models import Candidato, Partido, PinEleitor
+from svo.exception.validation_exception import ValidationException
+from svo.util import database_utils as db, senha_util, email_util
 
 
 def cargos_por_eleicao_e_usuario(id_eleicao, user):
@@ -99,13 +101,14 @@ def monta_candidato(candidato):
 
 
 def votar(user, id_eleicao, votos):
-    valida_credenciais(votos['usuario'], votos['senha'])
+    valida_credenciais(votos['usuario'], votos['senha'], user.eleitor.id_eleitor, votos['pin'])
     id_eleitor = c.enc(user.eleitor.id_eleitor)
     valida_voto(user, id_eleicao)
     id_cidade = user.eleitor.id_cidade
     for voto in votos['votos']:
         voto_enc = mf.cria_voto_encriptado(voto, id_cidade, id_eleitor)
         db.create(voto_enc)
+    criar_hash_voto(user, votos['votos'])
     db.commit()
 
 
@@ -115,8 +118,35 @@ def valida_voto(user, id_eleicao):
     user.eleitor.turnos.append(turno)
 
 
-def valida_credenciais(usuario, senha):
+def valida_credenciais(usuario, senha, id_eleitor, pin):
     login = db.find_login(usuario, senha)
     if login is None:
         msg = 'Credenciais incorretas'
         raise ValidationException(msg, [msg])
+    pin_valido = db.busca_pin_valido_por_id_eleitor(id_eleitor)
+    if pin_valido is None or pin_valido != pin:
+        raise ValidationException('Credenciais incorretas', ['Credenciais incorretas'])
+
+
+def gerar_pin(user):
+    if db.busca_pin_valido_por_id_eleitor(user.eleitor.id_eleitor) is None:
+        pin = PinEleitor()
+        pin.id_eleitor = user.eleitor.id_eleitor
+        user_pin = senha_util.generate_pin()
+        pin.pin = senha_util.encrypt_md5(user_pin)
+        db.create(pin)
+        db.commit()
+
+        msg = f'Seu código para votar é: {user_pin} \nO código é válido por apenas 5 minutos!'
+        email_util.enviar_email(user.email, msg, 'Código para votação')
+
+
+def criar_hash_voto(user, votos):
+    hash_voto = ''
+    for voto in votos:
+        hash_voto += voto['idCandidato']
+    hash_voto = senha_util.encrypt_md5(hash_voto)
+
+    agora = datetime.now().strftime('%H:%M:%S %d/%m/%Y')
+    msg = f'Voto computado com sucesso às {agora}!\nA sua hash é: {hash_voto}'
+    email_util.enviar_email(user.email, msg, 'Confirmação do voto')

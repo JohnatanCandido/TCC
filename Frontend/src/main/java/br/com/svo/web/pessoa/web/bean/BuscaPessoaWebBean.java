@@ -1,14 +1,19 @@
 package br.com.svo.web.pessoa.web.bean;
 
 import br.com.svo.business.exception.BusinessException;
+import br.com.svo.business.exception.NoResultException;
 import br.com.svo.entities.Cidade;
 import br.com.svo.entities.Estado;
+import br.com.svo.entities.Identity;
 import br.com.svo.entities.dto.PessoaConsultaDTO;
 import br.com.svo.service.pessoa.PessoaServiceLocal;
 import br.com.svo.service.regiao.RegiaoServiceLocal;
+import br.com.svo.util.Perfis;
+import br.com.svo.util.RedirectUtils;
 import br.com.svo.util.SvoMessages;
 import org.omnifaces.cdi.ViewScoped;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -27,11 +32,20 @@ public class BuscaPessoaWebBean implements Serializable {
     @Inject
     private RegiaoServiceLocal regiaoService;
 
+    @Inject
+    private Identity identity;
+
     private PessoaConsultaDTO pessoaConsultaDTO = new PessoaConsultaDTO();
     private List<PessoaConsultaDTO> pessoas = new ArrayList<>();
 
     private List<Estado> estados = new ArrayList<>();
     private List<Cidade> cidades = new ArrayList<>();
+
+    @PostConstruct
+    public void verificaPermissaoAcessoBuscaPessoa() {
+        if (!identity.hasPerfil(Perfis.ADMINISTRADOR))
+            RedirectUtils.redirect("index.html");
+    }
 
     public List<Estado> consultaEstados(String filtro) {
         try {
@@ -39,7 +53,7 @@ public class BuscaPessoaWebBean implements Serializable {
         } catch (BusinessException e) {
             estados = new ArrayList<>();
             e.printStackTrace();
-        }
+        } catch (NoResultException ignored) {}
         return estados;
     }
 
@@ -53,7 +67,7 @@ public class BuscaPessoaWebBean implements Serializable {
         } catch (BusinessException e) {
             estados = new ArrayList<>();
             e.printStackTrace();
-        }
+        } catch (NoResultException ignored) {}
         return cidades;
     }
 
@@ -62,6 +76,9 @@ public class BuscaPessoaWebBean implements Serializable {
             pessoas = pessoaService.buscarPessoas(pessoaConsultaDTO);
             SvoMessages.addFoundMessage(pessoas.size());
         } catch (BusinessException e) {
+            pessoas = new ArrayList<>();
+            SvoMessages.addErrorMessage(e);
+        } catch (NoResultException e) {
             pessoas = new ArrayList<>();
             SvoMessages.addErrorMessage(e);
         }

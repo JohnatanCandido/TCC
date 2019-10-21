@@ -1,6 +1,7 @@
 package br.com.svo.util;
 
 import br.com.svo.business.exception.BusinessException;
+import br.com.svo.business.exception.NoResultException;
 import br.com.svo.util.exception.RestException;
 import com.n1analytics.paillier.PaillierPublicKey;
 
@@ -43,7 +44,7 @@ public final class EncryptionUtils {
         String key = null;
         try {
             key = new RestUtil("voto/chave-publica").get();
-        } catch (RestException | BusinessException e) {
+        } catch (RestException | NoResultException e) {
             e.printStackTrace();
         }
         if (key == null)

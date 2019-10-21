@@ -5,7 +5,7 @@
                 template="../../template/template.xhtml">
 
 <ui:define name="content">
-    <h:form id="formEleicao">
+    <h:form id="formEleicao" rendered="#{eleicaoWebBean.eleicao != null}">
         <div class="ui-fluid">
             <div class="card-body">
                 <p:tabView id="tabViewEleicao" styleClass="ui-g-12 ui-md-12 ui-lg-12">

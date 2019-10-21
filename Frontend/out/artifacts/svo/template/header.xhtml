@@ -7,7 +7,11 @@
         <div style="width: 100%; background-color: #5A5; float: right; text-align: right">
             <h:outputText value="#{facesContext.externalContext.sessionMap.get('user').pessoa.nome}" />
             <br />
+            <p:commandLink value="Alterar senha" action="#{alteracaoSenhaWebBean.init()}" update="modalAlteracaoSenha" oncomplete="PF('modalAlteracaoSenha').show();" />
+            <br />
             <p:commandLink value="Sair" action="#{loginWebBean.logout()}" />
         </div>
     </h:form>
+
+    <ui:include src="../pages/pessoa/modal-alterar-senha.xhtml" />
 </ui:composition>

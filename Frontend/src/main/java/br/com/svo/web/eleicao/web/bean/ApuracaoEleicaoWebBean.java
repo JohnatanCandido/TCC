@@ -1,10 +1,12 @@
 package br.com.svo.web.eleicao.web.bean;
 
 import br.com.svo.business.exception.BusinessException;
+import br.com.svo.business.exception.NoResultException;
 import br.com.svo.entities.Candidato;
 import br.com.svo.entities.Eleicao;
 import br.com.svo.entities.TurnoCargo;
 import br.com.svo.entities.TurnoCargoRegiao;
+import br.com.svo.entities.dto.ApuracaoCandidatoDTO;
 import org.omnifaces.cdi.ViewScoped;
 
 import javax.annotation.PostConstruct;
@@ -19,7 +21,7 @@ public class ApuracaoEleicaoWebBean extends FiltroCandidatoWebBean implements Se
 
     public static final long serialVersionUID = 1L;
 
-    private List<Candidato> candidatos = new ArrayList<>();
+    private List<ApuracaoCandidatoDTO> candidatos = new ArrayList<>();
     private Integer turno;
     private List<TurnoCargo> turnoCargosSegundoTurno;
 
@@ -65,7 +67,7 @@ public class ApuracaoEleicaoWebBean extends FiltroCandidatoWebBean implements Se
             if (tcr != null && (turno != null || !tcr.isPossuiSegundoTurno())) {
                 try {
                     candidatos = eleicaoService.buscaCandidatos(tcr.getIdTurnoCargoRegiao());
-                } catch (BusinessException ignored) {}
+                } catch (BusinessException | NoResultException ignored) {}
             }
         }
     }
@@ -86,11 +88,11 @@ public class ApuracaoEleicaoWebBean extends FiltroCandidatoWebBean implements Se
 
 //    GETTERS E SETTERS
 
-    public List<Candidato> getCandidatos() {
+    public List<ApuracaoCandidatoDTO> getCandidatos() {
         return candidatos;
     }
 
-    public void setCandidatos(List<Candidato> candidatos) {
+    public void setCandidatos(List<ApuracaoCandidatoDTO> candidatos) {
         this.candidatos = candidatos;
     }
 

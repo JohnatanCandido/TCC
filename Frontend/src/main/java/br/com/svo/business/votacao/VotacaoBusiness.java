@@ -1,6 +1,7 @@
 package br.com.svo.business.votacao;
 
 import br.com.svo.business.exception.BusinessException;
+import br.com.svo.business.exception.NoResultException;
 import br.com.svo.entities.Identity;
 import br.com.svo.entities.Voto;
 import br.com.svo.entities.dto.CandidatoDTO;
@@ -27,7 +28,7 @@ public class VotacaoBusiness implements Serializable {
 
     private static final Gson GSON = new Gson();
 
-    public List<Voto> getCargosVotar(Long idEleicao) throws BusinessException {
+    public List<Voto> getCargosVotar(Long idEleicao) throws BusinessException, NoResultException {
         try {
             String response = new RestUtil("voto/cargos/eleicao/" + idEleicao).withHeader("Content-Type", "application/json")
                                                                               .withHeader("Authorization", identity.getToken())
@@ -39,7 +40,7 @@ public class VotacaoBusiness implements Serializable {
         }
     }
 
-    public CandidatoDTO consultaCandidato(Long idTurnoCargoRegiao, Integer numero) throws BusinessException {
+    public CandidatoDTO consultaCandidato(Long idTurnoCargoRegiao, Integer numero) throws BusinessException, NoResultException {
         try {
             String url = String.format("voto/turno-cargo-regiao/%s/candidato/%s", idTurnoCargoRegiao, numero);
             String response = new RestUtil(url).withHeader("Content-Type", "application/json")
@@ -52,11 +53,12 @@ public class VotacaoBusiness implements Serializable {
         }
     }
 
-    public void votar(String usuario, String senha, Long idEleicao, List<Voto> votos) throws BusinessException {
+    public void votar(String usuario, String senha, String pin, Long idEleicao, List<Voto> votos) throws BusinessException, NoResultException {
         try {
             usuario = EncryptionUtils.encryptMD5(usuario);
             senha = EncryptionUtils.encryptMD5(senha);
-            VotosDTO votosDTO  = new VotosDTO(usuario, senha, getVotosCriptografados(votos));
+            pin = EncryptionUtils.encryptMD5(pin);
+            VotosDTO votosDTO  = new VotosDTO(usuario, senha, pin, getVotosCriptografados(votos));
             String url = String.format("voto/eleicao/%s/votar", idEleicao);
             new RestUtil(url).withHeader("Content-Type", "application/json")
                              .withHeader("Authorization", identity.getToken())
@@ -85,5 +87,15 @@ public class VotacaoBusiness implements Serializable {
             votosCriptografados.add(votoCriptografado);
         }
         return votosCriptografados;
+    }
+
+    public void gerarPin() {
+        try {
+            new RestUtil("/voto/eleitor/pin").withHeader("Content-Type", "application/json")
+                                              .withHeader("Authorization", identity.getToken())
+                                              .post();
+        } catch (RestException | NoResultException e) {
+            e.printStackTrace();
+        }
     }
 }

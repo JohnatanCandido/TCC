@@ -1,11 +1,8 @@
 package br.com.svo.web.eleicao.web.bean;
 
 import br.com.svo.business.exception.BusinessException;
-import br.com.svo.entities.Cargo;
-import br.com.svo.entities.Eleicao;
-import br.com.svo.entities.Identity;
-import br.com.svo.entities.Turno;
-import br.com.svo.entities.TurnoCargo;
+import br.com.svo.business.exception.NoResultException;
+import br.com.svo.entities.*;
 import br.com.svo.service.eleicao.EleicaoServiceLocal;
 import br.com.svo.util.SvoMessages;
 import br.com.svo.util.Perfis;
@@ -43,6 +40,10 @@ public class EleicaoWebBean implements Serializable {
     public void init() {
         try {
             if (idEleicao == null) {
+                if (!identity.hasPerfil(Perfis.ADMINISTRADOR)) {
+                    RedirectUtils.redirect("eleicao/busca/buscar-eleicao.html");
+                    return;
+                }
                 eleicao = new Eleicao();
             } else {
                 eleicao = eleicaoService.buscaEleicao(idEleicao);
@@ -51,6 +52,9 @@ public class EleicaoWebBean implements Serializable {
             cargosDisponiveis.removeIf(cargo -> eleicao.getTurnos().get(0).contemCargo(cargo));
         } catch (BusinessException e) {
             SvoMessages.addErrorMessage(e);
+        } catch (NoResultException e) {
+            SvoMessages.addFlashGlobalError("Eleição não encontrada");
+            RedirectUtils.redirectToHome();
         }
     }
 
@@ -73,12 +77,15 @@ public class EleicaoWebBean implements Serializable {
         return turnoCargo.getCargo().getNome().equals("Presidente");
     }
 
-    public void salvar() {
+    public void salvar() throws NoResultException {
         try {
             Long idEleicao = eleicaoService.salvar(eleicao);
-            SvoMessages.addMessage("Salvo com sucesso.");
-            if (eleicao.getIdEleicao() == null)
+            if (eleicao.getIdEleicao() == null) {
                 RedirectUtils.redirect("eleicao/eleicao.html?idEleicao=" + idEleicao);
+                SvoMessages.addFlash("Salvo com sucesso.");
+            } else {
+                SvoMessages.addMessage("Salvo com sucesso.");
+            }
         } catch (BusinessException e) {
             SvoMessages.addErrorMessage(e);
         }

@@ -11,6 +11,7 @@ public class Pessoa implements Serializable {
     private Long idPessoa;
     private String nome;
     private String cpf;
+    private String email;
     private Eleitor eleitor;
     private List<Perfil> perfis;
 
@@ -43,6 +44,14 @@ public class Pessoa implements Serializable {
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Eleitor getEleitor() {

@@ -1,9 +1,11 @@
 package br.com.svo.service.pessoa;
 
 import br.com.svo.business.exception.BusinessException;
+import br.com.svo.business.exception.NoResultException;
 import br.com.svo.business.pessoa.PessoaBusiness;
 import br.com.svo.entities.Perfil;
 import br.com.svo.entities.Pessoa;
+import br.com.svo.entities.dto.AlteracaoSenhaDTO;
 import br.com.svo.entities.dto.PessoaConsultaDTO;
 
 import javax.ejb.Stateless;
@@ -19,7 +21,7 @@ public class PessoaService implements PessoaServiceLocal, Serializable {
     @Inject
     private PessoaBusiness pessoaBusiness;
 
-    public Pessoa buscaPessoa(Long idPessoa) throws BusinessException {
+    public Pessoa buscaPessoa(Long idPessoa) throws BusinessException, NoResultException {
         return pessoaBusiness.buscaPessoa(idPessoa);
     }
 
@@ -33,7 +35,12 @@ public class PessoaService implements PessoaServiceLocal, Serializable {
     }
 
     @Override
-    public List<PessoaConsultaDTO> buscarPessoas(PessoaConsultaDTO pessoaConsultaDTO) throws BusinessException {
+    public List<PessoaConsultaDTO> buscarPessoas(PessoaConsultaDTO pessoaConsultaDTO) throws BusinessException, NoResultException {
         return pessoaBusiness.buscarPessoas(pessoaConsultaDTO);
+    }
+
+    @Override
+    public void salvarSenha(AlteracaoSenhaDTO alteracaoSenhaDTO) throws BusinessException {
+        pessoaBusiness.salvarSenha(alteracaoSenhaDTO);
     }
 }

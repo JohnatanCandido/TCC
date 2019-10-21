@@ -83,32 +83,32 @@
                         <p:column headerText="Ação" width="5%">
 
                         </p:column>
-                        <p:column headerText="Número" width="7%">
+                        <p:column headerText="Número" width="9%" sortBy="#{candidato.numero}">
                             <h:outputText value="#{candidato.numero}" />
                         </p:column>
-                        <p:column headerText="Nome">
-                            <h:outputText value="#{candidato.pessoa.nome}" />
-                            <h:panelGroup rendered="#{candidato.viceCandidato != null}">
+                        <p:column headerText="Nome" sortBy="#{candidato.nome}">
+                            <h:outputText value="#{candidato.nome}" />
+                            <h:panelGroup rendered="#{candidato.nomeVice != null}">
                                 <br />
-                                <h:outputText value="Vice: #{candidato.viceCandidato.pessoa.nome}" />
+                                <h:outputText value="Vice: #{candidato.nomeVice}" />
                             </h:panelGroup>
                         </p:column>
-                        <p:column headerText="Partido" width="15%">
-                            <p:tooltip for="partidoPrincipal" value="#{candidato.partido.infoPartido}" position="bottom" />
+                        <p:column headerText="Partido" width="15%" sortBy="#{candidato.partidoFormatado}">
+                            <p:tooltip for="partidoPrincipal" value="#{candidato.toolTipPartido}" position="bottom" />
                             <h:outputText id="partidoPrincipal" value="#{candidato.partidoFormatado}" />
-                            <h:panelGroup rendered="#{candidato.viceCandidato != null}">
+                            <h:panelGroup rendered="#{candidato.nomeVice != null}">
                                 <br />
                                 <p:tooltip for="partidoVice"
-                                           value="#{candidato.viceCandidato.partido.infoPartido}"
+                                           value="#{candidato.toolTipPartidoVice}"
                                            position="bottom" />
                                 <h:outputText id="partidoVice"
-                                              value="Vice: #{candidato.viceCandidato.partidoFormatado}" />
+                                              value="Vice: #{candidato.partidoViceFormatado}" />
                             </h:panelGroup>
                         </p:column>
-                        <p:column headerText="Votos" width="10%">
+                        <p:column headerText="Votos" width="10%" sortBy="#{candidato.votos}">
                             <h:outputText value="#{candidato.votos}" />
                         </p:column>
-                        <p:column headerText="Situação" width="20%">
+                        <p:column headerText="Situação" width="20%" sortBy="#{candidato.situacao}">
                             <h:outputText value="#{candidato.situacao}" />
                         </p:column>
                     </p:dataTable>

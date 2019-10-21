@@ -10,8 +10,16 @@
             </div>
             <h:outputText value="Logado como: #{facesContext.externalContext.sessionMap.get('user').pessoa.nome}" styleClass="font-branca" />
             <br />
+<<<<<<< HEAD
             <p:commandLink value="Sair" action="#{loginWebBean.logout()}" styleClass="font-branca"/>
 
+=======
+            <p:commandLink value="Alterar senha" action="#{alteracaoSenhaWebBean.init()}" update="modalAlteracaoSenha" oncomplete="PF('modalAlteracaoSenha').show();" />
+            <br />
+            <p:commandLink value="Sair" action="#{loginWebBean.logout()}" />
+>>>>>>> 8be58a3d8f2bf347ae18a6ffbde99b4aef800e11
         </div>
     </h:form>
+
+    <ui:include src="../pages/pessoa/modal-alterar-senha.xhtml" />
 </ui:composition>

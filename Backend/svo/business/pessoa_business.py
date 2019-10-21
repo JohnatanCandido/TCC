@@ -1,10 +1,14 @@
 from svo.exception.validation_exception import ValidationException
-from svo.util import database_utils as db
+from svo.util import database_utils as db, email_util
 from svo.business import model_factory as mf
 
 # Usado na consulta de pessoa
 # noinspection PyUnresolvedReferences
 from svo.entities.models import Pessoa, Eleitor, Cidade, Estado
+
+# Usado na consulta de pessoa
+# noinspection PyUnresolvedReferences
+import re
 
 
 def pessoa_by_id(id_pessoa):
@@ -15,11 +19,18 @@ def pessoa_by_id(id_pessoa):
 
 
 def salvar_pessoa(dados):
-    pessoa = mf.cria_pessoa(dados)
+    pessoa, senha = mf.cria_pessoa(dados)
     validar_pessoa(pessoa)
     if pessoa.id_pessoa is None:
         db.create(pessoa)
     db.commit()
+
+    if senha is not None:
+        corpo_email = f'Parabéns! Agora você pode votar pela internet com as credenciais abaixo:.\n'\
+                      f'Usuário: {pessoa.eleitor.numero_inscricao}\n'\
+                      f'Senha: {senha}\n\n' \
+                      f'Sugerimos que você troque a senha ao entrar.'
+        email_util.enviar_email(pessoa.email, corpo_email, 'Cadastro no Sistema de Votação Online')
     return str(pessoa.id_pessoa)
 
 
@@ -64,7 +75,7 @@ def consultar_pessoas(filtro):
     if 'nome' in filtro:
         query += '.filter(Pessoa.nome.ilike(f\'%{filtro["nome"]}%\'))'
     if 'cpf' in filtro:
-        query += '.filter(Pessoa.cpf.ilike(f\'%{filtro["cpf"]}%\'))'
+        query += '.filter(Pessoa.cpf.ilike(f\'%{re.sub("[.-]", "", filtro["cpf"])}%\'))'
     if 'idCidade' in filtro:
         query += '.filter(Cidade.id_cidade == filtro["idCidade"])'
     if 'zonaEleitoral' in filtro:
@@ -100,3 +111,19 @@ def join_cidade(filtro):
     if 'idCidade' in filtro:
         return True
     return False
+
+
+def alterar_senha(user, credenciais):
+    valida_credenciais(user, credenciais)
+    user.login.senha = credenciais['senhaNova']
+    db.commit()
+
+
+def valida_credenciais(user, credenciais):
+    msg = None
+    if credenciais['senhaNova'] != credenciais['confirmacaoSenhaNova']:
+        msg = 'A senha nova e a confirmação da senha nova devem ser iguais'
+    elif user.login.usuario != credenciais['usuario'] or user.login.senha != credenciais['senha']:
+        msg = 'Credenciais incorretas'
+    if msg is not None:
+        raise ValidationException(msg, [msg])

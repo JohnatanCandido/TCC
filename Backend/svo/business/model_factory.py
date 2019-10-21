@@ -104,6 +104,7 @@ def cria_turno_cargo_regiao(dados, turno_cargo, turno_cargo_regiao):
 # Pessoa ===============================================================================================================
 
 def cria_pessoa(dados):
+    senha = None
     if 'idPessoa' in dados:
         pessoa = db.find_pessoa(int(dados['idPessoa']))
     else:
@@ -112,6 +113,8 @@ def cria_pessoa(dados):
         pessoa.nome = dados['nome']
     if 'cpf' in dados:
         pessoa.cpf = re.sub('[.-]', '', dados['cpf'])
+    if 'email' in dados:
+        pessoa.email = dados['email']
     if 'eleitor' in dados:
         if pessoa.eleitor is not None:
             cria_eleitor(dados['eleitor'], pessoa.eleitor)
@@ -120,13 +123,14 @@ def cria_pessoa(dados):
     if pessoa.login is None:
         pessoa.login = Login()
         pessoa.login.usuario = senha_util.encrypt_md5(pessoa.eleitor.numero_inscricao)
-        pessoa.login.senha = senha_util.generate_password()
+        senha = senha_util.generate_password()
+        pessoa.login.senha = senha_util.encrypt_md5(senha)
     if 'perfis' in dados:
         pessoa.login.perfis.clear()
         for p in dados['perfis']:
             perfil = db.find_perfil(p['idPerfil'])
             pessoa.login.perfis.append(perfil)
-    return pessoa
+    return pessoa, senha
 
 
 def cria_eleitor(dados, eleitor):

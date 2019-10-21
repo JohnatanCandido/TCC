@@ -1,6 +1,7 @@
 package br.com.svo.web.eleicao.web.bean;
 
 import br.com.svo.business.exception.BusinessException;
+import br.com.svo.business.exception.NoResultException;
 import br.com.svo.entities.Coligacao;
 import br.com.svo.entities.Partido;
 import br.com.svo.service.eleicao.EleicaoServiceLocal;
@@ -37,7 +38,7 @@ public class CadastroColigacaoWebBean implements Serializable {
         coligacoes = null;
     }
 
-    public void salvar() {
+    public void salvar() throws NoResultException {
         try {
             coligacao.setIdColigacao(eleicaoService.salvarColigacao(coligacao));
             if (coligacoes != null)
@@ -49,7 +50,7 @@ public class CadastroColigacaoWebBean implements Serializable {
         }
     }
 
-    public List<Partido> consultaPartidos(String filtro) {
+    public List<Partido> consultaPartidos(String filtro) throws NoResultException {
         try {
             partidos = eleicaoService.consultaPartidos(filtro);
         } catch (BusinessException e) {

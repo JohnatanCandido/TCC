@@ -7,7 +7,8 @@ from jwt import ExpiredSignatureError
 from svo.util import database_utils
 from svo import c
 
-secret = 'CRIAR UM SECRET'  # TODO Colocar em um lugar seguro
+# TODO Colocar em variável de ambiente
+secret = 'CRIAR UM SECRET'
 
 
 def generate_adm_token(id_pessoa):

@@ -34,3 +34,14 @@ def consultar_pessoas():
     if not pessoas:
         return 'Nenhuma pessoa encontrada.', 204
     return jsonify(pessoas)
+
+
+@pessoas.route('alterar-senha', methods=['POST'])
+@protected
+def alterar_senha(user):
+    try:
+        credenciais = request.json
+        pessoa_business.alterar_senha(user, credenciais)
+        return 'Senha alterada com sucesso!', 200
+    except ValidationException as e:
+        return jsonify(e.errors), 400
