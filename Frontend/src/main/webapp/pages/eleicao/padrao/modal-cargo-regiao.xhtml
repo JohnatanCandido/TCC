@@ -75,7 +75,7 @@
                                  value="#{eleicaoModalCargoWebBean.turnoCargo.turnoCargoRegioes}"
                                  var="regiao"
                                  emptyMessage="Nenhuma região cadastrada">
-                        <p:column headerText="Ação" width="50">
+                        <p:column headerText="Ação" width="50" styleClass="font-titulo tabela">
                             <p:commandLink id="removerRegiao"
                                            action="#{eleicaoModalCargoWebBean.removerRegiao(regiao)}"
                                            process="@this"
@@ -83,13 +83,13 @@
                                 <i class="fa fa-remove" />
                             </p:commandLink>
                         </p:column>
-                        <p:column headerText="Estado">
+                        <p:column headerText="Estado" styleClass="font-titulo tabela">
                             <h:outputText value="#{regiao.estado.nome}" />
                         </p:column>
-                        <p:column headerText="Cidade">
+                        <p:column headerText="Cidade" styleClass="font-titulo tabela">
                             <h:outputText value="#{regiao.cidade.nome}" />
                         </p:column>
-                        <p:column headerText="Cadeiras" width="75">
+                        <p:column headerText="Cadeiras" width="75" styleClass="font-titulo tabela">
                             <p:inputNumber value="#{regiao.qtdCadeiras}"
                                            size="3"
                                            disabled="#{eleicaoModalCargoWebBean.desabilitaQtdCadeiras}"
@@ -99,7 +99,7 @@
                                 <p:ajax process="@this" update="@this" global="false" />
                             </p:inputNumber>
                         </p:column>
-                        <p:column headerText="Possui Segundo turno">
+                        <p:column headerText="Possui Segundo turno" styleClass="font-titulo tabela">
                             <p:selectBooleanCheckbox id="regiaoSegundoTurno"
                                                      value="#{regiao.possuiSegundoTurno}"
                                                      disabled="#{!eleicaoModalCargoWebBean.turnoCargo.cargo.permiteSegundoTurno}">

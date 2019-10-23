@@ -48,7 +48,8 @@
                                      value="Adicionar"
                                      action="#{cadastroColigacaoWebBean.adicionarPartido()}"
                                      process="@this"
-                                     update="panelCadastroColigacao" />
+                                     update="panelCadastroColigacao"
+                                     styleClass="font-titulo botao"/>
                 </div>
                 <div class="ui-g-12 ui-md-12 ui-lg-12">
                     <p:dataTable id="tabelaPartidos"
@@ -60,16 +61,16 @@
                                  value="#{cadastroColigacaoWebBean.coligacao.partidos}"
                                  var="partido"
                                  emptyMessage="Nenhum partido vinculado">
-                        <p:column headerText="Ação">
+                        <p:column headerText="Ação" styleClass="font-titulo tabela">
 
                         </p:column>
-                        <p:column headerText="Nome">
+                        <p:column headerText="Nome" styleClass="font-titulo tabela">
                             <h:outputText value="#{partido.nome}" />
                         </p:column>
-                        <p:column headerText="Sigla">
+                        <p:column headerText="Sigla" styleClass="font-titulo tabela">
                             <h:outputText value="#{partido.sigla}" />
                         </p:column>
-                        <p:column headerText="Número">
+                        <p:column headerText="Número" styleClass="font-titulo tabela">
                             <h:outputText value="#{partido.numeroPartido}" />
                         </p:column>
                     </p:dataTable>
@@ -81,7 +82,8 @@
                                          icon="fa fa-save"
                                          action="#{cadastroColigacaoWebBean.salvar()}"
                                          process="@this"
-                                         update="@this, tabelaColigacoes" />
+                                         update="@this, tabelaColigacoes"
+                                         styleClass="botao font-titulo"/>
                     </div>
                 </div>
             </div>

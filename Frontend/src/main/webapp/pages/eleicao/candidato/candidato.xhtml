@@ -6,6 +6,12 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets">
 
     <div class="ui-g-12">
+        <div class="cabecalho">
+            <p:graphicImage url="/resources/img/logo.png" width="116" height="125"/>
+        </div>
+        <div class="paragrafo">
+            <h:outputText value="Cadidatos" styleClass="font-titulo-grande" />
+        </div>
         <h:panelGroup id="panelCadastroCandidato">
             <p:fieldset legend="Cargo">
                 <div class="ui-g-12 ui-md-12 ui-lg-12">
@@ -162,7 +168,8 @@
                                      icon="fa fa-save"
                                      process="@this"
                                      update="panelCadastroCandidato"
-                                     action="#{candidatoCadastroWebBean.salvar()}" />
+                                     action="#{candidatoCadastroWebBean.salvar()}"
+                                     styleClass="botao font-titulo"/>
                 </div>
                 <div class="ui-g-12 ui-md-12 ui-lg-2">
                     <p:commandButton id="novoCandidato"
@@ -170,7 +177,8 @@
                                      icon="fa fa-plus"
                                      process="@this"
                                      update="panelCadastroCandidato"
-                                     action="#{candidatoCadastroWebBean.novoCandidato()}" />
+                                     action="#{candidatoCadastroWebBean.novoCandidato()}"
+                                     styleClass="botao font-titulo"/>
                 </div>
             </div>
         </h:panelGroup>

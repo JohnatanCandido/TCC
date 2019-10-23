@@ -59,7 +59,8 @@
                                                  process="@this"
                                                  update="panelGroupCargos"
                                                  icon="fa fa-plus"
-                                                 action="#{eleicaoWebBean.adicionarCargo(turno)}" />
+                                                 action="#{eleicaoWebBean.adicionarCargo(turno)}"
+                                                 styleClass="botao font-titulo"/>
                             </div>
                         </div>
                         <div class="ui-g-12 ui-md-12 ui-lg-12">
@@ -72,7 +73,7 @@
                                          value="#{turno.turnoCargos}"
                                          var="turnoCargo"
                                          emptyMessage="Nenhum cargo cadastrado">
-                                <p:column headerText="Ação" width="50">
+                                <p:column headerText="Ação" width="50" styleClass="font-titulo tabela">
                                     <p:commandLink id="abiriModalRegiao"
                                                    action="#{eleicaoModalCargoWebBean.setTurnoCargo(turnoCargo)}"
                                                    disabled="#{eleicaoWebBean.desabilitaModalCargoRegiao(turnoCargo)}"
@@ -88,13 +89,13 @@
                                         <i class="fa fa-remove" />
                                     </p:commandLink>
                                 </p:column>
-                                <p:column headerText="Cargo">
+                                <p:column headerText="Cargo" styleClass="font-titulo tabela">
                                     <h:outputText value="#{turnoCargo.cargo.nome}" />
                                 </p:column>
-                                <p:column headerText="Sistema de eleição">
+                                <p:column headerText="Sistema de eleição" styleClass="font-titulo tabela">
                                     <h:outputText value="#{turnoCargo.cargo.sistemaEleicao}" />
                                 </p:column>
-                                <p:column headerText="Permite Segundo turno">
+                                <p:column headerText="Permite Segundo turno" styleClass="font-titulo tabela">
                                     <p:selectBooleanCheckbox disabled="true" value="#{turnoCargo.cargo.permiteSegundoTurno}" />
                                 </p:column>
                             </p:dataTable>
@@ -110,7 +111,8 @@
                                  action="#{eleicaoWebBean.salvar()}"
                                  icon="fa fa-save"
                                  process="@form"
-                                 update="@form" />
+                                 update="@form"
+                                 styleClass="botao font-titulo"/>
             </div>
         </div>
     </div>
