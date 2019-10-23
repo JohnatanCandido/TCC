@@ -101,7 +101,7 @@
 
 }
 
-.tabela{
+.tabela .ui-state-default {
     background-color: #144913;
     color: white;
 }

@@ -60,7 +60,7 @@
                                                  update="panelGroupCargos"
                                                  icon="fa fa-plus"
                                                  action="#{eleicaoWebBean.adicionarCargo(turno)}"
-                                                 styleClass="botao font-titulo"/>
+                                                 styleClass="botao"/>
                             </div>
                         </div>
                         <div class="ui-g-12 ui-md-12 ui-lg-12">
@@ -72,8 +72,9 @@
                                          paginatorAlwaysVisible="false"
                                          value="#{turno.turnoCargos}"
                                          var="turnoCargo"
+                                         styleClass="tabela"
                                          emptyMessage="Nenhum cargo cadastrado">
-                                <p:column headerText="Ação" width="50" styleClass="font-titulo tabela">
+                                <p:column headerText="Ação" width="50" styleClass="font-titulo">
                                     <p:commandLink id="abiriModalRegiao"
                                                    action="#{eleicaoModalCargoWebBean.setTurnoCargo(turnoCargo)}"
                                                    disabled="#{eleicaoWebBean.desabilitaModalCargoRegiao(turnoCargo)}"
@@ -108,11 +109,11 @@
             <div class="ui-g-12 ui-md-12 ui-lg-2">
                 <p:commandButton id="salvarEleicao"
                                  value="Salvar"
-                                 action="#{eleicaoWebBean.salvar()}"
                                  icon="fa fa-save"
                                  process="@form"
                                  update="@form"
-                                 styleClass="botao font-titulo"/>
+                                 action="#{eleicaoWebBean.salvar()}"
+                                 style="background-color: #144913; color: white;" />
             </div>
         </div>
     </div>

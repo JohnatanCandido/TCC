@@ -11,9 +11,11 @@
             <div class="menu">
                 <p:link value="Eleição" outcome="/pages/eleicao/busca/buscar-eleicao.xhtml" styleClass="font-preta"/>
             </div>
-            <div class="menu">
-                <p:link value="Eleitor" outcome="/pages/pessoa/busca-pessoa.xhtml" rendered="#{loginWebBean.renderizaMenuPessoa}" styleClass="font-preta" />
-   l         </div>
+            <h:panelGroup rendered="#{loginWebBean.renderizaMenuPessoa}">
+                <div class="menu">
+                    <p:link value="Eleitor" outcome="/pages/pessoa/busca-pessoa.xhtml" styleClass="font-preta" />
+                </div>
+            </h:panelGroup>
         </div>
     </h:form>
 </ui:composition>

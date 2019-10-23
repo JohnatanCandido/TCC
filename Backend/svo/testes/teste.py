@@ -12,7 +12,7 @@ qt_votos = [0, 0]
 
 
 def cria_pessoas():
-    for i in range(20000):
+    for i in range(5000):
         cria_pessoa(i)
         if i % 5000 == 0:
             db.commit()
@@ -87,7 +87,7 @@ def cria_candidatos(id_tcr, qt):
     for i in range(qt):
         print(f'Criando candidato {i}')
         candidato = Candidato()
-        candidato.id_pessoa = randint(20045, 40044)
+        candidato.id_pessoa = randint(3, 5002)
         partido = db.find_partido(randint(1, 18))
         candidato.numero = int(str(partido.numero_partido) + numero_aleatorio(2))
         candidato.id_partido = partido.id_partido

@@ -15,7 +15,7 @@ server.login(ENDERECO_EMAIL, SENHA)
 def enviar_email(email, mensagem, assunto):
     msg = MIMEMultipart()
 
-    msg['From'] = f'Sistema Eleitoral Online <{ENDERECO_EMAIL}>'
+    msg['From'] = f'Vote Safe <{ENDERECO_EMAIL}>'
     msg['To'] = email
     msg['Subject'] = assunto
 

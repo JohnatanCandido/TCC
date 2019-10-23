@@ -48,7 +48,7 @@
                                              action="#{buscaEleicaoWebBean.buscar()}"
                                              process="@this"
                                              update="eleicoes"
-                                             styleClass="botao font-titulo"/>
+                                             styleClass="botao"/>
                         </div>
                         <div class="ui-g-12 ui-md-12 ui-lg-3">
                             <p:button id="novaEleicao"
@@ -57,7 +57,7 @@
                                       icon="fa fa-plus"
                                       rendered="#{buscaEleicaoWebBean.renderizaBotaoNovaEleicao}"
                                       outcome="/pages/eleicao/eleicao.xhtml"
-                                      styleClass="botao font-titulo"/>
+                                      styleClass="botao"/>
                         </div>
                     </div>
                     <div class="ui-g-12 ui-md-12 ui-lg-12" style="margin-left: 10px;">
@@ -68,20 +68,22 @@
                                      paginatorAlwaysVisible="false"
                                      reflow="true"
                                      value="#{buscaEleicaoWebBean.eleicoes}"
+                                     styleClass="tabela"
+                                     emptyMessage="Nenhuma eleição encontrada..."
                                      var="eleicao">
-                            <p:column headerText="Ação" width="50" styleClass="tabela font-titulo">
+                            <p:column headerText="Ação" width="50" styleClass="font-titulo">
                                 <p:link outcome="/pages/eleicao/eleicao.xhtml">
                                     <i class="fa fa-pencil" />
                                     <f:param name="idEleicao" value="#{eleicao.idEleicao}" />
                                 </p:link>
                             </p:column>
-                            <p:column headerText="Código" styleClass="tabela font-titulo">
+                            <p:column headerText="Código" styleClass="font-titulo">
                                 <h:outputText value="#{eleicao.idEleicao}" />
                             </p:column>
-                            <p:column headerText="Título" styleClass="tabela font-titulo">
+                            <p:column headerText="Título" styleClass="font-titulo">
                                 <h:outputText value="#{eleicao.titulo}" />
                             </p:column>
-                            <p:column headerText="Data" styleClass="tabela font-titulo">
+                            <p:column headerText="Data" styleClass="font-titulo">
                                 <h:outputText value="#{eleicao.data}">
                                     <f:convertDateTime pattern="dd/MM/yyyy" />
                                 </h:outputText>

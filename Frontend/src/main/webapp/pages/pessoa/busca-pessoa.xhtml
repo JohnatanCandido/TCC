@@ -101,7 +101,7 @@
                                              action="#{buscaPessoaWebBean.buscar()}"
                                              process="@this"
                                              update="@this, panelListaPessoas"
-                                             styleClass="font-titulo botao"/>
+                                             styleClass="botao"/>
                         </div>
                         <div class="ui-g-12 ui-md-12 ui-lg-2">
                             <p:button id="novaPessoa"
@@ -109,7 +109,7 @@
                                       target="_blank"
                                       icon="fa fa-plus"
                                       outcome="/pages/pessoa/cadastro-pessoa.xhtml"
-                                      styleClass="font-titulo botao"/>
+                                      styleClass="botao"/>
                         </div>
                     </div>
                     <div class="ui-g-12 ui-md-12 ui-lg-12">
@@ -122,23 +122,24 @@
                                          paginator="true"
                                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
                                          paginatorAlwaysVisible="false"
+                                         styleClass="tabela"
                                          reflow="true">
-                                <p:column headerText="Ação" styleClass="tabela font-titulo">
+                                <p:column headerText="Ação" styleClass="font-titulo">
                                     <p:link outcome="cadastro-pessoa.xhtml">
                                         <i class="fa fa-pencil" />
                                         <f:param name="idPessoa" value="#{pessoa.idPessoa}" />
                                     </p:link>
                                 </p:column>
-                                <p:column headerText="Nome" styleClass="tabela font-titulo">
+                                <p:column headerText="Nome" styleClass="font-titulo">
                                     <h:outputText value="#{pessoa.nome}" />
                                 </p:column>
-                                <p:column headerText="CPF" styleClass="tabela font-titulo">
+                                <p:column headerText="CPF" styleClass="font-titulo">
                                     <h:outputText value="#{pessoa.cpf}" />
                                 </p:column>
-                                <p:column headerText="Título de eleitor" styleClass="tabela font-titulo">
+                                <p:column headerText="Título de eleitor" styleClass="font-titulo">
                                     <h:outputText value="#{pessoa.numeroInscricao}" />
                                 </p:column>
-                                <p:column headerText="Cidade" styleClass="tabela font-titulo">
+                                <p:column headerText="Cidade" styleClass="font-titulo">
                                     <h:outputText value="#{pessoa.cidade.nome}" />
                                 </p:column>
                             </p:dataTable>
