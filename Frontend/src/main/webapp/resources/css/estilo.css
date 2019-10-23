@@ -54,6 +54,10 @@
     font-family: "Comic Sans MS";
 }
 
+.font-titulo-grande{
+    font-family: "Comic Sans MS";
+    font-size: 24px;
+}
 .centraliza-texto{
    text-align: center;
 }
@@ -84,9 +88,9 @@
 }
 
 .cabecalho{
-    width: 99%;
+    width: 59%;
     float: right;
-    margin-top: -110px;
+    margin-top: -130px;
     font-size: 26px;
 }
 
@@ -94,9 +98,19 @@
     width: 15%;
     background-color: #144913;
     padding-top: 20px;
+
 }
 
 .tabela{
+    background-color: #144913;
+    color: white;
+}
+
+.paragrafo{
+    margin-left: 15px;
+}
+
+.botao{
     background-color: #144913;
     color: white;
 }

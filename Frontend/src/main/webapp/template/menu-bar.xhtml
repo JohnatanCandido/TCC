@@ -4,7 +4,6 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:form>
-<<<<<<< HEAD
         <div style="width: 15%; height: 100%;" class="vertical fundo">
             <div class="menu">
                 <p:link value="Início" outcome="/pages/index.xhtml" styleClass="font-preta"/>
@@ -13,14 +12,8 @@
                 <p:link value="Eleição" outcome="/pages/eleicao/busca/buscar-eleicao.xhtml" styleClass="font-preta"/>
             </div>
             <div class="menu">
-                <p:link value="Eleitor" outcome="/pages/pessoa/busca-pessoa.xhtml" styleClass="font-preta" />
-            </div>
-=======
-        <div style="width: 20%; height: 100%; background-color: red; margin: 0;">
-            <p:link value="Início" outcome="/pages/index.xhtml" />
-            <p:link value="Eleição" outcome="/pages/eleicao/busca/buscar-eleicao.xhtml" />
-            <p:link value="Pessoa" outcome="/pages/pessoa/busca-pessoa.xhtml" rendered="#{loginWebBean.renderizaMenuPessoa}" />
->>>>>>> 8be58a3d8f2bf347ae18a6ffbde99b4aef800e11
+                <p:link value="Eleitor" outcome="/pages/pessoa/busca-pessoa.xhtml" rendered="#{loginWebBean.renderizaMenuPessoa}" styleClass="font-preta" />
+   l         </div>
         </div>
     </h:form>
 </ui:composition>

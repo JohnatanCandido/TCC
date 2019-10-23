@@ -8,7 +8,13 @@
 
     <ui:define name="content">
         <h:form id="formBuscaPessoa">
+            <div class="cabecalho">
+                <p:graphicImage url="/resources/img/logo.png" width="116" height="125"/>
+            </div>
             <div class="ui-fluid">
+                <div class="paragrafo">
+                    <h:outputText value="Eleitores" styleClass="font-titulo-grande" />
+                </div>
                 <div class="card-body">
                     <div class="ui-g-12 ui-md-12 ui-lg-12">
                         <div class="ui-g-12 ui-md-12 ui-lg-4">
@@ -94,14 +100,16 @@
                                              icon="fa fa-search"
                                              action="#{buscaPessoaWebBean.buscar()}"
                                              process="@this"
-                                             update="@this, panelListaPessoas" />
+                                             update="@this, panelListaPessoas"
+                                             styleClass="font-titulo botao"/>
                         </div>
                         <div class="ui-g-12 ui-md-12 ui-lg-2">
                             <p:button id="novaPessoa"
                                       value="Cadastrar"
                                       target="_blank"
                                       icon="fa fa-plus"
-                                      outcome="/pages/pessoa/cadastro-pessoa.xhtml" />
+                                      outcome="/pages/pessoa/cadastro-pessoa.xhtml"
+                                      styleClass="font-titulo botao"/>
                         </div>
                     </div>
                     <div class="ui-g-12 ui-md-12 ui-lg-12">
@@ -115,22 +123,22 @@
                                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
                                          paginatorAlwaysVisible="false"
                                          reflow="true">
-                                <p:column headerText="Ação">
+                                <p:column headerText="Ação" styleClass="tabela font-titulo">
                                     <p:link outcome="cadastro-pessoa.xhtml">
                                         <i class="fa fa-pencil" />
                                         <f:param name="idPessoa" value="#{pessoa.idPessoa}" />
                                     </p:link>
                                 </p:column>
-                                <p:column headerText="Nome">
+                                <p:column headerText="Nome" styleClass="tabela font-titulo">
                                     <h:outputText value="#{pessoa.nome}" />
                                 </p:column>
-                                <p:column headerText="CPF">
+                                <p:column headerText="CPF" styleClass="tabela font-titulo">
                                     <h:outputText value="#{pessoa.cpf}" />
                                 </p:column>
-                                <p:column headerText="Título de eleitor">
+                                <p:column headerText="Título de eleitor" styleClass="tabela font-titulo">
                                     <h:outputText value="#{pessoa.numeroInscricao}" />
                                 </p:column>
-                                <p:column headerText="Cidade">
+                                <p:column headerText="Cidade" styleClass="tabela font-titulo">
                                     <h:outputText value="#{pessoa.cidade.nome}" />
                                 </p:column>
                             </p:dataTable>
