@@ -35,15 +35,18 @@
         </p:dialog>
 
     </h:form>
-
-    <div id="header">
-        <ui:include src="header.xhtml" />
-    </div>
-    <div id="menubar">
-       <ui:include src="menu-bar.xhtml" />
-    </div>
-    <div id="content" class="horizontal">
-       <ui:insert name="content" />
+    <div class="template">
+        <div style="width: 35%;">
+            <div id="header">
+                <ui:include src="header.xhtml" />
+            </div>
+            <div id="menubar">
+               <ui:include src="menu-bar.xhtml" />
+            </div>
+        </div>
+        <div id="content" class="horizontal">
+           <ui:insert name="content" />
+        </div>
     </div>
 
 <!--    <div id="footer">-->

@@ -2,27 +2,36 @@
     background-color: #EFEDED;
 }
 
-
-
 .fundologin{
     background-color: #144913;
 }
 
 .vertical {
-    display: flex;
-    flex-direction: column;
     padding-top: 20px;
     background-color: #144913;
-    padding-bottom: 35%;
+    padding-bottom: 800%;
 }
 
 .horizontal {
     display: flex;
-    flex-direction: row;
-    margin-left: 22%;
+    flex-direction: column;
     width: 70%;
-    margin-top: -600px;
     float: left;
+}
+
+@media screen and (min-width: 480px) {
+    .horizontal {
+        display: flex;
+        flex-direction: column;
+        width: 70%;
+        float: left;
+        margin-left: -160px;
+    }
+}
+
+.template{
+    display: flex;
+    flex-direction: row;
 }
 
 .menu{
@@ -88,14 +97,14 @@
 }
 
 .cabecalho{
-    width: 59%;
-    float: right;
-    margin-top: -130px;
+
+    display: flex;
+    justify-content: center;
     font-size: 26px;
 }
 
 .cabecalho-usuario{
-    width: 15%;
+    width: 45%;
     background-color: #144913;
     padding-top: 20px;
 
