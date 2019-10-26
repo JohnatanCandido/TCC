@@ -17,25 +17,25 @@
                 </div>
                 <div class="card-body">
                     <div class="ui-g-12 ui-md-12 ui-lg-12">
-                        <div class="ui-g-12 ui-md-12 ui-lg-4">
+                        <div class="ui-g-12 ui-md-3 ui-lg-4">
                             <label for="idPessoa">Código</label>
                             <p:inputNumber id="idPessoa" value="#{buscaPessoaWebBean.pessoaConsultaDTO.idPessoa}" decimalPlaces="0">
                                 <p:ajax update="@this" process="@this" global="false" />
                             </p:inputNumber>
                         </div>
-                        <div class="ui-g-12 ui-md-12 ui-lg-4">
+                        <div class="ui-g-12 ui-md-6 ui-lg-4">
                             <label for="nome">Nome</label>
                             <p:inputText id="nome" value="#{buscaPessoaWebBean.pessoaConsultaDTO.nome}">
                                 <p:ajax update="@this" process="@this" global="false" />
                             </p:inputText>
                         </div>
-                        <div class="ui-g-12 ui-md-12 ui-lg-4">
+                        <div class="ui-g-12 ui-md-3 ui-lg-4">
                             <label for="cpf">CPF</label>
                             <p:inputMask id="cpf" mask="999.999.999-99" value="#{buscaPessoaWebBean.pessoaConsultaDTO.cpf}">
                                 <p:ajax update="@this" process="@this" global="false" />
                             </p:inputMask>
                         </div>
-                        <div class="ui-g-12 ui-md-12 ui-lg-4">
+                        <div class="ui-g-12 ui-md-6 ui-lg-4">
                             <label for="estadoSuggestion">Estado</label>
                             <p:autoComplete id="estadoSuggestion"
                                             value="#{buscaPessoaWebBean.pessoaConsultaDTO.estado}"
@@ -54,7 +54,7 @@
                                 <o:converter converterId="omnifaces.ListConverter" list="#{buscaPessoaWebBean.estados}" />
                             </p:autoComplete>
                         </div>
-                        <div class="ui-g-12 ui-md-12 ui-lg-4">
+                        <div class="ui-g-12 ui-md-6 ui-lg-4">
                             <label for="cidadeSuggestion">Cidade</label>
                             <p:autoComplete id="cidadeSuggestion"
                                             value="#{buscaPessoaWebBean.pessoaConsultaDTO.cidade}"
@@ -74,19 +74,19 @@
                                 <o:converter converterId="omnifaces.ListConverter" list="#{buscaPessoaWebBean.cidades}" />
                             </p:autoComplete>
                         </div>
-                        <div class="ui-g-12 ui-md-12 ui-lg-4">
+                        <div class="ui-g-12 ui-md-4 ui-lg-4">
                             <label for="zonaEleitoral">Zona Eleitoral</label>
                             <p:inputText id="zonaEleitoral" value="#{buscaPessoaWebBean.pessoaConsultaDTO.zonaEleitoral}" maxlength="4">
                                 <p:ajax update="@this" process="@this" global="false" />
                             </p:inputText>
                         </div>
-                        <div class="ui-g-12 ui-md-12 ui-lg-4">
+                        <div class="ui-g-12 ui-md-4 ui-lg-4">
                             <label for="secao">Seção</label>
                             <p:inputText id="secao" value="#{buscaPessoaWebBean.pessoaConsultaDTO.secao}" maxlength="3">
                                 <p:ajax update="@this" process="@this" global="false" />
                             </p:inputText>
                         </div>
-                        <div class="ui-g-12 ui-md-12 ui-lg-4">
+                        <div class="ui-g-12 ui-md-4 ui-lg-4">
                             <label for="numeroInscricao">Número Inscrição</label>
                             <p:inputText id="numeroInscricao" value="#{buscaPessoaWebBean.pessoaConsultaDTO.numeroInscricao}" maxlength="12">
                                 <p:ajax update="@this" process="@this" global="false" />
@@ -94,7 +94,7 @@
                         </div>
                     </div>
                     <div class="ui-g-12 ui-md-12 ui-lg-12">
-                        <div class="ui-g-12 ui-md-12 ui-lg-2">
+                        <div class="ui-g-6 ui-md-3 ui-lg-2">
                             <p:commandButton id="buscarPessoas"
                                              value="Buscar"
                                              icon="fa fa-search"
@@ -103,7 +103,7 @@
                                              update="@this, panelListaPessoas"
                                              styleClass="botao"/>
                         </div>
-                        <div class="ui-g-12 ui-md-12 ui-lg-2">
+                        <div class="ui-g-6 ui-md-3 ui-lg-2">
                             <p:button id="novaPessoa"
                                       value="Cadastrar"
                                       target="_blank"
@@ -122,6 +122,7 @@
                                          paginator="true"
                                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
                                          paginatorAlwaysVisible="false"
+                                         paginatorPosition="bottom"
                                          styleClass="tabela"
                                          reflow="true">
                                 <p:column headerText="Ação" styleClass="font-titulo">
