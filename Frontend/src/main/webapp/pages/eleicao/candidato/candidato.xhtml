@@ -174,7 +174,17 @@
                                      action="#{candidatoCadastroWebBean.novoCandidato()}"
                                      style="background-color: #144913; color: white;" />
                 </div>
+                <div class="ui-g-12 ui-md-12 ui-lg-2">
+                    <p:commandLink id="novoPartido"
+                                   value="Cadastrar partido"
+                                   process="@this"
+                                   update="@this, panelCadastroPartido"
+                                   oncomplete="PF('modalNovoPartido').show();"
+                                   action="#{cadastroPartidoWebBean.novoPartido()}" />
+                </div>
             </div>
         </h:panelGroup>
     </div>
+
+    <ui:include src="modal-novo-partido.xhtml" />
 </ui:composition>

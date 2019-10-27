@@ -41,15 +41,11 @@ class Cidade(db.Model):
         }
 
 
-eleitor_turno = db.Table('eleitor_turno', db.Model.metadata,
-                         db.Column('id_eleitor', db.Integer, db.ForeignKey('eleitor.id_eleitor')),
-                         db.Column('id_turno', db.Integer, db.ForeignKey('turno.id_turno')))
-
-
 class Eleicao(db.Model):
     id_eleicao = db.Column(db.Integer, primary_key=True)
     titulo = db.Column(db.String(50), nullable=False, unique=True)
     observacao = db.Column(db.Text)
+    confirmada = db.Column(db.Boolean, default=False)
     turnos = db.relationship('Turno', backref='eleicao', lazy=True)
     coligacoes = db.relationship('Coligacao', backref='eleicao', lazy=True)
 
@@ -61,6 +57,7 @@ class Eleicao(db.Model):
             'idEleicao': self.id_eleicao,
             'titulo': self.titulo,
             'observacao': self.observacao,
+            'confirmada': self.confirmada,
             'turnos': [t.to_json() for t in self.turnos]
         }
 
@@ -315,6 +312,18 @@ class Candidato(db.Model):
         }
 
 
+class EleitorTurno(db.Model):
+    id_eleitor_turno = db.Column(db.Integer, primary_key=True)
+    id_eleitor = db.Column(db.Integer, db.ForeignKey('eleitor.id_eleitor'), nullable=False)
+    id_turno = db.Column(db.Integer, db.ForeignKey('turno.id_turno'), nullable=False)
+    hash = db.Column(db.String, nullable=False)
+    hora_voto = db.Column(db.DateTime, nullable=False)
+
+    __table_args__ = (
+        db.UniqueConstraint('id_eleitor', 'id_turno', name='unique_eleitor_turno'),
+    )
+
+
 class Eleitor(db.Model):
     id_eleitor = db.Column(db.Integer, primary_key=True)
     id_pessoa = db.Column(db.Integer, db.ForeignKey('pessoa.id_pessoa'), nullable=False)
@@ -322,7 +331,7 @@ class Eleitor(db.Model):
     secao = db.Column(db.String(4), nullable=False)
     numero_inscricao = db.Column(db.String(12), nullable=False, unique=True)
     id_cidade = db.Column(db.Integer, db.ForeignKey('cidade.id_cidade'), nullable=False)
-    turnos = db.relationship('Turno', secondary=eleitor_turno)
+    eleitor_turnos = db.relationship('EleitorTurno', backref='eleitor')
 
     def __repr__(self):
         return f'idEleitor: {self.id_eleitor}, número inscrição: {self.numero_inscricao}'
@@ -400,8 +409,6 @@ class VotoEncriptado(db.Model):
     id_partido = db.Column(db.Text)
     id_eleitor = db.Column(db.Text, nullable=False)
 
-    voto_apurado = db.relationship('VotoApurado', backref='votoEncriptado', uselist=False)
-
 
 class VotoApurado(db.Model):
     id_voto_apurado = db.Column(db.Integer, primary_key=True)
@@ -411,10 +418,6 @@ class VotoApurado(db.Model):
     id_candidato = db.Column(db.Integer, db.ForeignKey('candidato.id_candidato'))
     id_partido = db.Column(db.Integer, db.ForeignKey('partido.id_partido'))
     id_eleitor = db.Column(db.Text, nullable=False)
-    id_voto_encriptado = db.Column(db.Integer,
-                                   db.ForeignKey('voto_encriptado.id_voto_encriptado'),
-                                   nullable=False,
-                                   unique=True)
 
     def to_json(self):
         return {

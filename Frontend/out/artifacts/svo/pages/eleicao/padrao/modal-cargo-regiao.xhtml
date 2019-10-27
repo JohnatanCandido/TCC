@@ -15,67 +15,70 @@
               closable="true">
         <h:panelGroup rendered="#{eleicaoModalCargoWebBean.turnoCargo != null}">
             <div class="ui-g-12 ui-md-12 ui-lg-12">
-                <div class="ui-g-12 ui-md-12 ui-lg-4">
-                    <label for="estadoSuggestion">Estado</label>
-                    <p:autoComplete id="estadoSuggestion"
-                                    value="#{eleicaoModalCargoWebBean.estado}"
-                                    disabled="#{eleicaoModalCargoWebBean.desabilitaEstado}"
-                                    emptyMessage="Nenhum estado encontrado"
-                                    queryDelay="1000"
-                                    maxResults="10"
-                                    var="estado"
-                                    itemLabel="#{estado.nome}"
-                                    itemValue="#{estado}"
-                                    minQueryLength="3"
-                                    cache="true"
-                                    cacheTimeout="30000"
-                                    completeMethod="#{eleicaoModalCargoWebBean.consultaEstados}">
-                        <p:ajax event="clear" update="@this, cidadeSuggestion, adicionarRegiao" process="@this" global="false" />
-                        <p:ajax event="itemSelect" update="@this, cidadeSuggestion, adicionarRegiao" process="@this" global="false" />
-                        <o:converter converterId="omnifaces.ListConverter" list="#{eleicaoModalCargoWebBean.estados}" />
-                    </p:autoComplete>
-                </div>
-                <div class="ui-g-12 ui-md-12 ui-lg-4">
-                    <label for="cidadeSuggestion">Cidade</label>
-                    <p:autoComplete id="cidadeSuggestion"
-                                    value="#{eleicaoModalCargoWebBean.cidade}"
-                                    disabled="#{eleicaoModalCargoWebBean.desabilitaCidade}"
-                                    emptyMessage="Nenhuma cidade encontrada"
-                                    queryDelay="1000"
-                                    maxResults="10"
-                                    var="cidade"
-                                    itemLabel="#{cidade.nome}"
-                                    itemValue="#{cidade}"
-                                    minQueryLength="3"
-                                    cache="true"
-                                    cacheTimeout="30000"
-                                    completeMethod="#{eleicaoModalCargoWebBean.consultarCidades}">
-                        <p:ajax event="clear" update="@this" process="@this, adicionarRegiao" global="false" />
-                        <p:ajax event="itemSelect" update="@this, adicionarRegiao" process="@this" global="false" />
-                        <o:converter converterId="omnifaces.ListConverter" list="#{eleicaoModalCargoWebBean.cidades}" />
-                    </p:autoComplete>
-                </div>
-                <div class="ui-g-12 ui-md-12 ui-lg-4">
-                    <p:spacer width="0" height="10px" />
-                    <p:commandButton id="adicionarRegiao"
-                                     value="Adicionar"
-                                     action="#{eleicaoModalCargoWebBean.adicionaRegiao()}"
-                                     disabled="#{eleicaoModalCargoWebBean.desabilitaAdicionar}"
-                                     process="@this"
-                                     update="estadoSuggestion, cidadeSuggestion, tabelaCargos"
-                                     icon="fa fa-plus" />
-                </div>
+                <h:panelGroup rendered="#{!eleicaoWebBean.eleicao.confirmada}">
+                    <div class="ui-g-12 ui-md-12 ui-lg-4">
+                        <label for="estadoSuggestion">Estado</label>
+                        <p:autoComplete id="estadoSuggestion"
+                                        value="#{eleicaoModalCargoWebBean.estado}"
+                                        disabled="#{eleicaoModalCargoWebBean.desabilitaEstado}"
+                                        emptyMessage="Nenhum estado encontrado"
+                                        queryDelay="1000"
+                                        maxResults="10"
+                                        var="estado"
+                                        itemLabel="#{estado.nome}"
+                                        itemValue="#{estado}"
+                                        minQueryLength="3"
+                                        cache="true"
+                                        cacheTimeout="30000"
+                                        completeMethod="#{eleicaoModalCargoWebBean.consultaEstados}">
+                            <p:ajax event="clear" update="@this, cidadeSuggestion, adicionarRegiao" process="@this" global="false" />
+                            <p:ajax event="itemSelect" update="@this, cidadeSuggestion, adicionarRegiao" process="@this" global="false" />
+                            <o:converter converterId="omnifaces.ListConverter" list="#{eleicaoModalCargoWebBean.estados}" />
+                        </p:autoComplete>
+                    </div>
+                    <div class="ui-g-12 ui-md-12 ui-lg-4">
+                        <label for="cidadeSuggestion">Cidade</label>
+                        <p:autoComplete id="cidadeSuggestion"
+                                        value="#{eleicaoModalCargoWebBean.cidade}"
+                                        disabled="#{eleicaoModalCargoWebBean.desabilitaCidade}"
+                                        emptyMessage="Nenhuma cidade encontrada"
+                                        queryDelay="1000"
+                                        maxResults="10"
+                                        var="cidade"
+                                        itemLabel="#{cidade.nome}"
+                                        itemValue="#{cidade}"
+                                        minQueryLength="3"
+                                        cache="true"
+                                        cacheTimeout="30000"
+                                        completeMethod="#{eleicaoModalCargoWebBean.consultarCidades}">
+                            <p:ajax event="clear" update="@this" process="@this, adicionarRegiao" global="false" />
+                            <p:ajax event="itemSelect" update="@this, adicionarRegiao" process="@this" global="false" />
+                            <o:converter converterId="omnifaces.ListConverter" list="#{eleicaoModalCargoWebBean.cidades}" />
+                        </p:autoComplete>
+                    </div>
+                    <div class="ui-g-12 ui-md-12 ui-lg-4">
+                        <p:spacer width="0" height="10px" />
+                        <p:commandButton id="adicionarRegiao"
+                                         value="Adicionar"
+                                         action="#{eleicaoModalCargoWebBean.adicionaRegiao()}"
+                                         disabled="#{eleicaoModalCargoWebBean.desabilitaAdicionar}"
+                                         process="@this"
+                                         update="estadoSuggestion, cidadeSuggestion, tabelaCargos"
+                                         icon="fa fa-plus" />
+                    </div>
+                </h:panelGroup>
                 <div class="ui-g-12 ui-md-12 ui-lg-12">
                     <p:dataTable id="tabelaCargos"
                                  rows="10"
                                  paginator="true"
                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
                                  paginatorAlwaysVisible="false"
+                                 paginatorPosition="bottom"
                                  reflow="true"
                                  value="#{eleicaoModalCargoWebBean.turnoCargo.turnoCargoRegioes}"
                                  var="regiao"
                                  emptyMessage="Nenhuma região cadastrada">
-                        <p:column headerText="Ação" width="50">
+                        <p:column headerText="Ação" width="50" styleClass="font-titulo tabela" rendered="#{!eleicaoWebBean.eleicao.confirmada}">
                             <p:commandLink id="removerRegiao"
                                            action="#{eleicaoModalCargoWebBean.removerRegiao(regiao)}"
                                            process="@this"
@@ -83,13 +86,13 @@
                                 <i class="fa fa-remove" />
                             </p:commandLink>
                         </p:column>
-                        <p:column headerText="Estado">
+                        <p:column headerText="Estado" styleClass="font-titulo tabela">
                             <h:outputText value="#{regiao.estado.nome}" />
                         </p:column>
-                        <p:column headerText="Cidade">
+                        <p:column headerText="Cidade" styleClass="font-titulo tabela">
                             <h:outputText value="#{regiao.cidade.nome}" />
                         </p:column>
-                        <p:column headerText="Cadeiras" width="75">
+                        <p:column headerText="Cadeiras" width="75" styleClass="font-titulo tabela">
                             <p:inputNumber value="#{regiao.qtdCadeiras}"
                                            size="3"
                                            disabled="#{eleicaoModalCargoWebBean.desabilitaQtdCadeiras}"
@@ -99,7 +102,7 @@
                                 <p:ajax process="@this" update="@this" global="false" />
                             </p:inputNumber>
                         </p:column>
-                        <p:column headerText="Possui Segundo turno">
+                        <p:column headerText="Possui Segundo turno" styleClass="font-titulo tabela">
                             <p:selectBooleanCheckbox id="regiaoSegundoTurno"
                                                      value="#{regiao.possuiSegundoTurno}"
                                                      disabled="#{!eleicaoModalCargoWebBean.turnoCargo.cargo.permiteSegundoTurno}">

@@ -43,6 +43,15 @@ def consulta_eleicoes():
     return jsonify(eleicoes), 200
 
 
+@eleicoes.route('/<id_eleicao>/confirmar', methods=['POST'])
+@protected
+def confirmar_eleicao(user, id_eleicao):
+    if not user.login.has_perfil('Administrador'):
+        return jsonify(['Você não tem permissão para executar esta ação.']), 403
+    eleicao_business.confirmar_eleicao(id_eleicao)
+    return 'Eleição confirmada com sucesso!', 200
+
+
 @eleicoes.route('/usuario', methods=['GET'])
 @protected
 def consulta_eleicoes_usuario(user):
@@ -52,7 +61,7 @@ def consulta_eleicoes_usuario(user):
     return jsonify(eleicoes), 200
 
 
-@eleicoes.route('/<id_eleicao>/apurar/turno/<turno>')
+@eleicoes.route('/<id_eleicao>/turno/<turno>/apurar', methods=['POST'])
 def apurar(id_eleicao, turno):
     try:
         eleicao_business.valida_apuracao(int(id_eleicao), int(turno))

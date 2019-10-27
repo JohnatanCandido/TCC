@@ -52,13 +52,15 @@ def valida_usuario_votou_e_retorna_turno_aberto(id_eleicao, user):
 
 def consulta_turno_aberto_por_eleicao(id_eleicao):
     sql = '''SELECT t.id_turno FROM turno t 
+             JOIN eleicao e ON t.id_eleicao = e.id_eleicao
              LEFT JOIN apuracao a ON a.id_turno = t.id_turno
              WHERE current_date BETWEEN t.inicio AND t.termino
+             AND e.confirmada 
              AND a IS NULL 
              AND t.id_eleicao = :idEleicao'''
 
-    result = db.native(sql, {'idEleicao': id_eleicao})
-    id_turno = result.first()['id_turno']
+    result = db.native(sql, {'idEleicao': id_eleicao}).first()
+    id_turno = result['id_turno'] if result is not None else None
     return id_turno
 
 
@@ -103,19 +105,13 @@ def monta_candidato(candidato):
 def votar(user, id_eleicao, votos):
     valida_credenciais(votos['usuario'], votos['senha'], user.eleitor.id_eleitor, votos['pin'])
     id_eleitor = c.enc(user.eleitor.id_eleitor)
-    valida_voto(user, id_eleicao)
+    id_turno = valida_usuario_votou_e_retorna_turno_aberto(id_eleicao, user)
     id_cidade = user.eleitor.id_cidade
     for voto in votos['votos']:
         voto_enc = mf.cria_voto_encriptado(voto, id_cidade, id_eleitor)
         db.create(voto_enc)
-    criar_hash_voto(user, votos['votos'])
+    criar_hash_voto(user, votos['votos'], id_turno)
     db.commit()
-
-
-def valida_voto(user, id_eleicao):
-    id_turno = valida_usuario_votou_e_retorna_turno_aberto(id_eleicao, user)
-    turno = db.find_turno(id_turno)
-    user.eleitor.turnos.append(turno)
 
 
 def valida_credenciais(usuario, senha, id_eleitor, pin):
@@ -141,12 +137,17 @@ def gerar_pin(user):
         email_util.enviar_email(user.email, msg, 'Código para votação')
 
 
-def criar_hash_voto(user, votos):
+def criar_hash_voto(user, votos, id_turno):
     hash_voto = ''
     for voto in votos:
         hash_voto += voto['idCandidato']
     hash_voto = senha_util.encrypt_md5(hash_voto)
+    agora = datetime.now()
+    agora_formatado = agora.strftime('%H:%M:%S %d/%m/%Y')
 
-    agora = datetime.now().strftime('%H:%M:%S %d/%m/%Y')
-    msg = f'Voto computado com sucesso às {agora}!\nA sua hash é: {hash_voto}'
+    eleitor_turno = mf.cria_eleitor_turno(user.eleitor, id_turno, hash_voto, str(agora))
+    user.eleitor.eleitor_turnos.append(eleitor_turno)
+    db.create(eleitor_turno)
+
+    msg = f'Voto computado com sucesso às {agora_formatado}!\nA sua hash é: {hash_voto}'
     email_util.enviar_email(user.email, msg, 'Confirmação do voto')

@@ -1,11 +1,9 @@
 package br.com.svo.util;
 
-import br.com.svo.business.exception.BusinessException;
 import br.com.svo.business.exception.NoResultException;
 import br.com.svo.util.exception.RestException;
 import com.n1analytics.paillier.PaillierPublicKey;
 
-import javax.inject.Inject;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

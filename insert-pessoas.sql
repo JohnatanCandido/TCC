@@ -7,7 +7,7 @@ join cidade c using(id_cidade)
 
 START TRANSACTION;
 
-INSERT INTO pessoa(nome, cpf, email) VALUES('Johnatan Espíndola Cândido', '11404390901', 'john.acdc@hotmail.com');
+INSERT INTO pessoa(nome, cpf, email) VALUES('Johnatan Espíndola Cândido', '11404390901', 'johnatanespindola@gmail.com');
 INSERT INTO login(usuario, senha, id_pessoa) VALUES(md5('admin'), md5('admin'), currval('pessoa_id_pessoa_seq'));
 INSERT INTO perfil(nome) VALUES('Administrador');
 INSERT INTO login_perfil(id_login, id_perfil) VALUES(currval('login_id_login_seq'), currval('perfil_id_perfil_seq'));

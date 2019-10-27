@@ -7,7 +7,13 @@
 
     <ui:define name="content">
         <h:form id="formBuscaEleicao">
+            <div class="cabecalho">
+                <p:graphicImage url="/resources/img/logo.png" width="116" height="125" styleClass=""/>
+            </div>
             <div class="ui-fluid">
+                <div class="paragrafo">
+                    <h:outputText value="Eleições" styleClass="font-titulo-grande" />
+                </div>
                 <div class="card-body">
                     <div class="ui-g-12 ui-md-12 ui-lg-12">
                         <div class="ui-g-12 ui-md-2 ui-lg-2">
@@ -41,7 +47,8 @@
                                              icon="fa fa-search"
                                              action="#{buscaEleicaoWebBean.buscar()}"
                                              process="@this"
-                                             update="eleicoes" />
+                                             update="eleicoes"
+                                             styleClass="botao"/>
                         </div>
                         <div class="ui-g-12 ui-md-12 ui-lg-3">
                             <p:button id="novaEleicao"
@@ -49,31 +56,35 @@
                                       target="_blank"
                                       icon="fa fa-plus"
                                       rendered="#{buscaEleicaoWebBean.renderizaBotaoNovaEleicao}"
-                                      outcome="/pages/eleicao/eleicao.xhtml" />
+                                      outcome="/pages/eleicao/eleicao.xhtml"
+                                      styleClass="botao"/>
                         </div>
                     </div>
-                    <div class="ui-g-12 ui-md-12 ui-lg-12">
+                    <div class="ui-g-12 ui-md-12 ui-lg-12" style="margin-left: 10px;">
                         <p:dataTable id="eleicoes"
                                      rows="10"
                                      paginator="true"
                                      paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
                                      paginatorAlwaysVisible="false"
+                                     paginatorPosition="bottom"
                                      reflow="true"
                                      value="#{buscaEleicaoWebBean.eleicoes}"
+                                     styleClass="tabela"
+                                     emptyMessage="Nenhuma eleição encontrada..."
                                      var="eleicao">
-                            <p:column headerText="Ação" width="50">
+                            <p:column headerText="Ação" width="50" styleClass="font-titulo">
                                 <p:link outcome="/pages/eleicao/eleicao.xhtml">
                                     <i class="fa fa-pencil" />
                                     <f:param name="idEleicao" value="#{eleicao.idEleicao}" />
                                 </p:link>
                             </p:column>
-                            <p:column headerText="Código">
+                            <p:column headerText="Código" styleClass="font-titulo">
                                 <h:outputText value="#{eleicao.idEleicao}" />
                             </p:column>
-                            <p:column headerText="Título">
+                            <p:column headerText="Título" styleClass="font-titulo">
                                 <h:outputText value="#{eleicao.titulo}" />
                             </p:column>
-                            <p:column headerText="Data">
+                            <p:column headerText="Data" styleClass="font-titulo">
                                 <h:outputText value="#{eleicao.data}">
                                     <f:convertDateTime pattern="dd/MM/yyyy" />
                                 </h:outputText>

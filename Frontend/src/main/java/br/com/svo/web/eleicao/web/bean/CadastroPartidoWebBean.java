@@ -21,14 +21,12 @@ public class CadastroPartidoWebBean implements Serializable {
     public static final long serialVersionUID = 1L;
 
     private Partido partido;
-    private List<Coligacao> coligacoes;
 
     @Inject
     private EleicaoServiceLocal eleicaoService;
 
-    public void novoPartido(List<Coligacao> coligacoes) {
+    public void novoPartido() {
         this.partido = new Partido();
-        this.coligacoes = coligacoes;
     }
 
     public void salvar() throws NoResultException {
@@ -49,13 +47,5 @@ public class CadastroPartidoWebBean implements Serializable {
 
     public void setPartido(Partido partido) {
         this.partido = partido;
-    }
-
-    public List<Coligacao> getColigacoes() {
-        return coligacoes;
-    }
-
-    public void setColigacoes(List<Coligacao> coligacoes) {
-        this.coligacoes = coligacoes;
     }
 }

@@ -6,28 +6,32 @@
 
 <ui:define name="content">
     <h:form id="formEleicao" rendered="#{eleicaoWebBean.eleicao != null}">
+        <div class="cabecalho">
+            <p:graphicImage url="/resources/img/logo.png" width="116" height="125"/>
+        </div>
         <div class="ui-fluid">
+            <div class="paragrafo">
+                <h:outputText value="Cadastro de Eleições" styleClass="font-titulo-grande" />
+            </div>
             <div class="card-body">
-                <p:tabView id="tabViewEleicao" styleClass="ui-g-12 ui-md-12 ui-lg-12">
-                    <p:tab title="Eleição" rendered="#{eleicaoWebBean.possuiPermissaoAdministrador}">
-                        <ui:include src="padrao/eleicao-padrao.xhtml" />
-                    </p:tab>
-                    <p:tab title="Candidatos"
-                           rendered="#{eleicaoWebBean.renderizaAbasPermissaoAdministrador}"
-                           styleClass="ui-g-12 ui-md-12 ui-lg-12">
-                        <ui:include src="candidato/candidato.xhtml" />
-                    </p:tab>
-                    <p:tab title="Apuração"
-                           rendered="#{eleicaoWebBean.eleicaoPersistida}"
-                           styleClass="ui-g-12 ui-md-12 ui-lg-12">
-                        <ui:include src="apuracao/apuracao-eleicao.xhtml" />
-                    </p:tab>
-                    <p:tab title="Partidos e Coligações"
-                           rendered="#{eleicaoWebBean.renderizaAbasPermissaoAdministrador}"
-                           styleClass="ui-g-12 ui-md-12 ui-lg-12">
-                        <ui:include src="coligacao/coligacao.xhtml" />
-                    </p:tab>
-                </p:tabView>
+                <div class="ui-g-12 ui-md-12 ui-lg-12">
+                    <p:tabView id="tabViewEleicao" styleClass="ui-g-12 ui-md-12 ui-lg-12">
+                        <p:tab title="Eleição" rendered="#{eleicaoWebBean.possuiPermissaoAdministrador}">
+                            <ui:include src="padrao/eleicao-padrao.xhtml" />
+                        </p:tab>
+                        <p:tab title="Candidatos"
+                               rendered="#{eleicaoWebBean.renderizaAbasPermissaoAdministrador and !eleicaoWebBean.eleicao.confirmada}">
+                            <div class="ui-g-12 ui-md-12 ui-lg-12">
+                                <ui:include src="candidato/candidato.xhtml" />
+                            </div>
+                        </p:tab>
+                        <p:tab title="Apuração"
+                               rendered="#{eleicaoWebBean.eleicaoPersistida}"
+                               styleClass="ui-g-12 ui-md-12 ui-lg-12">
+                            <ui:include src="apuracao/apuracao-eleicao.xhtml" />
+                        </p:tab>
+                    </p:tabView>
+                </div>
             </div>
         </div>
     </h:form>

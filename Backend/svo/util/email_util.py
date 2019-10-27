@@ -7,12 +7,12 @@ from email.mime.text import MIMEText
 ENDERECO_EMAIL = 'sistema.eleitoral2019@gmail.com'
 SENHA = 'SistemaEleitoral2019'
 
-server = smtplib.SMTP(host='smtp.gmail.com', port=587)
-server.starttls()
-server.login(ENDERECO_EMAIL, SENHA)
-
 
 def enviar_email(email, mensagem, assunto):
+    server = smtplib.SMTP(host='smtp.gmail.com', port=587)
+    server.starttls()
+    server.login(ENDERECO_EMAIL, SENHA)
+
     msg = MIMEMultipart()
 
     msg['From'] = f'Vote Safe <{ENDERECO_EMAIL}>'

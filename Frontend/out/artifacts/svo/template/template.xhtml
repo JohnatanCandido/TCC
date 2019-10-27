@@ -11,7 +11,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </h:head>
 
-<h:body style="margin: 0; display: block">
+<h:body style="margin: 0; display: block" styleClass="fundo">
 
     <p:messages id="messages" showDetail="true" closable="true" style="z-index: 8000; position: fixed; min-width: 86%; max-width: 86%; font-size: 14px; margin-left: 8%">
         <p:autoUpdate />
@@ -35,17 +35,18 @@
         </p:dialog>
 
     </h:form>
-
-    <div id="header">
-        <ui:include src="header.xhtml" />
-    </div>
-
-    <div id="menubar">
-        <ui:include src="menu-bar.xhtml" />
-    </div>
-
-    <div id="content" style="width: 70%; float: left">
-        <ui:insert name="content" />
+    <div class="template">
+        <div style="width: 18%;">
+            <div id="header">
+                <ui:include src="header.xhtml" />
+            </div>
+            <div id="menubar" style="height: 57%;">
+               <ui:include src="menu-bar.xhtml" />
+            </div>
+        </div>
+        <div id="content" class="horizontal">
+           <ui:insert name="content" />
+        </div>
     </div>
 
 <!--    <div id="footer">-->

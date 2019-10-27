@@ -12,6 +12,7 @@ public class Eleicao implements Serializable {
     private Long idEleicao;
     private String titulo;
     private String observacao;
+    private boolean confirmada;
     private List<Turno> turnos = new ArrayList<>();
     private boolean usuarioVotou;
 
@@ -48,6 +49,14 @@ public class Eleicao implements Serializable {
 
     public void setObservacao(String observacao) {
         this.observacao = observacao;
+    }
+
+    public boolean isConfirmada() {
+        return confirmada;
+    }
+
+    public void setConfirmada(boolean confirmada) {
+        this.confirmada = confirmada;
     }
 
     public List<Turno> getTurnos() {

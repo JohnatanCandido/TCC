@@ -20,7 +20,7 @@
                             <ui:include src="padrao/eleicao-padrao.xhtml" />
                         </p:tab>
                         <p:tab title="Candidatos"
-                               rendered="#{eleicaoWebBean.renderizaAbasPermissaoAdministrador}">
+                               rendered="#{eleicaoWebBean.renderizaAbasPermissaoAdministrador and !eleicaoWebBean.eleicao.confirmada}">
                             <div class="ui-g-12 ui-md-12 ui-lg-12">
                                 <ui:include src="candidato/candidato.xhtml" />
                             </div>
@@ -29,11 +29,6 @@
                                rendered="#{eleicaoWebBean.eleicaoPersistida}"
                                styleClass="ui-g-12 ui-md-12 ui-lg-12">
                             <ui:include src="apuracao/apuracao-eleicao.xhtml" />
-                        </p:tab>
-                        <p:tab title="Partidos e Coligações"
-                               rendered="#{eleicaoWebBean.renderizaAbasPermissaoAdministrador}"
-                               styleClass="ui-g-12 ui-md-12 ui-lg-12">
-                            <ui:include src="coligacao/coligacao.xhtml" />
                         </p:tab>
                     </p:tabView>
                 </div>

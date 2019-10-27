@@ -8,11 +8,11 @@
         <p:fieldset legend="Dados">
             <div class="ui-g-12 ui-md-12 ui-lg-12">
                 <label for="tituloEleicao">Título</label>
-                <p:inputText id="tituloEleicao" value="#{eleicaoWebBean.eleicao.titulo}" />
+                <p:inputText id="tituloEleicao" value="#{eleicaoWebBean.eleicao.titulo}" readonly="#{eleicaoWebBean.eleicao.confirmada}" />
             </div>
             <div class="ui-g-12 ui-md-12 ui-lg-12">
                 <label for="observacao">Observação</label>
-                <p:inputTextarea id="observacao" rows="5" value="#{eleicaoWebBean.eleicao.observacao}" />
+                <p:inputTextarea id="observacao" rows="5" value="#{eleicaoWebBean.eleicao.observacao}" readonly="#{eleicaoWebBean.eleicao.confirmada}" />
             </div>
         </p:fieldset>
         <br />
@@ -24,6 +24,7 @@
                             <label for="inicioTurno">Início</label>
                             <p:calendar id="inicioTurno"
                                         mask="true"
+                                        disabled="#{eleicaoWebBean.eleicao.confirmada}"
                                         value="#{turno.inicio}"
                                         showOn="both"
                                         pattern="dd/MM/yyyy HH:mm" />
@@ -32,6 +33,7 @@
                             <label for="terminoTurno">Término</label>
                             <p:calendar id="terminoTurno"
                                         mask="true"
+                                        disabled="#{eleicaoWebBean.eleicao.confirmada}"
                                         value="#{turno.termino}"
                                         showOn="both"
                                         pattern="dd/MM/yyyy HH:mm" />
@@ -39,40 +41,47 @@
                     </div>
                     <h:panelGroup id="panelGroupCargos">
                         <label>Cargos</label>
-                        <div class="ui-g-12 ui-md-12 ui-lg-12">
-                            <div class="ui-g-12 ui-md-8 ui-lg-8">
-                                <p:selectOneMenu id="cargosDisponiveis"
-                                                 converter="omnifaces.SelectItemsIndexConverter"
-                                                 value="#{eleicaoWebBean.cargoSelecionado}"
-                                                 autoWidth="false">
-                                    <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
-                                    <f:selectItems value="#{eleicaoWebBean.cargosDisponiveis}"
-                                                   var="cargoDisponivel"
-                                                   itemLabel="#{cargoDisponivel.nome}"
-                                                   itemValue="#{cargoDisponivel}" />
-                                    <p:ajax process="@this" update="@this" global="false" />
-                                </p:selectOneMenu>
+
+                        <h:panelGroup rendered="#{!eleicaoWebBean.eleicao.confirmada}">
+                            <div class="ui-g-12 ui-md-12 ui-lg-12" style="padding: 0;">
+                                <div class="ui-g-12 ui-md-8 ui-lg-8">
+                                    <p:selectOneMenu id="cargosDisponiveis"
+                                                     converter="omnifaces.SelectItemsIndexConverter"
+                                                     value="#{eleicaoWebBean.cargoSelecionado}"
+                                                     autoWidth="false">
+                                        <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+                                        <f:selectItems value="#{eleicaoWebBean.cargosDisponiveis}"
+                                                       var="cargoDisponivel"
+                                                       itemLabel="#{cargoDisponivel.nome}"
+                                                       itemValue="#{cargoDisponivel}" />
+                                        <p:ajax process="@this" update="@this" global="false" />
+                                    </p:selectOneMenu>
+                                </div>
+                                <div class="ui-g-12 ui-md-4 ui-lg-4">
+                                    <p:commandButton id="adicionarCargo"
+                                                     value="Adicionar"
+                                                     process="@this"
+                                                     update="panelGroupCargos"
+                                                     icon="fa fa-plus"
+                                                     action="#{eleicaoWebBean.adicionarCargo(turno)}"
+                                                     style="background-color: #144913; color: white;"
+                                                     styleClass="botao"/>
+                                </div>
                             </div>
-                            <div class="ui-g-12 ui-md-4 ui-lg-4">
-                                <p:commandButton id="adicionarCargo"
-                                                 value="Adicionar"
-                                                 process="@this"
-                                                 update="panelGroupCargos"
-                                                 icon="fa fa-plus"
-                                                 action="#{eleicaoWebBean.adicionarCargo(turno)}" />
-                            </div>
-                        </div>
-                        <div class="ui-g-12 ui-md-12 ui-lg-12">
+                        </h:panelGroup>
+                        <div class="ui-g-12 ui-md-12 ui-lg-12" style="padding: 0;">
                             <p:dataTable id="tabelaCargos"
                                          rows="10"
                                          reflow="true"
                                          paginator="true"
                                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
                                          paginatorAlwaysVisible="false"
+                                         paginatorPosition="bottom"
                                          value="#{turno.turnoCargos}"
                                          var="turnoCargo"
+                                         styleClass="tabela"
                                          emptyMessage="Nenhum cargo cadastrado">
-                                <p:column headerText="Ação" width="50">
+                                <p:column headerText="Ação" width="50" styleClass="font-titulo">
                                     <p:commandLink id="abiriModalRegiao"
                                                    action="#{eleicaoModalCargoWebBean.setTurnoCargo(turnoCargo)}"
                                                    disabled="#{eleicaoWebBean.desabilitaModalCargoRegiao(turnoCargo)}"
@@ -83,18 +92,19 @@
                                     </p:commandLink>
                                     <p:commandLink id="removerCargo"
                                                    action="#{eleicaoWebBean.removerCargo(turno, turnoCargo)}"
+                                                   rendered="#{!eleicaoWebBean.eleicao.confirmada}"
                                                    process="@this"
                                                    update="formEleicao:tabViewEleicao:turnos">
                                         <i class="fa fa-remove" />
                                     </p:commandLink>
                                 </p:column>
-                                <p:column headerText="Cargo">
+                                <p:column headerText="Cargo" styleClass="font-titulo tabela">
                                     <h:outputText value="#{turnoCargo.cargo.nome}" />
                                 </p:column>
-                                <p:column headerText="Sistema de eleição">
+                                <p:column headerText="Sistema de eleição" styleClass="font-titulo tabela">
                                     <h:outputText value="#{turnoCargo.cargo.sistemaEleicao}" />
                                 </p:column>
-                                <p:column headerText="Permite Segundo turno">
+                                <p:column headerText="Permite Segundo turno" styleClass="font-titulo tabela">
                                     <p:selectBooleanCheckbox disabled="true" value="#{turnoCargo.cargo.permiteSegundoTurno}" />
                                 </p:column>
                             </p:dataTable>
@@ -103,16 +113,29 @@
                 </p:tab>
             </p:accordionPanel>
         </p:fieldset>
-        <div class="ui-g-12 ui-md-12 ui-lg-12">
-            <div class="ui-g-12 ui-md-12 ui-lg-2">
-                <p:commandButton id="salvarEleicao"
-                                 value="Salvar"
-                                 action="#{eleicaoWebBean.salvar()}"
-                                 icon="fa fa-save"
-                                 process="@form"
-                                 update="@form" />
+        <h:panelGroup rendered="#{!eleicaoWebBean.eleicao.confirmada}">
+            <div class="ui-g-12 ui-md-12 ui-lg-12">
+                <div class="ui-g-12 ui-md-12 ui-lg-2">
+                    <p:commandButton id="salvarEleicao"
+                                     value="Salvar"
+                                     icon="fa fa-save"
+                                     process="@form"
+                                     update="@form"
+                                     action="#{eleicaoWebBean.salvar()}"
+                                     style="background-color: #144913; color: white;" />
+                </div>
+                <div class="ui-g-12 ui-md-12 ui-lg-2">
+                    <p:commandButton id="confirmarEleicao"
+                                     value="Confirmar"
+                                     icon="fa fa-check"
+                                     rendered="#{eleicaoWebBean.eleicao.idEleicao != null}"
+                                     process="@form"
+                                     update="@form"
+                                     action="#{eleicaoWebBean.confirmar()}"
+                                     style="background-color: #144913; color: white;" />
+                </div>
             </div>
-        </div>
+        </h:panelGroup>
     </div>
     <ui:include src="modal-cargo-regiao.xhtml" />
 </ui:composition>
