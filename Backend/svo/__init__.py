@@ -4,7 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 from svo.entities.crypt import Crypto
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres+psycopg2://postgres:1234@localhost/svo'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres+psycopg2://svo:1234@localhost:5432/svo'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app, session_options={"autoflush": False})
 
 # TODO Colocar em variável de ambiente
