@@ -167,4 +167,14 @@ public class EleicaoBusiness implements Serializable {
             throw new BusinessException("Erros ao buscar eleições:", e.getMessages());
         }
     }
+
+    public void confirmarEleicao(Long idEleicao) throws BusinessException {
+        try {
+            new RestUtil("eleicao/" + idEleicao + "/confirmar").withHeader("Content-Type", "application/json")
+                                                               .withHeader("Authorization", identity.getToken())
+                                                               .post();
+        } catch (RestException e) {
+            throw new BusinessException("Erro ao confirmar eleição", e.getMessages());
+        } catch (NoResultException ignored) {}
+    }
 }

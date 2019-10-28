@@ -91,6 +91,16 @@ public class EleicaoWebBean implements Serializable {
         }
     }
 
+    public void confirmar() {
+        try {
+            eleicaoService.confirmarEleicao(eleicao.getIdEleicao());
+            eleicao.setConfirmada(true);
+            SvoMessages.addMessage("Eleição confirmada com sucesso!");
+        } catch (BusinessException e) {
+            SvoMessages.addErrorMessage(e);
+        }
+    }
+
     public boolean isPossuiPermissaoAdministrador() {
         return identity.hasPerfil(Perfis.ADMINISTRADOR);
     }

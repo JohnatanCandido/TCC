@@ -1,5 +1,5 @@
 from svo.entities.models import Eleicao, Turno, TurnoCargo, TurnoCargoRegiao, Partido, Candidato, Eleitor, Login, \
-    VotoEncriptado, Pessoa, Coligacao, VotoApurado
+    VotoEncriptado, Pessoa, Coligacao, VotoApurado, EleitorTurno
 from svo.exception.validation_exception import ValidationException
 from svo.util import database_utils as db, senha_util
 from svo import c
@@ -71,7 +71,9 @@ def cria_turno_cargo(dados, turno, turno_cargo):
                 turno_cargo_regiao = turno_cargo.turno_cargo_regiao_by_id(turnoCargoRegiaoDados['idTurnoCargoRegiao'])
                 cria_turno_cargo_regiao(turnoCargoRegiaoDados, turno_cargo, turno_cargo_regiao)
             else:
-                turno_cargo.turno_cargo_regioes.append(cria_turno_cargo_regiao(turnoCargoRegiaoDados, turno_cargo, None))
+                turno_cargo.turno_cargo_regioes.append(cria_turno_cargo_regiao(turnoCargoRegiaoDados,
+                                                                               turno_cargo,
+                                                                               None))
     return turno_cargo
 
 
@@ -222,3 +224,12 @@ def cria_voto(voto_enc):
     if id_partido != -1:
         va.id_partido = id_partido
     return va
+
+
+def cria_eleitor_turno(eleitor, id_turno, hash_voto, hora):
+    et = EleitorTurno()
+    et.id_eleitor = eleitor.id_eleitor
+    et.id_turno = id_turno
+    et.hash = hash_voto
+    et.hora_voto = hora
+    return et

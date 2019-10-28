@@ -80,4 +80,9 @@ public class EleicaoService implements EleicaoServiceLocal, Serializable {
     public List<EleicaoConsultaDTO> consultaEleicoesUsuario() throws BusinessException, NoResultException {
         return eleicaoBusiness.consultaEleicoesUsuario();
     }
+
+    @Override
+    public void confirmarEleicao(Long idEleicao) throws BusinessException {
+        eleicaoBusiness.confirmarEleicao(idEleicao);
+    }
 }

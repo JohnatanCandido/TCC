@@ -77,13 +77,15 @@
                                  paginator="true"
                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
                                  paginatorAlwaysVisible="false"
+                                 paginatorPosition="bottom"
                                  value="#{apuracaoEleicaoWebBean.candidatos}"
                                  var="candidato"
+                                 styleClass="tabela"
                                  emptyMessage="Nenhum candidato cadastrado">
-                        <p:column headerText="Ação" width="5%">
+                        <p:column headerText="Ação" width="7%">
 
                         </p:column>
-                        <p:column headerText="Número" width="9%" sortBy="#{candidato.numero}">
+                        <p:column headerText="Número" width="11%" sortBy="#{candidato.numero}">
                             <h:outputText value="#{candidato.numero}" />
                         </p:column>
                         <p:column headerText="Nome" sortBy="#{candidato.nome}">

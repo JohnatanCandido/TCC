@@ -8,28 +8,34 @@
 
     <ui:define name="content">
         <h:form id="formBuscaPessoa">
+            <div class="cabecalho">
+                <p:graphicImage url="/resources/img/logo.png" width="116" height="125"/>
+            </div>
             <div class="ui-fluid">
+                <div class="paragrafo">
+                    <h:outputText value="Eleitores" styleClass="font-titulo-grande" />
+                </div>
                 <div class="card-body">
                     <div class="ui-g-12 ui-md-12 ui-lg-12">
-                        <div class="ui-g-12 ui-md-12 ui-lg-4">
+                        <div class="ui-g-12 ui-md-3 ui-lg-4">
                             <label for="idPessoa">Código</label>
                             <p:inputNumber id="idPessoa" value="#{buscaPessoaWebBean.pessoaConsultaDTO.idPessoa}" decimalPlaces="0">
                                 <p:ajax update="@this" process="@this" global="false" />
                             </p:inputNumber>
                         </div>
-                        <div class="ui-g-12 ui-md-12 ui-lg-4">
+                        <div class="ui-g-12 ui-md-6 ui-lg-4">
                             <label for="nome">Nome</label>
                             <p:inputText id="nome" value="#{buscaPessoaWebBean.pessoaConsultaDTO.nome}">
                                 <p:ajax update="@this" process="@this" global="false" />
                             </p:inputText>
                         </div>
-                        <div class="ui-g-12 ui-md-12 ui-lg-4">
+                        <div class="ui-g-12 ui-md-3 ui-lg-4">
                             <label for="cpf">CPF</label>
                             <p:inputMask id="cpf" mask="999.999.999-99" value="#{buscaPessoaWebBean.pessoaConsultaDTO.cpf}">
                                 <p:ajax update="@this" process="@this" global="false" />
                             </p:inputMask>
                         </div>
-                        <div class="ui-g-12 ui-md-12 ui-lg-4">
+                        <div class="ui-g-12 ui-md-6 ui-lg-4">
                             <label for="estadoSuggestion">Estado</label>
                             <p:autoComplete id="estadoSuggestion"
                                             value="#{buscaPessoaWebBean.pessoaConsultaDTO.estado}"
@@ -48,7 +54,7 @@
                                 <o:converter converterId="omnifaces.ListConverter" list="#{buscaPessoaWebBean.estados}" />
                             </p:autoComplete>
                         </div>
-                        <div class="ui-g-12 ui-md-12 ui-lg-4">
+                        <div class="ui-g-12 ui-md-6 ui-lg-4">
                             <label for="cidadeSuggestion">Cidade</label>
                             <p:autoComplete id="cidadeSuggestion"
                                             value="#{buscaPessoaWebBean.pessoaConsultaDTO.cidade}"
@@ -68,19 +74,19 @@
                                 <o:converter converterId="omnifaces.ListConverter" list="#{buscaPessoaWebBean.cidades}" />
                             </p:autoComplete>
                         </div>
-                        <div class="ui-g-12 ui-md-12 ui-lg-4">
+                        <div class="ui-g-12 ui-md-4 ui-lg-4">
                             <label for="zonaEleitoral">Zona Eleitoral</label>
                             <p:inputText id="zonaEleitoral" value="#{buscaPessoaWebBean.pessoaConsultaDTO.zonaEleitoral}" maxlength="4">
                                 <p:ajax update="@this" process="@this" global="false" />
                             </p:inputText>
                         </div>
-                        <div class="ui-g-12 ui-md-12 ui-lg-4">
+                        <div class="ui-g-12 ui-md-4 ui-lg-4">
                             <label for="secao">Seção</label>
                             <p:inputText id="secao" value="#{buscaPessoaWebBean.pessoaConsultaDTO.secao}" maxlength="3">
                                 <p:ajax update="@this" process="@this" global="false" />
                             </p:inputText>
                         </div>
-                        <div class="ui-g-12 ui-md-12 ui-lg-4">
+                        <div class="ui-g-12 ui-md-4 ui-lg-4">
                             <label for="numeroInscricao">Número Inscrição</label>
                             <p:inputText id="numeroInscricao" value="#{buscaPessoaWebBean.pessoaConsultaDTO.numeroInscricao}" maxlength="12">
                                 <p:ajax update="@this" process="@this" global="false" />
@@ -88,20 +94,22 @@
                         </div>
                     </div>
                     <div class="ui-g-12 ui-md-12 ui-lg-12">
-                        <div class="ui-g-12 ui-md-12 ui-lg-2">
+                        <div class="ui-g-6 ui-md-3 ui-lg-2">
                             <p:commandButton id="buscarPessoas"
                                              value="Buscar"
                                              icon="fa fa-search"
                                              action="#{buscaPessoaWebBean.buscar()}"
                                              process="@this"
-                                             update="@this, panelListaPessoas" />
+                                             update="@this, panelListaPessoas"
+                                             styleClass="botao"/>
                         </div>
-                        <div class="ui-g-12 ui-md-12 ui-lg-2">
+                        <div class="ui-g-6 ui-md-3 ui-lg-2">
                             <p:button id="novaPessoa"
                                       value="Cadastrar"
                                       target="_blank"
                                       icon="fa fa-plus"
-                                      outcome="/pages/pessoa/cadastro-pessoa.xhtml" />
+                                      outcome="/pages/pessoa/cadastro-pessoa.xhtml"
+                                      styleClass="botao"/>
                         </div>
                     </div>
                     <div class="ui-g-12 ui-md-12 ui-lg-12">
@@ -114,23 +122,25 @@
                                          paginator="true"
                                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
                                          paginatorAlwaysVisible="false"
+                                         paginatorPosition="bottom"
+                                         styleClass="tabela"
                                          reflow="true">
-                                <p:column headerText="Ação">
+                                <p:column headerText="Ação" styleClass="font-titulo">
                                     <p:link outcome="cadastro-pessoa.xhtml">
                                         <i class="fa fa-pencil" />
                                         <f:param name="idPessoa" value="#{pessoa.idPessoa}" />
                                     </p:link>
                                 </p:column>
-                                <p:column headerText="Nome">
+                                <p:column headerText="Nome" styleClass="font-titulo">
                                     <h:outputText value="#{pessoa.nome}" />
                                 </p:column>
-                                <p:column headerText="CPF">
+                                <p:column headerText="CPF" styleClass="font-titulo">
                                     <h:outputText value="#{pessoa.cpf}" />
                                 </p:column>
-                                <p:column headerText="Título de eleitor">
+                                <p:column headerText="Título de eleitor" styleClass="font-titulo">
                                     <h:outputText value="#{pessoa.numeroInscricao}" />
                                 </p:column>
-                                <p:column headerText="Cidade">
+                                <p:column headerText="Cidade" styleClass="font-titulo">
                                     <h:outputText value="#{pessoa.cidade.nome}" />
                                 </p:column>
                             </p:dataTable>

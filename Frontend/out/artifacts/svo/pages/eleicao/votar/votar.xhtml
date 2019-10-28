@@ -6,7 +6,13 @@
 
     <ui:define name="content">
         <h:form id="formEleicao">
+            <div class="cabecalho">
+                <p:graphicImage url="/resources/img/logo.png" width="116" height="125"/>
+            </div>
             <div class="ui-fluid">
+                <div class="paragrafo">
+                    <h:outputText value="Votação" styleClass="font-titulo-grande" />
+                </div>
                 <div class="card-body">
                     <div class="ui-g-12 ui-md-12 ui-lg-12">
                         <p:repeat id="repeatVotos" value="#{votoWebBean.votos}" var="voto">
@@ -39,7 +45,8 @@
                                          process="@this"
                                          update="@this, modalConfirmaVoto"
                                          value="Confirmar voto"
-                                         icon="fa fa-check" />
+                                         icon="fa fa-check"
+                                         styleClass="botao"/>
                     </div>
                 </div>
             </div>

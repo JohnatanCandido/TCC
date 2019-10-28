@@ -3,11 +3,19 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
-    <h:form>
-        <div style="width: 20%; height: 100%; background-color: red; margin: 0;">
-            <p:link value="Início" outcome="/pages/index.xhtml" />
-            <p:link value="Eleição" outcome="/pages/eleicao/busca/buscar-eleicao.xhtml" />
-            <p:link value="Pessoa" outcome="/pages/pessoa/busca-pessoa.xhtml" rendered="#{loginWebBean.renderizaMenuPessoa}" />
+    <h:form style="height: 100%;">
+        <div style="width: 90%; height: 100%;" class="vertical fundo">
+            <div class="menu">
+                <p:link value="Início" outcome="/pages/index.xhtml" styleClass="font-preta"/>
+            </div>
+            <div class="menu">
+                <p:link value="Eleição" outcome="/pages/eleicao/busca/buscar-eleicao.xhtml" styleClass="font-preta"/>
+            </div>
+            <h:panelGroup rendered="#{loginWebBean.renderizaMenuPessoa}">
+                <div class="menu">
+                    <p:link value="Eleitor" outcome="/pages/pessoa/busca-pessoa.xhtml" styleClass="font-preta" />
+                </div>
+            </h:panelGroup>
         </div>
     </h:form>
 </ui:composition>

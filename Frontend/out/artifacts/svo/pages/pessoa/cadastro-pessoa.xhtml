@@ -8,7 +8,13 @@
 
     <ui:define name="content">
         <h:form id="formPessoa">
+            <div class="cabecalho">
+                <p:graphicImage url="/resources/img/logo.png" width="116" height="125"/>
+            </div>
             <div class="ui-fluid">
+                <div class="paragrafo">
+                    <h:outputText value="Cadastro de Eleitor" styleClass="font-titulo-grande" />
+                </div>
                 <div class="card-body">
                     <div class="ui-g-12 ui-md-12 ui-lg-12">
                         <p:fieldset legend="Dados">
@@ -113,7 +119,8 @@
                                              icon="fa fa-save"
                                              process="@form"
                                              update="@form"
-                                             action="#{pessoaWebBean.salvar()}" />
+                                             action="#{pessoaWebBean.salvar()}"
+                                             styleClass="botao"/>
                         </div>
                     </div>
                 </div>

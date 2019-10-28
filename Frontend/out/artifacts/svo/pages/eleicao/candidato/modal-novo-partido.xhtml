@@ -38,29 +38,14 @@
                     </p:inputNumber>
                 </div>
                 <div class="ui-g-12 ui-md-12 ui-lg-12">
-                    <label for="coligacoesDisponiveis">Coligação</label>
-                    <p:selectOneMenu id="coligacoesDisponiveis"
-                                     converter="omnifaces.SelectItemsIndexConverter"
-                                     filter="true"
-                                     filterMatchMode="contains"
-                                     value="#{cadastroPartidoWebBean.partido.idColigacao}"
-                                     autoWidth="false">
-                        <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
-                        <f:selectItems value="#{cadastroPartidoWebBean.coligacoes}"
-                                       var="coligacao"
-                                       itemLabel="#{coligacao.nome}"
-                                       itemValue="#{coligacao.idColigacao}" />
-                        <p:ajax process="@this" update="@this" global="false" />
-                    </p:selectOneMenu>
-                </div>
-                <div class="ui-g-12 ui-md-12 ui-lg-12">
                     <div class="ui-g-12 ui-md-12 ui-lg-2">
                         <p:commandButton id="salvarPartido"
                                          value="Salvar"
                                          icon="fa fa-save"
                                          action="#{cadastroPartidoWebBean.salvar()}"
                                          process="@this"
-                                         update="@this" />
+                                         update="@this"
+                                         style="background-color: #144913; color: white;" />
                     </div>
                 </div>
             </div>

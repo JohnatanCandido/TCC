@@ -37,4 +37,6 @@ public interface EleicaoServiceLocal {
     Long salvarColigacao(Coligacao coligacao) throws BusinessException, NoResultException;
 
     List<EleicaoConsultaDTO> consultaEleicoesUsuario() throws BusinessException, NoResultException;
+
+    void confirmarEleicao(Long idEleicao) throws BusinessException;
 }

@@ -7,10 +7,13 @@
 
 <ui:define name="content">
     <h:form>
+        <div class="cabecalho">
+            <p:graphicImage url="/resources/img/logo.png" width="116" height="125" styleClass=""/>
+        </div>
         <div class="ui-fluid">
             <div class="card-body">
                 <div class="ui-g-12 ui-md-12 ui-lg-12">
-                    <label for="eleicoesAberto">Eleições em aberto</label>
+                    <label for="eleicoesAberto" class="font-titulo">Eleições em aberto</label>
                     <p:dataTable id="eleicoesAberto"
                                  value="#{homeWebBean.eleicoesAbertas}"
                                  var="eleicao"
@@ -18,34 +21,36 @@
                                  paginator="true"
                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
                                  paginatorAlwaysVisible="false"
+                                 paginatorPosition="bottom"
                                  reflow="true"
+                                 styleClass="tabela"
                                  emptyMessage="Não há nenhuma eleição em aberto...">
-                        <p:column headerText="Ação">
+                        <p:column headerText="Ação" styleClass="font-titulo">
                             <p:link rendered="#{!eleicao.votou}" outcome="/pages/eleicao/votar/votar.xhtml">
                                 <i class="fa fa-pencil" />
                                 <f:param name="idEleicao" value="#{eleicao.idEleicao}" />
                             </p:link>
                         </p:column>
-                        <p:column headerText="Título">
+                        <p:column headerText="Título" styleClass="font-titulo">
                             <h:outputText value="#{eleicao.tituloComTurno}" />
                         </p:column>
-                        <p:column headerText="Inicio">
+                        <p:column headerText="Inicio" styleClass="font-titulo">
                             <h:outputText value="#{eleicao.inicio}">
                                 <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
                             </h:outputText>
                         </p:column>
-                        <p:column headerText="Término">
+                        <p:column headerText="Término" styleClass="font-titulo">
                             <h:outputText value="#{eleicao.termino}">
                                 <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
                             </h:outputText>
                         </p:column>
-                        <p:column headerText="Votou">
+                        <p:column headerText="Votou" styleClass="font-titulo">
                             <h:selectBooleanCheckbox value="#{eleicao.votou}" disabled="true" />
                         </p:column>
                     </p:dataTable>
                 </div>
                 <div class="ui-g-12 ui-md-12 ui-lg-12">
-                    <label for="eleicoesFinalizadas">Últimas eleições</label>
+                    <label for="eleicoesFinalizadas" class="font-titulo">Últimas eleições</label>
                     <p:dataTable id="eleicoesFinalizadas"
                                  value="#{homeWebBean.eleicoesFinalizadas}"
                                  var="eleicao"
@@ -53,28 +58,31 @@
                                  paginator="true"
                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
                                  paginatorAlwaysVisible="false"
+                                 paginatorPosition="bottom"
                                  reflow="true"
+                                 styleClass="tabela"
                                  emptyMessage="Nenhuma eleição encontrada...">
-                        <p:column headerText="Ação" width="100">
+                        <p:column headerText="Ação" width="100" styleClass="font-titulo">
                             <p:link value="Mais detalhes" outcome="/pages/eleicao/eleicao.xhtml">
                                 <f:param name="idEleicao" value="#{eleicao.idEleicao}" />
                             </p:link>
                         </p:column>
-                        <p:column headerText="Título">
+                        <p:column headerText="Título" styleClass="font-titulo">
                             <h:outputText value="#{eleicao.titulo}" />
                         </p:column>
-                        <p:column headerText="Data">
+                        <p:column headerText="Data" styleClass="font-titulo">
                             <h:outputText value="#{eleicao.inicio}">
                                 <f:convertDateTime pattern="dd/MM/yyyy" />
                             </h:outputText>
                         </p:column>
-                        <p:column headerText="Participou">
+                        <p:column headerText="Participou" styleClass="font-titulo">
                             <h:selectBooleanCheckbox value="#{eleicao.votou}" disabled="true" />
                         </p:column>
                     </p:dataTable>
                 </div>
             </div>
         </div>
+
     </h:form>
 </ui:define>
 </ui:composition>

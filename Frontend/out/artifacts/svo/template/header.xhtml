@@ -4,12 +4,15 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:form>
-        <div style="width: 100%; background-color: #5A5; float: right; text-align: right">
-            <h:outputText value="#{facesContext.externalContext.sessionMap.get('user').pessoa.nome}" />
+        <div class="cabecalho-usuario">
+            <div class="logo centraliza-texto">
+                <h:outputText value="Sistema Eleitoral" styleClass="font-titulo" />
+            </div>
+            <h:outputText value="Logado como: #{facesContext.externalContext.sessionMap.get('user').pessoa.nome}" styleClass="font-branca" />
             <br />
-            <p:commandLink value="Alterar senha" action="#{alteracaoSenhaWebBean.init()}" update="modalAlteracaoSenha" oncomplete="PF('modalAlteracaoSenha').show();" />
+            <p:commandLink value="Alterar senha" action="#{alteracaoSenhaWebBean.init()}" update="modalAlteracaoSenha" oncomplete="PF('modalAlteracaoSenha').show();" styleClass="font-branca"/>
             <br />
-            <p:commandLink value="Sair" action="#{loginWebBean.logout()}" />
+            <p:commandLink value="Sair" action="#{loginWebBean.logout()}" styleClass="font-branca"/>
         </div>
     </h:form>
 

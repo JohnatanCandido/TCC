@@ -84,7 +84,7 @@ def consulta_eleicao_por_usuario(user):
              JOIN turno_cargo tc ON t.id_turno = tc.id_turno
              JOIN turno_cargo_regiao tcr ON tc.id_turno_cargo = tcr.id_turno_cargo
              LEFT JOIN eleitor_turno et ON t.id_turno = et.id_turno AND et.id_eleitor = :idEleitor
-             WHERE t.inicio IS NOT NULL AND t.termino IS NOT NULL
+             WHERE t.inicio IS NOT NULL AND t.termino IS NOT NULL AND e.confirmada
              AND ((tcr.id_estado IS NULL AND tcr.id_cidade IS NULL)
                    OR (tcr.id_estado = :idEstado AND tcr.id_cidade IS NULL)
                    OR (tcr.id_estado = :idEstado AND tcr.id_cidade = :idCidade))'''
@@ -320,4 +320,10 @@ def setar_candidatos_eleitos_representacao_proporcional(id_tcr, partidos):
 
         for candidato in candidatos:
             candidato.situacao = 'Eleito'
+    db.commit()
+
+
+def confirmar_eleicao(id_eleicao):
+    eleicao = db.find_eleicao(id_eleicao)
+    eleicao.confirmada = True
     db.commit()
