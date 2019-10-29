@@ -350,7 +350,7 @@ class PinEleitor(db.Model):
     id_pin_eleitor = db.Column(db.Integer, primary_key=True)
     id_eleitor = db.Column(db.Integer, db.ForeignKey('eleitor.id_eleitor'), nullable=False)
     pin = db.Column(db.String, nullable=False)
-    criacao = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    criacao = db.Column(db.DateTime, nullable=False)
 
     def __repr__(self):
         return f'idEleitor: {self.id_eleitor}, pin: {self.pin}, criação: {self.criacao}'
