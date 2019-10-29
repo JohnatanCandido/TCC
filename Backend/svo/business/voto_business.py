@@ -130,7 +130,7 @@ def gerar_pin(user):
         pin.id_eleitor = user.eleitor.id_eleitor
         user_pin = senha_util.generate_pin()
         pin.pin = senha_util.encrypt_md5(user_pin)
-		pin.criacao = datetime.now()
+        pin.criacao = datetime.now()
         db.create(pin)
         db.commit()
 
