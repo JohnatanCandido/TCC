@@ -26,8 +26,7 @@
                                  styleClass="tabela"
                                  emptyMessage="Não há nenhuma eleição em aberto...">
                         <p:column headerText="Ação" styleClass="font-titulo">
-                            <p:link rendered="#{!eleicao.votou}" outcome="/pages/eleicao/votar/votar.xhtml">
-                                <i class="fa fa-pencil" />
+                            <p:link value="Votar" rendered="#{!eleicao.votou}" outcome="/pages/eleicao/votar/votar.xhtml">
                                 <f:param name="idEleicao" value="#{eleicao.idEleicao}" />
                             </p:link>
                         </p:column>
