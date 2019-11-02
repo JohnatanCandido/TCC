@@ -109,9 +109,9 @@
 
 }
 
-.tabela .ui-state-default {
-    background-color: #144913;
-    color: white;
+.ui-datatable thead th, .ui-datatable tfoot td {
+    background-color: #144913 !important;
+    color: white !important;
 }
 
 .paragrafo{
