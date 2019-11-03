@@ -17,6 +17,10 @@
         <p:autoUpdate />
     </p:messages>
 
+    <p:messages id="messagesNoAutoUpdate" showDetail="true" closable="true" style="z-index: 8000; position: fixed; min-width: 86%; max-width: 86%; font-size: 14px; margin-left: 8%">
+        <p:autoUpdate disabled="true" />
+    </p:messages>
+
     <h:form>
         <p:ajaxStatus rendered="true"
                       onstart="PF('statusDialog').show();"

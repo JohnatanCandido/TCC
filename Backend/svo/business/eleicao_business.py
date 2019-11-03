@@ -34,11 +34,15 @@ def consulta_eleicoes(filtro):
     return [e.campos_consulta() for e in eleicoes]
 
 
-def eleicao_by_id(id_eleicao):
+def eleicao_by_id(user, id_eleicao):
     eleicao = db.find_eleicao(id_eleicao)
     if eleicao is None:
         return None
-    return eleicao.to_json()
+    eleicao_json = eleicao.to_json()
+    for turno in eleicao_json['turnos']:
+        hash_eleitor = db.hash_eleitor_turno(turno['idTurno'], user.eleitor.id_eleitor)
+        turno['hashEleitor'] = hash_eleitor
+    return eleicao_json
 
 
 def salvar(dados):
@@ -106,21 +110,21 @@ def consulta_eleicao_por_usuario(user):
 
 # APURAÇÃO =============================================================================================================
 
-def apurar_eleicao(id_eleicao, num_turno):
-    turno = db.find_eleicao(id_eleicao).turnos[num_turno-1]
-    insere_apuracao(turno)
+def apurar_eleicao(id_turno, gerar_segundo_turno):
+    turno = db.find_turno(id_turno)
+    id_apuracao = insere_apuracao(turno)
     threads = []
     for turno_cargo in turno.turnosCargos:
         for tcr in turno_cargo.turno_cargo_regioes:
-            t = Thread(target=apurar_votos, kwargs={'tcr': tcr})
+            t = Thread(target=apurar_votos, kwargs={'tcr': tcr, 'id_apuracao': id_apuracao})
             threads.append(t)
             t.start()
     for t in threads:
         t.join()
     insere_termino_apuracao(turno.id_turno)
     segundo_turno = verifica_eleitos(turno.id_turno)
-    if segundo_turno:
-        cria_segundo_turno(id_eleicao, segundo_turno)
+    if gerar_segundo_turno and segundo_turno:
+        cria_segundo_turno(turno.id_eleicao, segundo_turno)
 
 
 def cria_segundo_turno(id_eleicao, segundo_turno):
@@ -171,40 +175,44 @@ def cria_candidatos(turno_cargo_regiao, candidatos):
         vice.candidato_principal = candidato
 
 
-def valida_apuracao(id_eleicao, turno):
-    turno = db.find_eleicao(id_eleicao).turnos[turno - 1]
-    if turno.apuracao is not None:
-        msg = f'O {turno.turno}º desta eleição já foi apurado!'
+def valida_apuracao(id_turno):
+    turno = db.find_turno(id_turno)
+    if [a for a in turno.apuracoes if a.termino_apuracao is not None]:
+        msg = 'Esta eleição já está sendo apurada!'
+        raise ValidationException(msg, [msg])
+    if turno.termino > datetime.now():
+        msg = 'A apuração só pode ser feita após o término da votação!'
         raise ValidationException(msg, [msg])
 
 
 def insere_apuracao(turno):
-    id_turno = turno.id_turno
     apuracao = Apuracao()
-    apuracao.id_turno = id_turno
+    apuracao.id_turno = turno.id_turno
     apuracao.inicio_apuracao = str(datetime.now())
     db.create(apuracao)
     db.commit()
 
+    return apuracao.id_apuracao
 
-def apurar_votos(tcr):
+
+def apurar_votos(tcr, id_apuracao):
     print(f'Iniciada apuração: {tcr.turnoCargo.cargo.nome} ===========================================================')
     votos = db.query(VotoEncriptado)\
               .filter(VotoEncriptado.id_turno_cargo_regiao == tcr.id_turno_cargo_regiao)\
-              .filter(VotoEncriptado.voto_apurado == None)\
               .all()
 
     for voto_enc in votos:
-        voto = mf.cria_voto(voto_enc)
+        voto = mf.cria_voto(voto_enc, id_apuracao)
         db.create(voto)
         db.commit()
     sql = '''UPDATE candidato c 
              SET qt_votos = (SELECT count(*) FROM voto_apurado va 
                              WHERE id_turno_cargo_regiao = :idTurnoCargoRegiao 
+                             AND id_apuracao = :idApuracao
                              AND va.id_candidato = c.id_candidato)
              WHERE c.id_turno_cargo_regiao = :idTurnoCargoRegiao'''
 
-    db.native(sql, {'idTurnoCargoRegiao': tcr.id_turno_cargo_regiao})
+    db.native(sql, {'idTurnoCargoRegiao': tcr.id_turno_cargo_regiao, 'idApuracao': id_apuracao})
     db.commit()
     print(f'Finalizada apuração: {tcr.turnoCargo.cargo.nome} =========================================================')
 
@@ -220,6 +228,7 @@ def verifica_eleitos(id_turno):
     turno = db.find_turno(id_turno)
     for turno_cargo in turno.turnosCargos:
         for tcr in turno_cargo.turno_cargo_regioes:
+            remove_status_eleito(tcr)
             if tcr.turnoCargo.cargo.sistema_eleicao == 'Maioria Simples':
                 verifica_eleito_maioria_simples(tcr, segundo_turno)
             else:
@@ -320,6 +329,12 @@ def setar_candidatos_eleitos_representacao_proporcional(id_tcr, partidos):
 
         for candidato in candidatos:
             candidato.situacao = 'Eleito'
+    db.commit()
+
+
+def remove_status_eleito(tcr):
+    sql = """UPDATE candidato SET situacao = 'Não Eleito' WHERE id_turno_cargo_regiao = :idTcr"""
+    db.native(sql, {'idTcr': tcr.id_turno_cargo_regiao})
     db.commit()
 
 

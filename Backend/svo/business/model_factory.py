@@ -210,12 +210,12 @@ def cria_voto_encriptado(dados, id_cidade, id_eleitor):
     return voto
 
 
-def cria_voto(voto_enc):
+def cria_voto(voto_enc, id_apuracao):
     va = VotoApurado()
     va.id_turno_cargo_regiao = voto_enc.id_turno_cargo_regiao
     va.id_cidade = voto_enc.id_cidade
-    va.id_eleitor = voto_enc.id_eleitor
     va.id_voto_encriptado = voto_enc.id_voto_encriptado
+    va.id_apuracao = id_apuracao
 
     id_candidato = c.dec(int(voto_enc.id_candidato))
     id_partido = c.dec(int(voto_enc.id_partido))

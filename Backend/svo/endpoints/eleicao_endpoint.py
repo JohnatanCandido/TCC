@@ -22,8 +22,9 @@ def salvar(user):
 
 
 @eleicoes.route('/<id_eleicao>', methods=['GET'])
-def consultar_eleicao(id_eleicao):
-    eleicao = eleicao_business.eleicao_by_id(id_eleicao)
+@protected
+def consultar_eleicao(user, id_eleicao):
+    eleicao = eleicao_business.eleicao_by_id(user, id_eleicao)
     if eleicao is None:
         return jsonify(['Eleição não encontrada']), 204
     return jsonify(eleicao), 200
@@ -61,13 +62,31 @@ def consulta_eleicoes_usuario(user):
     return jsonify(eleicoes), 200
 
 
-@eleicoes.route('/<id_eleicao>/turno/<turno>/apurar', methods=['POST'])
-def apurar(id_eleicao, turno):
+@eleicoes.route('/turno/<id_turno>/apurar', methods=['POST'])
+@protected
+def apurar(user, id_turno):
+    if not user.login.has_perfil('Administrador'):
+        return jsonify(['Você não tem permissão para executar esta ação.']), 403
     try:
-        eleicao_business.valida_apuracao(int(id_eleicao), int(turno))
-        thread = Thread(target=eleicao_business.apurar_eleicao, kwargs={'id_eleicao': int(id_eleicao),
-                                                                        'num_turno': int(turno)})
+        eleicao_business.valida_apuracao(int(id_turno))
+        thread = Thread(target=eleicao_business.apurar_eleicao, kwargs={'id_turno': int(id_turno),
+                                                                        'gerar_segundo_turno': True})
         thread.start()
         return 'Foi iniciada a apuração da eleição', 200
+    except ValidationException as e:
+        return jsonify(e.errors), 400
+
+
+@eleicoes.route('/turno/<id_turno>/recontar', methods=['POST'])
+@protected
+def recontar(user, id_turno):
+    if not user.login.has_perfil('Administrador'):
+        return jsonify(['Você não tem permissão para executar esta ação.']), 403
+    try:
+        eleicao_business.valida_apuracao(int(id_turno))
+        thread = Thread(target=eleicao_business.apurar_eleicao, kwargs={'id_turno': int(id_turno),
+                                                                        'gerar_segundo_turno': False})
+        thread.start()
+        return 'Foi iniciada a recontagem dos votos da eleição', 200
     except ValidationException as e:
         return jsonify(e.errors), 400

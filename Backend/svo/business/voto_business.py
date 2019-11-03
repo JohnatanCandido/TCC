@@ -54,7 +54,7 @@ def consulta_turno_aberto_por_eleicao(id_eleicao):
     sql = '''SELECT t.id_turno FROM turno t 
              JOIN eleicao e ON t.id_eleicao = e.id_eleicao
              LEFT JOIN apuracao a ON a.id_turno = t.id_turno
-             WHERE current_date BETWEEN t.inicio AND t.termino
+             WHERE now() BETWEEN t.inicio AND t.termino
              AND e.confirmada 
              AND a IS NULL 
              AND t.id_eleicao = :idEleicao'''
