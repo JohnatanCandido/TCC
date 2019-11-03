@@ -85,4 +85,9 @@ public class EleicaoService implements EleicaoServiceLocal, Serializable {
     public void confirmarEleicao(Long idEleicao) throws BusinessException {
         eleicaoBusiness.confirmarEleicao(idEleicao);
     }
+
+    @Override
+    public String apurarTurno(Long idTurno) throws BusinessException {
+        return eleicaoBusiness.apurarTurno(idTurno);
+    }
 }

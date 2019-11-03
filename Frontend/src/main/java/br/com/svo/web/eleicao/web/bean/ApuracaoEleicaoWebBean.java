@@ -86,6 +86,14 @@ public class ApuracaoEleicaoWebBean extends FiltroCandidatoWebBean implements Se
         return false;
     }
 
+    public boolean isRenderizaPanelHashEleitor() {
+        return getHashEleitorTurno() != null;
+    }
+
+    public String getHashEleitorTurno() {
+        return turno != null ? eleicaoWebBean.getEleicao().getTurnos().get(turno-1).getHashEleitor() : null;
+    }
+
 //    GETTERS E SETTERS
 
     public List<ApuracaoCandidatoDTO> getCandidatos() {

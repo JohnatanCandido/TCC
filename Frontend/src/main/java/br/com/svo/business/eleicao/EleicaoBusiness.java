@@ -15,6 +15,7 @@ import com.google.gson.reflect.TypeToken;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class EleicaoBusiness implements Serializable {
@@ -50,7 +51,9 @@ public class EleicaoBusiness implements Serializable {
 
     public Eleicao buscaEleicao(Long idEleicao) throws BusinessException, NoResultException {
         try {
-            String response = new RestUtil("eleicao/" + idEleicao).get();
+            String response = new RestUtil("eleicao/" + idEleicao).withHeader("Content-Type", "application/json")
+                                                                  .withHeader("Authorization", identity.getToken())
+                                                                  .get();
             return GSON.fromJson(response, Eleicao.class);
         } catch (RestException e) {
             throw new BusinessException(e.getMessages().get(0));
@@ -176,5 +179,17 @@ public class EleicaoBusiness implements Serializable {
         } catch (RestException e) {
             throw new BusinessException("Erro ao confirmar eleição", e.getMessages());
         } catch (NoResultException ignored) {}
+    }
+
+    public String apurarTurno(Long idTurno) throws BusinessException {
+        try {
+            return new RestUtil("eleicao/turno/" + idTurno + "/apurar").withHeader("Content-Type", "application/json")
+                                                                      .withHeader("Authorization", identity.getToken())
+                                                                      .post();
+        } catch (RestException e) {
+            throw new BusinessException("Erro ao apurar eleição", e.getMessages());
+        } catch (NoResultException ignored) {
+            throw new BusinessException("Erro ao apurar eleição", Collections.singletonList("Erro ao apurar eleição"));
+        }
     }
 }

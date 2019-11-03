@@ -39,4 +39,6 @@ public interface EleicaoServiceLocal {
     List<EleicaoConsultaDTO> consultaEleicoesUsuario() throws BusinessException, NoResultException;
 
     void confirmarEleicao(Long idEleicao) throws BusinessException;
+
+    String apurarTurno(Long idTurno) throws BusinessException;
 }

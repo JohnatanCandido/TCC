@@ -54,29 +54,12 @@ def cria_votos(id_eleitores, id_turno):
     for id_eleitor in id_eleitores:
         hash_voto = ''
         print(f'Voto de {id_eleitor}')
-        cand = db.query(Candidato).get(randint(9, 308))
+        cands = [1, 3, 5, 7]
+        shuffle(cands)
+        cand = db.query(Candidato).get(cands[0])
         id_candidato = c.enc(cand.id_candidato)
         id_partido = c.enc(cand.id_partido)
         id_eleitor_enc = c.enc(id_eleitor)
-        id_turno_cargo_regiao = 2
-        id_cidade = 1
-
-        hash_voto += str(id_candidato)
-
-        sql = 'INSERT INTO voto_encriptado(id_turno_cargo_regiao, id_cidade, id_candidato, id_partido, id_eleitor)' \
-              'VALUES(:idTurnoCargoRegiao, :idCidade, :idCandidato, :idPartido, :idEleitor)'
-
-        db.native(sql, {'idTurnoCargoRegiao': id_turno_cargo_regiao,
-                        'idCidade': id_cidade,
-                        'idCandidato': id_candidato,
-                        'idPartido': id_partido,
-                        'idEleitor': id_eleitor_enc})
-
-        candidatos = [1, 3, 5, 7]
-        shuffle(candidatos)
-        cand = db.query(Candidato).get(candidatos[0])
-        id_candidato = c.enc(cand.id_candidato)
-        id_partido = c.enc(cand.id_partido)
         id_turno_cargo_regiao = 1
         id_cidade = 1
 
@@ -90,6 +73,25 @@ def cria_votos(id_eleitores, id_turno):
                         'idCandidato': id_candidato,
                         'idPartido': id_partido,
                         'idEleitor': id_eleitor_enc})
+
+        # candidatos = [1, 3, 5, 7]
+        # shuffle(candidatos)
+        # cand = db.query(Candidato).get(candidatos[0])
+        # id_candidato = c.enc(cand.id_candidato)
+        # id_partido = c.enc(cand.id_partido)
+        # id_turno_cargo_regiao = 1
+        # id_cidade = 1
+        #
+        # hash_voto += str(id_candidato)
+        #
+        # sql = 'INSERT INTO voto_encriptado(id_turno_cargo_regiao, id_cidade, id_candidato, id_partido, id_eleitor)' \
+        #       'VALUES(:idTurnoCargoRegiao, :idCidade, :idCandidato, :idPartido, :idEleitor)'
+        #
+        # db.native(sql, {'idTurnoCargoRegiao': id_turno_cargo_regiao,
+        #                 'idCidade': id_cidade,
+        #                 'idCandidato': id_candidato,
+        #                 'idPartido': id_partido,
+        #                 'idEleitor': id_eleitor_enc})
 
         insert_eleitor_turno(id_eleitor, id_turno, senha_util.encrypt_md5(hash_voto))
         db.commit()

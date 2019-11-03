@@ -1,11 +1,11 @@
 from datetime import datetime
 
 from sqlalchemy.sql import text
+from sqlalchemy import desc
 
 from svo import db
 from svo.entities.models import VotoEncriptado, Login, Pessoa, Cargo, Estado, Cidade, Eleicao, Perfil, Partido, \
-    Coligacao, TurnoCargoRegiao, Turno, Apuracao, PinEleitor
-from svo.exception.validation_exception import ValidationException
+    Coligacao, TurnoCargoRegiao, Turno, Apuracao, EleitorTurno
 
 
 def create(entidade):
@@ -89,7 +89,15 @@ def find_turno(id_turno):
 
 
 def apuracao_by_id_turno(id_turno):
-    return query(Apuracao).filter(Apuracao.id_turno == id_turno).first()
+    return query(Apuracao).filter(Apuracao.id_turno == id_turno).order_by(desc(Apuracao.inicio_apuracao)).first()
+
+
+def hash_eleitor_turno(id_turno, id_eleitor):
+    eleitor_turno = query(EleitorTurno).filter(EleitorTurno.id_turno == id_turno)\
+                                       .filter(EleitorTurno.id_eleitor == id_eleitor)\
+                                       .first()
+
+    return eleitor_turno.hash if eleitor_turno is not None else None
 
 
 def busca_pin_valido_por_id_eleitor(id_eleitor):

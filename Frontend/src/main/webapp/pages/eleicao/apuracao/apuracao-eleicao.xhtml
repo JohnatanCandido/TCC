@@ -19,7 +19,7 @@
                                            var="turnoCargo"
                                            itemLabel="#{turnoCargo.cargo.nome}"
                                            itemValue="#{turnoCargo}" />
-                            <p:ajax listener="#{apuracaoEleicaoWebBean.filtraEstados()}" process="@this" update="panelApuracao" />
+                            <p:ajax listener="#{apuracaoEleicaoWebBean.filtraEstados()}" process="@this" update="panelApuracao, panelHashEleitor" />
                         </p:selectOneMenu>
                     </div>
                     <h:panelGroup id="panelEstadoApuracao" rendered="#{apuracaoEleicaoWebBean.renderizaEstado}">
@@ -34,7 +34,7 @@
                                                var="estado"
                                                itemLabel="#{estado.nome}"
                                                itemValue="#{estado}" />
-                                <p:ajax listener="#{apuracaoEleicaoWebBean.filtraCidades()}" process="@this" update="panelApuracao" />
+                                <p:ajax listener="#{apuracaoEleicaoWebBean.filtraCidades()}" process="@this" update="panelApuracao, panelHashEleitor" />
                             </p:selectOneMenu>
                         </div>
                     </h:panelGroup>
@@ -50,7 +50,7 @@
                                                var="cidade"
                                                itemLabel="#{cidade.nome}"
                                                itemValue="#{cidade}" />
-                                <p:ajax listener="#{apuracaoEleicaoWebBean.buscaCandidatos()}" process="@this" update="panelApuracao" />
+                                <p:ajax listener="#{apuracaoEleicaoWebBean.buscaCandidatos()}" process="@this" update="panelApuracao, panelHashEleitor" />
                             </p:selectOneMenu>
                         </div>
                     </h:panelGroup>
@@ -65,8 +65,14 @@
                                                var="turno"
                                                itemLabel="#{turno.label}"
                                                itemValue="#{turno.value}" />
-                                <p:ajax listener="#{apuracaoEleicaoWebBean.buscaCandidatos()}" process="@this" update="panelApuracao" />
+                                <p:ajax listener="#{apuracaoEleicaoWebBean.buscaCandidatos()}" process="@this" update="panelApuracao, panelHashEleitor" />
                             </p:selectOneMenu>
+                        </div>
+                    </h:panelGroup>
+                    <h:panelGroup id="panelHashEleitor" rendered="#{apuracaoEleicaoWebBean.renderizaPanelHashEleitor}">
+                        <div class="ui-g-12 ui-md-12 ui-lg-3">
+                            <label for="hashEleitor">Hash de identificação do seu voto</label>
+                            <p:inputText id="hashEleitor" value="#{apuracaoEleicaoWebBean.hashEleitorTurno}" readonly="true" />
                         </div>
                     </h:panelGroup>
                 </div>

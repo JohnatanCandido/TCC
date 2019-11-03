@@ -14,6 +14,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.List;
 
 @ViewScoped
@@ -101,6 +102,17 @@ public class EleicaoWebBean implements Serializable {
         }
     }
 
+    public void apurar() {
+        try {
+            Long idTurno = eleicao.getTurnos().stream().max(Comparator.comparing(Turno::getTurno)).get().getIdTurno();
+            String msg = eleicaoService.apurarTurno(idTurno);
+            SvoMessages.addMessage(msg);
+            eleicao.getTurnos().get(eleicao.getTurnos().size()-1).setSituacao("Em apuração");
+        } catch (BusinessException e) {
+            SvoMessages.addErrorMessage(e);
+        }
+    }
+
     public boolean isPossuiPermissaoAdministrador() {
         return identity.hasPerfil(Perfis.ADMINISTRADOR);
     }
@@ -111,6 +123,18 @@ public class EleicaoWebBean implements Serializable {
 
     public boolean isRenderizaAbasPermissaoAdministrador() {
         return isEleicaoPersistida() && isPossuiPermissaoAdministrador();
+    }
+
+    public boolean isRenderizarBotaoApurar() {
+        return eleicao.getTurnos().stream().anyMatch(t -> "Aguardando apuração".equals(t.getSituacao()));
+    }
+
+    public boolean isPermiteAlteracoesSegundoTurno() {
+        return eleicao.getTurnos().size() == 2 && eleicao.getTurnos().get(1).getSituacao().equals("Aguardando lançamento");
+    }
+
+    public boolean isPermiteAlterarDatasTurno(Turno turno) {
+        return turno.getSituacao().equals("Aguardando lançamento");
     }
 
 //    GETTERS E SETTERS

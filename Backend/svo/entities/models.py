@@ -47,7 +47,6 @@ class Eleicao(db.Model):
     observacao = db.Column(db.Text)
     confirmada = db.Column(db.Boolean, default=False)
     turnos = db.relationship('Turno', backref='eleicao', lazy=True)
-    coligacoes = db.relationship('Coligacao', backref='eleicao', lazy=True)
 
     def __repr__(self):
         return f'idEleicao: {self.id_eleicao}, título: {self.titulo}'
@@ -80,7 +79,7 @@ class Turno(db.Model):
     inicio = db.Column(db.DateTime)
     termino = db.Column(db.DateTime)
     turnosCargos = db.relationship('TurnoCargo', backref='turno', lazy=True)
-    apuracao = db.relationship('Apuracao', backref='turno', uselist=False)
+    apuracoes = db.relationship('Apuracao', backref='turno')
 
     __table_args__ = (
         db.UniqueConstraint('id_eleicao', 'turno', name='unique_turno_eleicao'),
@@ -94,12 +93,24 @@ class Turno(db.Model):
         return tcs[0] if len(tcs) == 1 else TurnoCargo()
 
     def to_json(self):
+        if self.termino is None:
+            situacao = 'Aguardando lançamento'
+        elif self.termino > datetime.now():
+            situacao = 'Em andamento'
+        elif not self.apuracoes:
+            situacao = 'Aguardando apuração'
+        elif [a for a in self.apuracoes if a.termino_apuracao is None]:
+            situacao = 'Em apuração'
+        else:
+            situacao = 'Apurado'
+
         return {
             'idTurno': self.id_turno,
             'turno': self.turno,
             'inicio': str(self.inicio) if self.inicio is not None else None,
             'termino': str(self.termino) if self.termino is not None else None,
-            'turnoCargos': [tc.to_json() for tc in self.turnosCargos]
+            'turnoCargos': [tc.to_json() for tc in self.turnosCargos],
+            'situacao': situacao
         }
 
 
@@ -417,13 +428,12 @@ class VotoApurado(db.Model):
     id_cidade = db.Column(db.Integer, db.ForeignKey('cidade.id_cidade'))
     id_candidato = db.Column(db.Integer, db.ForeignKey('candidato.id_candidato'))
     id_partido = db.Column(db.Integer, db.ForeignKey('partido.id_partido'))
-    id_eleitor = db.Column(db.Text, nullable=False)
+    id_apuracao = db.Column(db.Integer, db.ForeignKey('apuracao.id_apuracao'))
 
     def to_json(self):
         return {
             'idCargo': self.id_cargo,
             'idEleicao': self.id_eleicao,
             'idCidade': self.id_cidade,
-            'candidato': self.candidato,
-            'idEleitor': self.id_eleitor
+            'candidato': self.candidato
         }

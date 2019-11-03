@@ -13,7 +13,9 @@ public class Turno implements Serializable {
     private int turno;
     private Date inicio;
     private Date termino;
+    private String situacao;
     private List<TurnoCargo> turnoCargos = new ArrayList<>();
+    private String hashEleitor;
 
     public Turno() {}
 
@@ -59,11 +61,23 @@ public class Turno implements Serializable {
         this.termino = termino;
     }
 
+    public String getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(String situacao) {
+        this.situacao = situacao;
+    }
+
     public List<TurnoCargo> getTurnoCargos() {
         return turnoCargos;
     }
 
     public void setTurnoCargos(List<TurnoCargo> turnoCargos) {
         this.turnoCargos = turnoCargos;
+    }
+
+    public String getHashEleitor() {
+        return hashEleitor;
     }
 }
