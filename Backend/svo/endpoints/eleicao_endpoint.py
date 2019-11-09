@@ -4,7 +4,7 @@ from flask import request, Blueprint, jsonify
 
 from svo.exception.validation_exception import ValidationException
 from svo.util.token_util import protected
-from svo.business import eleicao_business
+from svo.business import eleicao_business, apuracao_business
 
 eleicoes = Blueprint('eleicoes', __name__)
 
@@ -68,8 +68,8 @@ def apurar(user, id_turno):
     if not user.login.has_perfil('Administrador'):
         return jsonify(['Você não tem permissão para executar esta ação.']), 403
     try:
-        eleicao_business.valida_apuracao(int(id_turno))
-        thread = Thread(target=eleicao_business.apurar_eleicao, kwargs={'id_turno': int(id_turno),
+        apuracao_business.valida_apuracao(int(id_turno))
+        thread = Thread(target=apuracao_business.apurar_eleicao, kwargs={'id_turno': int(id_turno),
                                                                         'gerar_segundo_turno': True})
         thread.start()
         return 'Foi iniciada a apuração da eleição', 200
@@ -83,8 +83,8 @@ def recontar(user, id_turno):
     if not user.login.has_perfil('Administrador'):
         return jsonify(['Você não tem permissão para executar esta ação.']), 403
     try:
-        eleicao_business.valida_apuracao(int(id_turno))
-        thread = Thread(target=eleicao_business.apurar_eleicao, kwargs={'id_turno': int(id_turno),
+        apuracao_business.valida_apuracao(int(id_turno))
+        thread = Thread(target=eleicao_business.apuracao_business, kwargs={'id_turno': int(id_turno),
                                                                         'gerar_segundo_turno': False})
         thread.start()
         return 'Foi iniciada a recontagem dos votos da eleição', 200

@@ -19,11 +19,6 @@
         width: 98%;
     }
 
-    .menu {
-        width: 100% !important;
-        margin: 0 !important;
-    }
-
     .ui-tabs .ui-tabs-panel {
         padding: 0;
     }
@@ -31,17 +26,22 @@
     .ui-accordion .ui-accordion-content {
         padding: 0;
     }
+
+    .ui-menuitem.ui-widget.ui-corner-all:last-child {
+        float: right;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+.menu {
+    width: 100%;
+    margin: 0;
 }
 
 .template{
     display: flex;
     flex-direction: row;
-}
-
-.menu {
-    width: 90%;
-    height: 100%;
-    margin-top: 0;
 }
 
 .center{
@@ -130,6 +130,10 @@
         width: 96% !important;
         margin: 0 0 10px 0;
     }
+
+    .no-margin {
+        margin: 0 !important;
+    }
 }
 .fundo-branco {
     background-color: #FFF;
@@ -166,5 +170,11 @@
 
     .mega-menu {
         width: 96%;
+    }
+
+    .menu {
+        width: 90%;
+        height: 100%;
+        margin-top: 0;
     }
 }

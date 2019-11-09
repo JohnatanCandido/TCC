@@ -47,10 +47,12 @@
             </div>
         </div>
         <div id="content" class="horizontal">
-            <div class="mobile-menu">
-                <ui:include src="navigation-menu.xhtml" />
-                <p:sticky target="navigationMenu" />
-            </div>
+            <h:form>
+                <div class="mobile-menu">
+                    <ui:include src="navigation-menu.xhtml" />
+                    <p:sticky target="navigationMenu" />
+                </div>
+            </h:form>
            <ui:insert name="content" />
         </div>
     </div>
@@ -58,7 +60,7 @@
 <!--    <div id="footer">-->
 <!--        <ui:include src="/template/basicfoo" />-->
 <!--    </div>-->
-
+    <ui:include src="../pages/pessoa/modal-alterar-senha.xhtml" />
     <h:outputStylesheet name="css/estilo.css" />
 </h:body>
 </html>
