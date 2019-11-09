@@ -1,6 +1,7 @@
 package br.com.svo.entities;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Estado implements Serializable {
 
@@ -51,5 +52,10 @@ public class Estado implements Serializable {
             return false;
         Estado other = (Estado) obj;
         return this.idEstado.equals(other.idEstado);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.idEstado);
     }
 }

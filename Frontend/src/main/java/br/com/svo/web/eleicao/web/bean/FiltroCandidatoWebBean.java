@@ -36,8 +36,9 @@ public class FiltroCandidatoWebBean {
         if (turnoCargo != null && isRenderizaEstado()) {
             this.estados = turnoCargo.getTurnoCargoRegioes()
                                      .stream()
+                                     .filter(tcr -> tcr.getEstado() != null)
                                      .map(TurnoCargoRegiao::getEstado)
-                                     .filter(Objects::nonNull)
+                                     .distinct()
                                      .collect(Collectors.toList());
             this.cidades = new ArrayList<>();
         }

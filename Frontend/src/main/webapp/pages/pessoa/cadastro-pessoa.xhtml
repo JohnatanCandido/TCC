@@ -1,7 +1,6 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:o="http://omnifaces.org/ui"
                 template="../../template/template.xhtml">
@@ -100,6 +99,8 @@
                         <br />
                         <p:fieldset legend="Perfis">
                             <p:pickList id="perfis"
+                                        responsive="true"
+                                        style="max-width: 490px;"
                                         value="#{pessoaWebBean.perfis}"
                                         var="perfil"
                                         itemLabel="#{perfil.nome}"

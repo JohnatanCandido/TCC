@@ -1,15 +1,9 @@
-.fundo{
+.fundo {
     background-color: #EFEDED;
 }
 
 .fundologin{
     background-color: #144913;
-}
-
-.vertical {
-    padding-top: 20px;
-    background-color: #144913;
-    padding-bottom: 100%;
 }
 
 .horizontal {
@@ -19,13 +13,23 @@
     float: left;
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 640px) {
     .horizontal {
-        display: flex;
-        flex-direction: column;
-        width: 80%;
-        float: left;
-        margin-left: -160px;
+        display: block;
+        width: 98%;
+    }
+
+    .menu {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    .ui-tabs .ui-tabs-panel {
+        padding: 0;
+    }
+
+    .ui-accordion .ui-accordion-content {
+        padding: 0;
     }
 }
 
@@ -34,16 +38,10 @@
     flex-direction: row;
 }
 
-.menu{
-    background-color: #EFEDED;
-    margin-top: 10px;
-    margin-bottom: 5px;
-    padding-left: 5px;
-    padding-bottom: 5px;
-    padding-top: 5px;
-    border-color: black;
-    border-radius: 5%;
-
+.menu {
+    width: 90%;
+    height: 100%;
+    margin-top: 0;
 }
 
 .center{
@@ -68,7 +66,7 @@
     font-size: 24px;
 }
 .centraliza-texto{
-   text-align: center;
+    text-align: center;
 }
 
 .font{
@@ -121,4 +119,52 @@
 .botao{
     background-color: #144913;
     color: white;
+}
+
+@media screen and (min-width: 640px) {
+    .ui-menubar .ui-menuitem {
+        width: 100% !important;
+    }
+
+    .ui-menu .ui-menuitem-link {
+        width: 96% !important;
+        margin: 0 0 10px 0;
+    }
+}
+.fundo-branco {
+    background-color: #FFF;
+}
+
+.menu-lateral {
+    display: none;
+}
+
+.mega-menu {
+    width: 100%;
+}
+
+@media (min-width: 640px) {
+    .menu-lateral {
+        display: block;
+        width: 18%;
+    }
+
+    .fundo-menu {
+        height: 57%;
+    }
+
+    .mobile-menu {
+        display: none;
+        width: 100%
+    }
+
+    .vertical {
+        padding-top: 20px;
+        background-color: #144913;
+        padding-bottom: 100%;
+    }
+
+    .mega-menu {
+        width: 96%;
+    }
 }
