@@ -70,7 +70,7 @@ def apurar(user, id_turno):
     try:
         apuracao_business.valida_apuracao(int(id_turno))
         thread = Thread(target=apuracao_business.apurar_eleicao, kwargs={'id_turno': int(id_turno),
-                                                                        'gerar_segundo_turno': True})
+                                                                         'gerar_segundo_turno': True})
         thread.start()
         return 'Foi iniciada a apuração da eleição', 200
     except ValidationException as e:
@@ -84,8 +84,8 @@ def recontar(user, id_turno):
         return jsonify(['Você não tem permissão para executar esta ação.']), 403
     try:
         apuracao_business.valida_apuracao(int(id_turno))
-        thread = Thread(target=eleicao_business.apuracao_business, kwargs={'id_turno': int(id_turno),
-                                                                        'gerar_segundo_turno': False})
+        thread = Thread(target=apuracao_business.apurar_eleicao, kwargs={'id_turno': int(id_turno),
+                                                                         'gerar_segundo_turno': False})
         thread.start()
         return 'Foi iniciada a recontagem dos votos da eleição', 200
     except ValidationException as e:
