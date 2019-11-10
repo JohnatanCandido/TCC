@@ -84,7 +84,7 @@ def consultar_pessoas(filtro):
         query += '.filter(Eleitor.secao == filtro["secao"])'
     if 'numeroInscricao' in filtro:
         query += '.filter(Eleitor.numero_inscricao == filtro["numeroInscricao"])'
-    query += '.all()'
+    query += '.limit(10).all()'
     pessoas = eval(query)
     if not pessoas:
         return []

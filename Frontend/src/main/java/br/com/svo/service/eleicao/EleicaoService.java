@@ -90,4 +90,9 @@ public class EleicaoService implements EleicaoServiceLocal, Serializable {
     public String apurarTurno(Long idTurno) throws BusinessException {
         return eleicaoBusiness.apurarTurno(idTurno);
     }
+
+    @Override
+    public String recontagemVotos(Long idTurno) throws BusinessException {
+        return eleicaoBusiness.recontagemVotos(idTurno);
+    }
 }

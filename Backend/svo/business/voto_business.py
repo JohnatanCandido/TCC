@@ -67,6 +67,7 @@ def consulta_turno_aberto_por_eleicao(id_eleicao):
 def consulta_candidato(tcr, numero):
     candidato = db.query(Candidato)\
                   .filter(Candidato.id_turno_cargo_regiao == tcr)\
+                  .filter(Candidato.id_candidato_principal == None) \
                   .filter(Candidato.numero == numero)\
                   .first()
 

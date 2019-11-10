@@ -41,7 +41,8 @@ def votar(id_eleicao):
              join eleitor e on p.id_pessoa = e.id_pessoa
              where p.nome like '%Teste%' 
              and not exists(select 1 from eleitor_turno et 
-                            where e.id_eleitor = et.id_eleitor and et.id_turno = :idTurno)'''
+                            where e.id_eleitor = et.id_eleitor and et.id_turno = :idTurno)
+             limit 500'''
 
     id_turno = voto_business.consulta_turno_aberto_por_eleicao(id_eleicao)
     result = db.native(sql, {'idTurno': id_turno}).fetchall()
@@ -54,13 +55,18 @@ def cria_votos(id_eleitores, id_turno):
     for id_eleitor in id_eleitores:
         hash_voto = ''
         print(f'Voto de {id_eleitor}')
-        cands = [1, 3, 5, 7]
+        cands = [-1, 23, 25, 27, 29]
         shuffle(cands)
-        cand = db.query(Candidato).get(cands[0])
-        id_candidato = c.enc(cand.id_candidato)
-        id_partido = c.enc(cand.id_partido)
+
+        if cands[0] != -1:
+            cand = db.query(Candidato).get(cands[0])
+            id_candidato = c.enc(cand.id_candidato)
+            id_partido = c.enc(cand.id_partido)
+        else:
+            id_candidato = c.enc(-1)
+            id_partido = c.enc(-1)
         id_eleitor_enc = c.enc(id_eleitor)
-        id_turno_cargo_regiao = 1
+        id_turno_cargo_regiao = 9
         id_cidade = 1
 
         hash_voto += str(id_candidato)
@@ -74,24 +80,51 @@ def cria_votos(id_eleitores, id_turno):
                         'idPartido': id_partido,
                         'idEleitor': id_eleitor_enc})
 
-        # candidatos = [1, 3, 5, 7]
-        # shuffle(candidatos)
-        # cand = db.query(Candidato).get(candidatos[0])
-        # id_candidato = c.enc(cand.id_candidato)
-        # id_partido = c.enc(cand.id_partido)
-        # id_turno_cargo_regiao = 1
-        # id_cidade = 1
-        #
-        # hash_voto += str(id_candidato)
-        #
-        # sql = 'INSERT INTO voto_encriptado(id_turno_cargo_regiao, id_cidade, id_candidato, id_partido, id_eleitor)' \
-        #       'VALUES(:idTurnoCargoRegiao, :idCidade, :idCandidato, :idPartido, :idEleitor)'
-        #
-        # db.native(sql, {'idTurnoCargoRegiao': id_turno_cargo_regiao,
-        #                 'idCidade': id_cidade,
-        #                 'idCandidato': id_candidato,
-        #                 'idPartido': id_partido,
-        #                 'idEleitor': id_eleitor_enc})
+        cands = [-1, 31, 33, 35]
+        shuffle(cands)
+        if cands[0] != -1:
+            cand = db.query(Candidato).get(cands[0])
+            id_candidato = c.enc(cand.id_candidato)
+            id_partido = c.enc(cand.id_partido)
+        else:
+            id_candidato = c.enc(-1)
+            id_partido = c.enc(-1)
+        id_turno_cargo_regiao = 10
+        id_cidade = 1
+
+        hash_voto += str(id_candidato)
+
+        sql = 'INSERT INTO voto_encriptado(id_turno_cargo_regiao, id_cidade, id_candidato, id_partido, id_eleitor)' \
+              'VALUES(:idTurnoCargoRegiao, :idCidade, :idCandidato, :idPartido, :idEleitor)'
+
+        db.native(sql, {'idTurnoCargoRegiao': id_turno_cargo_regiao,
+                        'idCidade': id_cidade,
+                        'idCandidato': id_candidato,
+                        'idPartido': id_partido,
+                        'idEleitor': id_eleitor_enc})
+
+        cand = randint(43, 142)
+        cand = cand if bool(randint(0, 1)) else -1
+        if cand != -1:
+            cand = db.query(Candidato).get(cand)
+            id_candidato = c.enc(cand.id_candidato)
+            id_partido = c.enc(cand.id_partido)
+        else:
+            id_candidato = c.enc(-1)
+            id_partido = c.enc(-1)
+        id_turno_cargo_regiao = 12
+        id_cidade = 1
+
+        hash_voto += str(id_candidato)
+
+        sql = 'INSERT INTO voto_encriptado(id_turno_cargo_regiao, id_cidade, id_candidato, id_partido, id_eleitor)' \
+              'VALUES(:idTurnoCargoRegiao, :idCidade, :idCandidato, :idPartido, :idEleitor)'
+
+        db.native(sql, {'idTurnoCargoRegiao': id_turno_cargo_regiao,
+                        'idCidade': id_cidade,
+                        'idCandidato': id_candidato,
+                        'idPartido': id_partido,
+                        'idEleitor': id_eleitor_enc})
 
         insert_eleitor_turno(id_eleitor, id_turno, senha_util.encrypt_md5(hash_voto))
         db.commit()
@@ -106,7 +139,7 @@ def cria_candidatos(id_tcr, qt):
     for i in range(qt):
         print(f'Criando candidato {i}')
         candidato = Candidato()
-        candidato.id_pessoa = randint(12, 5002)
+        candidato.id_pessoa = randint(100, 5002)
         partido = db.find_partido(randint(1, 18))
         candidato.numero = int(str(partido.numero_partido) + numero_aleatorio(2))
         candidato.id_partido = partido.id_partido

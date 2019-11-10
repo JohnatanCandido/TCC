@@ -25,7 +25,7 @@ public class EleicaoBusiness implements Serializable {
     @Inject
     private Identity identity;
 
-    private static final Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm:ss").create();
+    private static final Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 
     public List<Cargo> consultaCargos() {
         try {
@@ -190,6 +190,18 @@ public class EleicaoBusiness implements Serializable {
             throw new BusinessException("Erro ao apurar eleição", e.getMessages());
         } catch (NoResultException ignored) {
             throw new BusinessException("Erro ao apurar eleição", Collections.singletonList("Erro ao apurar eleição"));
+        }
+    }
+
+    public String recontagemVotos(Long idTurno) throws BusinessException {
+        try {
+            return new RestUtil("eleicao/turno/" + idTurno + "/recontar").withHeader("Content-Type", "application/json")
+                                                                         .withHeader("Authorization", identity.getToken())
+                                                                         .post();
+        } catch (RestException e) {
+            throw new BusinessException("Erro ao fazer recontagem de votos da eleição", e.getMessages());
+        } catch (NoResultException ignored) {
+            throw new BusinessException("Erro ao fazer recontagem de votos da eleição", Collections.singletonList("Erro ao fazer recontagem de votos da eleição"));
         }
     }
 }

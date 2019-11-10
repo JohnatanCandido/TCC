@@ -35,12 +35,12 @@
                         </p:column>
                         <p:column headerText="Inicio" styleClass="font-titulo">
                             <h:outputText value="#{eleicao.inicio}">
-                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="GMT-3" />
                             </h:outputText>
                         </p:column>
                         <p:column headerText="Término" styleClass="font-titulo">
                             <h:outputText value="#{eleicao.termino}">
-                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="GMT-3" />
                             </h:outputText>
                         </p:column>
                         <p:column headerText="Votou" styleClass="font-titulo">

@@ -78,7 +78,7 @@ class Turno(db.Model):
     turno = db.Column(db.Integer, nullable=False)
     inicio = db.Column(db.DateTime)
     termino = db.Column(db.DateTime)
-    turnosCargos = db.relationship('TurnoCargo', backref='turno', lazy=True)
+    turnosCargos = db.relationship('TurnoCargo', backref='turno', lazy=True, cascade='all, delete-orphan')
     apuracoes = db.relationship('Apuracao', backref='turno')
 
     __table_args__ = (
@@ -93,7 +93,7 @@ class Turno(db.Model):
         return tcs[0] if len(tcs) == 1 else TurnoCargo()
 
     def to_json(self):
-        if self.termino is None:
+        if self.termino is None or not self.eleicao.confirmada:
             situacao = 'Aguardando lançamento'
         elif self.termino > datetime.now():
             situacao = 'Em andamento'
@@ -164,7 +164,7 @@ class TurnoCargo(db.Model):
     id_turno_cargo = db.Column(db.Integer, primary_key=True)
     id_turno = db.Column(db.Integer, db.ForeignKey('turno.id_turno'), nullable=False)
     id_cargo = db.Column(db.Integer, db.ForeignKey('cargo.id_cargo'), nullable=False)
-    turno_cargo_regioes = db.relationship('TurnoCargoRegiao', backref='turnoCargo')
+    turno_cargo_regioes = db.relationship('TurnoCargoRegiao', backref='turnoCargo', cascade='all, delete-orphan')
 
     def __repr__(self):
         return f'idTurnoCargo: {self.id_turno_cargo}'
@@ -189,9 +189,12 @@ class TurnoCargoRegiao(db.Model):
     possui_segundo_turno = db.Column(db.Boolean, nullable=False)
     id_cidade = db.Column(db.Integer, db.ForeignKey('cidade.id_cidade'))
     id_estado = db.Column(db.Integer, db.ForeignKey('estado.id_estado'))
-    votosEncriptados = db.relationship('VotoEncriptado', backref='turnoCargoRegiao', lazy=True)
-    votosApurados = db.relationship('VotoApurado', backref='turnoCargoRegiao', lazy=True)
-    candidatos = db.relationship('Candidato', backref='turnoCargoRegiao', lazy=True)
+    votosEncriptados = db.relationship('VotoEncriptado',
+                                       backref='turnoCargoRegiao',
+                                       lazy=True,
+                                       cascade='all, delete-orphan')
+    votosApurados = db.relationship('VotoApurado', backref='turnoCargoRegiao', lazy=True, cascade='all, delete-orphan')
+    candidatos = db.relationship('Candidato', backref='turnoCargoRegiao', lazy=True, cascade='all, delete-orphan')
 
     def __repr__(self):
         return f'idTurnoCargoRegiao: {self.id_turno_cargo_regiao}'

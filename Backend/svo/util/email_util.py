@@ -9,18 +9,20 @@ SENHA = 'SistemaEleitoral2019'
 
 
 def enviar_email(email, mensagem, assunto):
-    server = smtplib.SMTP(host='smtp.gmail.com', port=587)
-    server.starttls()
-    server.login(ENDERECO_EMAIL, SENHA)
+    # server = smtplib.SMTP(host='smtp.gmail.com', port=587)
+    # server.starttls()
+    # server.login(ENDERECO_EMAIL, SENHA)
 
-    msg = MIMEMultipart()
+    # msg = MIMEMultipart()
 
-    msg['From'] = f'Vote Safe <{ENDERECO_EMAIL}>'
-    msg['To'] = email
-    msg['Subject'] = assunto
+    # msg['From'] = f'Vote Safe <{ENDERECO_EMAIL}>'
+    # msg['To'] = email
+    # msg['Subject'] = assunto
 
-    msg.attach(MIMEText(mensagem, 'plain'))
+    # msg.attach(MIMEText(mensagem, 'plain'))
 
-    server.send_message(msg)
+    # server.send_message(msg)
     
-    del msg
+    # del msg
+
+    print(mensagem)

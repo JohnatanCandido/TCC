@@ -1,6 +1,7 @@
 from threading import Thread
 from datetime import datetime
 from types import SimpleNamespace
+from sqlalchemy import desc
 
 from svo.business import model_factory as mf
 from svo.entities.models import Apuracao, Turno, TurnoCargo, TurnoCargoRegiao, Candidato, VotoEncriptado
@@ -8,7 +9,7 @@ from svo.exception.validation_exception import ValidationException
 from svo.util import database_utils as db
 
 
-def apurar_eleicao(id_turno, gerar_segundo_turno):
+def apurar_eleicao(id_turno):
     turno = db.find_turno(id_turno)
     id_apuracao = insere_apuracao(turno)
     threads = []
@@ -20,8 +21,8 @@ def apurar_eleicao(id_turno, gerar_segundo_turno):
     for t in threads:
         t.join()
     insere_termino_apuracao(turno.id_turno)
-    segundo_turno = verifica_eleitos(turno.id_turno)
-    if gerar_segundo_turno and segundo_turno:
+    segundo_turno = verifica_eleitos(turno.id_turno, id_apuracao)
+    if segundo_turno and turno.turno == 1:
         cria_segundo_turno(turno.id_eleicao, segundo_turno)
 
 
@@ -75,7 +76,7 @@ def cria_candidatos(turno_cargo_regiao, candidatos):
 
 def valida_apuracao(id_turno):
     turno = db.find_turno(id_turno)
-    if [a for a in turno.apuracoes if a.termino_apuracao is not None]:
+    if [a for a in turno.apuracoes if a.termino_apuracao is None]:
         msg = 'Esta eleição já está sendo apurada!'
         raise ValidationException(msg, [msg])
     if turno.termino > datetime.now():
@@ -121,28 +122,30 @@ def insere_termino_apuracao(id_turno):
     db.commit()
 
 
-def verifica_eleitos(id_turno):
+def verifica_eleitos(id_turno, id_apuracao):
     segundo_turno = {}
     turno = db.find_turno(id_turno)
     for turno_cargo in turno.turnosCargos:
         for tcr in turno_cargo.turno_cargo_regioes:
             remove_status_eleito(tcr)
             if tcr.turnoCargo.cargo.sistema_eleicao == 'Maioria Simples':
-                verifica_eleito_maioria_simples(tcr, segundo_turno)
+                verifica_eleito_maioria_simples(tcr, segundo_turno, id_apuracao)
             else:
-                verifica_eleito_representacao_proporcional(tcr)
+                verifica_eleito_representacao_proporcional(tcr, id_apuracao)
     return segundo_turno
 
 
-def verifica_eleito_maioria_simples(tcr, segundo_turno):
-    candidatos = tcr.candidatos
+def verifica_eleito_maioria_simples(tcr, segundo_turno, id_apuracao):
+    candidatos = [c for c in tcr.candidatos if c.id_candidato_principal is None]
     candidatos.sort(key=lambda c: c.qt_votos, reverse=True)
     if tcr.possui_segundo_turno and candidatos:
         sql_total_votos = '''SELECT count(*) FROM voto_apurado 
                              WHERE id_turno_cargo_regiao = :idTurnoCargoRegiao 
+                             AND id_apuracao = :idApuracao
                              AND id_candidato IS NOT NULL'''
 
-        total_votos = db.native(sql_total_votos, {'idTurnoCargoRegiao': tcr.id_turno_cargo_regiao}).first()[0]
+        total_votos = db.native(sql_total_votos, {'idTurnoCargoRegiao': tcr.id_turno_cargo_regiao,
+                                                  'idApuracao': id_apuracao}).first()[0]
         if candidatos[0].qt_votos > (int(total_votos/2)):
             candidatos[0].situacao = 'Eleito'
         else:
@@ -161,8 +164,8 @@ def adiciona_turno_cargo_regiao_segundo_turno(tcr, candidatos, segundo_turno):
     segundo_turno[tcr.turnoCargo][tcr] = candidatos
 
 
-def verifica_eleito_representacao_proporcional(tcr):
-    qt_votos_validos = get_qt_votos_validos(tcr.id_turno_cargo_regiao)
+def verifica_eleito_representacao_proporcional(tcr, id_apuracao):
+    qt_votos_validos = get_qt_votos_validos(tcr.id_turno_cargo_regiao, id_apuracao)
     if qt_votos_validos > 0:
         quociente_eleitoral = int(qt_votos_validos / tcr.qtd_cadeiras)
         partidos = get_partidos(tcr.id_turno_cargo_regiao)
@@ -178,10 +181,11 @@ def verifica_eleito_representacao_proporcional(tcr):
         setar_candidatos_eleitos_representacao_proporcional(tcr.id_turno_cargo_regiao, partidos)
 
 
-def get_qt_votos_validos(id_tcr):
+def get_qt_votos_validos(id_tcr, id_apuracao):
     sql_qt_votos_validos = "SELECT count(*) FROM voto_apurado " \
-                           "WHERE id_partido IS NOT NULL AND id_turno_cargo_regiao = :idTcr"
-    return db.native(sql_qt_votos_validos, {'idTcr': id_tcr}).first()[0]
+                           "WHERE id_partido IS NOT NULL AND id_turno_cargo_regiao = :idTcr " \
+                           "AND id_apuracao = :idApuracao"
+    return db.native(sql_qt_votos_validos, {'idTcr': id_tcr, 'idApuracao': id_apuracao}).first()[0]
 
 
 def get_partidos(id_tcr):
@@ -222,6 +226,7 @@ def setar_candidatos_eleitos_representacao_proporcional(id_tcr, partidos):
         candidatos = db.query(Candidato)\
                        .filter(Candidato.id_turno_cargo_regiao == id_tcr)\
                        .filter(Candidato.id_partido == partido.id_partido)\
+                       .order_by(desc(Candidato.qt_votos))\
                        .limit(partido.cadeiras)\
                        .all()
 
@@ -234,3 +239,31 @@ def remove_status_eleito(tcr):
     sql = """UPDATE candidato SET situacao = 'Não Eleito' WHERE id_turno_cargo_regiao = :idTcr"""
     db.native(sql, {'idTcr': tcr.id_turno_cargo_regiao})
     db.commit()
+
+
+def verifica_integridade_votos(id_turno):
+    sql = '''SELECT COUNT(*) FROM (
+                        SELECT DISTINCT id_eleitor FROM (SELECT id_eleitor, id_candidato, id_turno_cargo_regiao 
+                                                         FROM voto_encriptado 
+                                                         ORDER BY id_eleitor, id_turno_cargo_regiao) ve
+             WHERE ve.id_turno_cargo_regiao IN(SELECT id_turno_cargo_regiao
+                                            FROM turno_cargo_regiao
+                                            JOIN turno_cargo tc ON turno_cargo_regiao.id_turno_cargo = tc.id_turno_cargo
+                                            WHERE tc.id_turno = :idTurno)
+             GROUP BY ve.id_eleitor
+             HAVING md5(string_agg(ve.id_candidato, '')) NOT IN (SELECT et.hash FROM eleitor_turno et)) 
+             AS votos_alterados'''
+
+    votos_alterados = db.native(sql, {'idTurno': id_turno}).first()[0]
+    if votos_alterados > 0:
+        msg = f'{votos_alterados} votos desta eleição foram alterados!'
+        raise ValidationException(msg, [msg])
+
+
+def verifica_remover_segundo_turno(id_turno):
+    turno = db.find_turno(id_turno)
+    if turno.turno == 1:
+        segundo_turno = db.segundo_turno_by_id_eleicao(turno.id_eleicao)
+        if segundo_turno is not None:
+            db.delete(segundo_turno)
+            db.commit()

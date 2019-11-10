@@ -219,9 +219,9 @@ def cria_voto(voto_enc, id_apuracao):
 
     id_candidato = c.dec(int(voto_enc.id_candidato))
     id_partido = c.dec(int(voto_enc.id_partido))
-    if id_candidato != -1:
+    if id_candidato > 1:
         va.id_candidato = id_candidato
-    if id_partido != -1:
+    if id_partido > 1:
         va.id_partido = id_partido
     return va
 

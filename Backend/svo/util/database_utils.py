@@ -88,6 +88,10 @@ def find_turno(id_turno):
     return Turno.query.get(id_turno)
 
 
+def segundo_turno_by_id_eleicao(id_eleicao):
+    return query(Turno).filter(Turno.id_eleicao == id_eleicao).filter(Turno.turno == 2).first()
+
+
 def apuracao_by_id_turno(id_turno):
     return query(Apuracao).filter(Apuracao.id_turno == id_turno).order_by(desc(Apuracao.inicio_apuracao)).first()
 

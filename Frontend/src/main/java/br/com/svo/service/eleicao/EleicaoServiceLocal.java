@@ -41,4 +41,6 @@ public interface EleicaoServiceLocal {
     void confirmarEleicao(Long idEleicao) throws BusinessException;
 
     String apurarTurno(Long idTurno) throws BusinessException;
+
+    String recontagemVotos(Long idTurno) throws BusinessException;
 }

@@ -113,6 +113,17 @@ public class EleicaoWebBean implements Serializable {
         }
     }
 
+    public void recontagemVotos(int turno) {
+        try {
+            Long idTurno = eleicao.getTurnos().get(turno).getIdTurno();
+            String msg = eleicaoService.recontagemVotos(idTurno);
+            SvoMessages.addMessage(msg);
+            eleicao.getTurnos().get(turno).setSituacao("Em apuração");
+        } catch (BusinessException e) {
+            SvoMessages.addErrorMessage(e);
+        }
+    }
+
     public boolean isPossuiPermissaoAdministrador() {
         return identity.hasPerfil(Perfis.ADMINISTRADOR);
     }
@@ -135,6 +146,14 @@ public class EleicaoWebBean implements Serializable {
 
     public boolean isPermiteAlterarDatasTurno(Turno turno) {
         return turno.getSituacao().equals("Aguardando lançamento");
+    }
+
+    public boolean isPermiteRecontarPrimeiroTurno() {
+        return eleicao.getTurnos().get(0).getSituacao().equals("Apurado");
+    }
+
+    public boolean isPermiteRecontarSegundoTurno() {
+        return eleicao.getTurnos().size() == 2 && eleicao.getTurnos().get(1).getSituacao().equals("Apurado");
     }
 
 //    GETTERS E SETTERS

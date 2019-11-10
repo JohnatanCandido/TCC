@@ -149,6 +149,29 @@
                                  style="background-color: #144913; color: white;" />
             </div>
         </div>
+
+        <div class="ui-g-12 ui-md-12 ui-lg-12">
+            <div class="ui-g-12 ui-md-12 ui-lg-2">
+                <p:commandButton id="recontarPrimeiroTurno"
+                                 value="Recontagem 1º turno"
+                                 icon="fa fa-search"
+                                 rendered="#{eleicaoWebBean.permiteRecontarPrimeiroTurno}"
+                                 process="@form"
+                                 update="@form"
+                                 action="#{eleicaoWebBean.recontagemVotos(0)}"
+                                 style="background-color: #144913; color: white;" />
+            </div>
+            <div class="ui-g-12 ui-md-12 ui-lg-2">
+                <p:commandButton id="recontarSegundoTurno"
+                                 value="Recontagem 2º turno"
+                                 icon="fa fa-search"
+                                 rendered="#{eleicaoWebBean.permiteRecontarSegundoTurno}"
+                                 process="@form"
+                                 update="@form"
+                                 action="#{eleicaoWebBean.recontagemVotos(1)}"
+                                 style="background-color: #144913; color: white;" />
+            </div>
+        </div>
     </div>
     <ui:include src="modal-cargo-regiao.xhtml" />
 </ui:composition>
