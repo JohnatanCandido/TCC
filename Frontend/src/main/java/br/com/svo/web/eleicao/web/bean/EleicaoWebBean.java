@@ -149,7 +149,7 @@ public class EleicaoWebBean implements Serializable {
     }
 
     public boolean isPermiteRecontarPrimeiroTurno() {
-        return eleicao.getTurnos().get(0).getSituacao().equals("Apurado");
+        return "Apurado".equals(eleicao.getTurnos().get(0).getSituacao());
     }
 
     public boolean isPermiteRecontarSegundoTurno() {

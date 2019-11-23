@@ -93,7 +93,7 @@ def monta_partido(tcr, partido):
 
 
 def monta_candidato(candidato):
-    retorno = {'idCandidato': candidato.id_partido,
+    retorno = {'idCandidato': candidato.id_candidato,
                'nome': candidato.pessoa.nome,
                'idPartido': candidato.partido.id_partido,
                'partido': candidato.partido.sigla}

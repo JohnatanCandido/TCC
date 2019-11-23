@@ -281,6 +281,7 @@ class Pessoa(db.Model):
             'cpf': self.cpf,
             'usuario': self.login.usuario,
             'eleitor': self.eleitor.to_json(),
+            'email': self.email,
             'perfis': [p.to_json() for p in self.login.perfis]
         }
 

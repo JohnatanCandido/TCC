@@ -5,7 +5,7 @@
         <p:megaMenu id="navigationMenu" orientation="vertical" styleClass="vertical mega-menu" style="border: 0">
             <p:menuitem value="Início" outcome="/pages/index.xhtml" styleClass="font-preta fundo-branco" />
             <p:menuitem value="Eleição" outcome="/pages/eleicao/busca/buscar-eleicao.xhtml" styleClass="font-preta fundo-branco" />
-            <p:menuitem value="Eleitor" outcome="/pages/pessoa/busca-pessoa.xhtml" styleClass="font-preta fundo-branco" />
+            <p:menuitem value="Eleitor" rendered="#{loginWebBean.renderizaMenuPessoa}" outcome="/pages/pessoa/busca-pessoa.xhtml" styleClass="font-preta fundo-branco" />
             <p:menuitem value="Alterar senha" action="#{alteracaoSenhaWebBean.init()}" update="modalAlteracaoSenha" oncomplete="PF('modalAlteracaoSenha').show();" styleClass="fundo-branco"/>
             <p:menuitem value="Sair" action="#{loginWebBean.logout()}" styleClass="font-preta fundo-branco float-right" />
         </p:megaMenu>
