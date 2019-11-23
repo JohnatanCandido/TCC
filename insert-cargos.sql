@@ -21,4 +21,8 @@ INSERT INTO cargo(nome, sistema_eleicao, permite_segundo_turno, id_tipo_cargo, m
 INSERT INTO cargo(nome, sistema_eleicao, permite_segundo_turno, id_tipo_cargo, max_votos, tam_numero_candidato) VALUES('Deputado Estadual', 'Representação Proporcional', FALSE, currval('tipo_cargo_id_tipo_cargo_seq')-1, 1, 5);
 INSERT INTO cargo(nome, sistema_eleicao, permite_segundo_turno, id_tipo_cargo, max_votos, tam_numero_candidato) VALUES('Vereador', 'Representação Proporcional', FALSE, currval('tipo_cargo_id_tipo_cargo_seq'), 1, 5);
 
+INSERT INTO cargo(nome, sistema_eleicao, permite_segundo_turno, id_tipo_cargo, max_votos, tam_numero_candidato) VALUES('Secretário Geral', 'Maioria Simples', FALSE, currval('tipo_cargo_id_tipo_cargo_seq')-2, 1, 2);
+INSERT INTO cargo(nome, sistema_eleicao, permite_segundo_turno, id_tipo_cargo, max_votos, tam_numero_candidato) VALUES('Secretário Adjunto', 'Maioria Simples', FALSE, currval('tipo_cargo_id_tipo_cargo_seq')-2, 1, 2);
+INSERT INTO cargo(nome, sistema_eleicao, permite_segundo_turno, id_tipo_cargo, max_votos, tam_numero_candidato) VALUES('Tesoureiro', 'Maioria Simples', FALSE, currval('tipo_cargo_id_tipo_cargo_seq')-2, 1, 2);
+
 COMMIT;
