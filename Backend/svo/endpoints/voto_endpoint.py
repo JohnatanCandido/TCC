@@ -28,6 +28,7 @@ def get_cargos_eleitor(user, id_eleicao):
             return 'Nenhuma eleição encontrada', 204
         return jsonify(cargos), 200
     except ValidationException as e:
+        print(e.errors)
         return jsonify(e.errors), 403
 
 
