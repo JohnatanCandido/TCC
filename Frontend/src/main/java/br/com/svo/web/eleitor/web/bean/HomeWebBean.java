@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,6 +42,14 @@ public class HomeWebBean implements Serializable {
             eleicoesAbertas = new ArrayList<>();
             eleicoesFinalizadas = new ArrayList<>();
         }
+        
+        Date date = new Date();
+        System.out.println("date.getHours()");
+        System.out.println(date.getHours());
+        System.out.println("date.getMinutes()");
+        System.out.println(date.getMinutes());
+        System.out.println("date.getSeconds()");
+        System.out.println(date.getSeconds());
     }
 
 //    GETTERS E SETTERS
