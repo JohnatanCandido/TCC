@@ -87,7 +87,8 @@ def consulta_eleicao_por_usuario(user):
              WHERE t.inicio IS NOT NULL AND t.termino IS NOT NULL AND e.confirmada
              AND ((tcr.id_estado IS NULL AND tcr.id_cidade IS NULL)
                    OR (tcr.id_estado = :idEstado AND tcr.id_cidade IS NULL)
-                   OR (tcr.id_estado = :idEstado AND tcr.id_cidade = :idCidade))'''
+                   OR (tcr.id_estado = :idEstado AND tcr.id_cidade = :idCidade))
+             ORDER BY t.inicio DESC'''
 
     resultado = db.native(sql, {'idEstado': user.eleitor.cidade.id_estado,
                                 'idCidade': user.eleitor.id_cidade,
