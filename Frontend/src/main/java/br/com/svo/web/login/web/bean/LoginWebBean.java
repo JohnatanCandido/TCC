@@ -15,10 +15,16 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.TimeZone;
 
 @ViewScoped
 @Named("loginWebBean")
 public class LoginWebBean implements Serializable {
+    
+    static {
+        System.out.println("######### Alterando timezone #########");
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT-03:00"));
+    }
 
     /*
         Iniciar postgres:

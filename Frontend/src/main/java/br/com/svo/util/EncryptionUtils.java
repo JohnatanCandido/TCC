@@ -7,7 +7,6 @@ import com.n1analytics.paillier.PaillierPublicKey;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.TimeZone;
 
 public final class EncryptionUtils {
 
@@ -15,9 +14,6 @@ public final class EncryptionUtils {
 
     static {
         buscaChave();
-
-        System.out.println("######### Alterando timezone #########");
-        TimeZone.setDefault(TimeZone.getTimeZone("GMT-03:00"));
     }
 
     public static String encrypt(Long valor) throws RestException {
