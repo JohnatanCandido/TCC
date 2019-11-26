@@ -40,6 +40,7 @@ INSERT INTO cidade(id_estado, nome) VALUES(currval('estado_id_estado_seq'), 'Cap
 INSERT INTO cidade(id_estado, nome) VALUES(currval('estado_id_estado_seq'), 'Florianópolis');
 
 INSERT INTO estado(nome, sigla) VALUES('São Paulo', 'SC');
+INSERT INTO cidade(id_estado, nome) VALUES(currval('estado_id_estado_seq'), 'São Paulo');
 INSERT INTO estado(nome, sigla) VALUES('Sergipe', 'SE');
 INSERT INTO estado(nome, sigla) VALUES('Tocantins', 'TO');
 
